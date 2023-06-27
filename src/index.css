@@ -12,4 +12,6 @@ code {
     monospace;
 }
 
-@import "../src/screens/home/home.css";
+*{
+  box-sizing: border-box;
+}

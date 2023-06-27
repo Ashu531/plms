@@ -1,4 +1,5 @@
 import React,{useEffect, useState} from 'react'
+import './button.css'
 
 export default function Button({
     text,
@@ -30,7 +31,7 @@ export default function Button({
   }
 
   return (
-    <div className={`button-component ${classes} ${disabled ? 'disable' : ''}`} style={ linearGradient == 'green' ? {background: 'linear-gradient(94.29deg, #3399CC 0%, #00CB9C 100%)',borderRadius: 6} : style} onClick={()=>_handleButtonClick()}> 
+    <div className={`button-component ${disabled ? 'disable' : ''}`} style={classes} onClick={()=>_handleButtonClick()}> 
         {leadingIcon && <img src={leadingIcon}/>}
         {!!count && <div className={'text'}>{count}</div>}
         {text && <div className={showTextOnHover ? 'hideText text' : 'text'} style={type == 'Show' ? {color : '#FFFFFF'} : null }>{text}</div>}

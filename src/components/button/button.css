@@ -1,0 +1,94 @@
+.button-component{
+    display: flex;;
+    justify-content: space-evenly;
+    align-items: center;
+    box-sizing: border-box;
+    font-size: 1.4rem;
+    line-height: 2.1rem;
+    position: relative;
+}
+.img{
+    width: 2rem;
+    height: 2rem;
+    margin: 0 0.3rem;
+}
+
+.text{
+    margin: 0 0.6rem;
+    text-align: center;
+    color: #ffffff;
+}
+
+.hideText{
+    display: none;
+}
+
+.pressedBubble{
+    position: absolute;
+    bottom: 0px;
+    right: 0px;
+    width: 25px;
+    height: 25px;
+    margin: 0px;
+    padding: 0px;
+    background: linear-gradient(94.29deg, #3399CC 0%, #00CB9C 100%);
+    border-radius: 100% 0 0 0;
+    border-bottom-right-radius: 15px
+}
+
+
+.btn-primary{
+    justify-content: center;
+    padding: 1.2rem 1.6rem;
+    border-radius: 1.2rem;
+    background: var(--defaultBackground);
+    color: var(--defaultColor);
+    transition: background 0.4s;
+}
+
+.btn-secondary{
+    justify-content: center;
+    padding: 1.4rem;
+    border-radius: 2.5rem;
+    background: #0E0F11;
+    color: #C8CCD0;
+}
+
+.btn-tertiary{
+    padding: 0.8rem 1.2rem;
+    border-radius: 0.4rem;
+    background: none;
+    border: 1px solid #2D31D2;
+    color: var(--defaultColor);
+    font-size: 1.4rem;
+    font-weight: 500;
+    line-height: 2.1rem;
+}
+
+.btn-group-component{
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    
+    
+}
+.btn{
+    background: var(--defaultBackground);
+    padding: 1rem 1.6rem;
+    font-weight: 500;
+    font-size: 1.2rem;
+    line-height: 1.8rem;
+    color: var(--primaryColor);
+    border: 1px solid var(--insignificantStrokeColor);
+}
+
+.selected{
+    background: var(--primaryColor);
+    color: var(--defaultBackground);
+    border-radius: 0.4rem;
+}
+
+.disable{
+    pointer-events: none;
+    opacity: 0.5;
+}

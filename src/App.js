@@ -2,12 +2,10 @@ import React from 'react';
 import './App.css';
 import Home from './screens/home/home.jsx';
 
-function App() {
+export default function App() {
   return (
     <div className="App">
       <Home />
     </div>
   );
 }
-
-export default App;

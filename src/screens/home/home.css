@@ -5,4 +5,12 @@
     padding: 12px;
     justify-content: flex-start;
     align-items: center;
+    color: blue;
+}
+.tab{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
 }

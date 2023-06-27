@@ -8,7 +8,7 @@ const sharedConfigs = {
   module: {
     rules: [
       {
-        test: /\.js$|jsx/,
+        test: /\.js$|jsx$/,
         exclude: /(node_modules|bower_components)/,
         use: {
           loader: "babel-loader",

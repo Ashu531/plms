@@ -13,7 +13,7 @@ const configs = addBaseConfig({
     rules: [
       {
         test: /\.css$/,
-        use: ["style-loader", "css-loader", "sass-loader"],
+        use: ["style-loader", "css-loader"],
       },
       {
         test: /\.(png|woff|woff2|eot|ttf|otf|svg|gif)$/,
