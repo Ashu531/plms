@@ -1,5 +1,6 @@
 .App {
   text-align: center;
+  background-color: black;
 }
 
 .App-logo {
@@ -36,5 +37,3 @@
     transform: rotate(360deg);
   }
 }
-
-@import "../src/screens/home/home.css";
