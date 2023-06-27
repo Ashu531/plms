@@ -38,7 +38,6 @@ const configs = addBaseConfig({
       // LOGIN_API_URL: JSON.stringify("http://localhost:7777"),
       // API_URL: JSON.stringify("https://fmsbackend.credenc.com"),
     }),
-    // new HotModuleReplacementPlugin(),
     new HtmlWebpackPlugin({
       title: "React Cards",
       filename: "index.html",
