@@ -50,13 +50,14 @@ const configs = addBaseConfig({
       exposes: {
         "./app": "./src/App",
       },
+      shared: { react: { singleton: true, eager: true }, "react-dom": { singleton: true, eager: true } },
     }),
   ],
   devServer: {
     host: "0.0.0.0",
     // disableHostCheck: true,
     allowedHosts: "all",
-    port: 3001,
+    port: 4444,
     historyApiFallback: true,
     hot: true,
     static: {

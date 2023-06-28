@@ -13,13 +13,13 @@ export default function Button({
     type
 }) {
 
-  // const [buttonPressed,setButtonPressed] = _useState(false);
+  const [buttonPressed,setButtonPressed] = useState(false);
 
-  // useEffect(() => {
-  //   return () => {
-  //     setButtonPressed(false)
-  //   };
-  // }, []);
+  useEffect(() => {
+    return () => {
+      setButtonPressed(false)
+    };
+  }, []);
 
 
   const _handleButtonClick = () => {

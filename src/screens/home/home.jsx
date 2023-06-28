@@ -24,7 +24,7 @@ export default function Home() {
                 boldText={'Incomplete'}
                 // bgColor={`#0DB78F`}
                 // textColor={`#FFFFFF`}
-                style={{padding: '14px'}}
+                // style={{padding: '14px'}}
                 />
 
                 <Status 
