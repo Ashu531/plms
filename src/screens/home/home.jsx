@@ -5,8 +5,29 @@ import Status from '../../components/status/status.jsx';
 import './home.css'
 import Table from '../../components/table/table.jsx';
 import Header from '../../components/header/header.jsx'
+import SlidingPanel from '../../components/sliding-panel/sliding_panel.jsx'
+import LeadForm from '../../components/leadForm/leadform.jsx';
 
 export default function Home() {
+
+    const [openPanel,setOpenPanel] = useState(false)
+    const [openLeadForm,setOpenLeadForm] = useState(false)
+
+    const openSlidingPanel = () =>{
+        setOpenPanel(true)
+    }
+
+    const closeSlidingPanel=()=>{
+        setOpenPanel(false)
+    }
+
+    const _openLeadForm=()=>{
+        setOpenLeadForm(true)
+    }
+
+    const _closeLeadForm=()=>{
+        setOpenLeadForm(true)
+    }
 
     return (
         <div className='home-container'>
@@ -74,12 +95,22 @@ export default function Home() {
                         fontFamily: 'Montserrat',
                         fontWeight: 500
                     }}
+                    onClick={()=>_openLeadForm()}
                   />
              </div>
              <div className='table-container'>
-                <Table />
+                <Table openSlidingPanel={()=>openSlidingPanel()} />
              </div>
-             
+             {
+                 openPanel && 
+                 <SlidingPanel closeSlidingPanel={()=>closeSlidingPanel()} />
+             }
+             {
+                 openLeadForm &&
+                 <LeadForm 
+                     _closeLeadForm={()=>_closeLeadForm()}
+                 />
+             }
         </div>
     )
 }

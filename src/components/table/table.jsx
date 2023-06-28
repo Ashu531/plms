@@ -2,7 +2,7 @@ import React,{useEffect, useState} from 'react'
 import sortIcon from '../../assets/Icons/sortIcon.svg'
 import './table.css'
 
-export default function Table(){
+export default function Table(props){
 
     return (
         <div className='table'>
@@ -30,7 +30,7 @@ export default function Table(){
                 </div>
             </div>
             <div className='table-row-container'>
-                <div className='table-row'>
+                <div className='table-row' onClick={()=>props.openSlidingPanel()}>
                     <div className='row-text'>
                         255194
                     </div>
