@@ -14,14 +14,53 @@
 }
 
 .lead-form-modal-content{
-    padding: 2.4rem;
-    width: 48rem;
+    width: 90%;
     backdrop-filter: blur(40px);
     border-radius: 2.4rem;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    background: #FFFFFF;
-    border: 1px solid #404040;
-    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.25);
+    border-radius: 12px;
+    border: 1px solid #EAEAEA;
+    background: #FFF;
+    height: 90%;
+}
+
+.lead-form-modal-container{
+    box-sizing: border-box;
+    position: relative;
+    padding: 2.4rem;
+}
+
+.lead-form-modal-header{
+    position: absolute;
+    top: 30px;
+    /* left: 75px; */
+}
+
+.full-width-modal{
+    width: 90% !important;
+    justify-content: space-between;
+}
+
+.lead-modal-header{
+    color: #000;
+    font-size: 24px;
+    font-family: 'Montserrat';
+    font-weight: 600;
+    text-transform: uppercase;
+    margin-left: 8px;
+}
+
+.lead-modal-instructions{
+    color: #0B090D;
+    font-size: 12px;
+    font-family: 'Montserrat';
+    font-weight: 500;
+    text-align: start;
+}
+
+.lead-form-modal-footer{
+    position: fixed;
+    bottom: 30px;
 }

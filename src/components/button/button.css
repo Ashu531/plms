@@ -6,6 +6,8 @@
     font-size: 1.4rem;
     line-height: 2.1rem;
     position: relative;
+    width: auto !important;
+    padding: 0px 12px;
 }
 .img{
     width: 2rem;

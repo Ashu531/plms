@@ -4,6 +4,11 @@ import './table.css'
 
 export default function Table(props){
 
+    const handleNavigation=()=>{
+        let i = 1;
+        props?.goToDetailPage(i)
+    }
+
     return (
         <div className='table'>
             <div className='table-header'>
@@ -30,26 +35,26 @@ export default function Table(props){
                 </div>
             </div>
             <div className='table-row-container'>
-                <div className='table-row' onClick={()=>props.openSlidingPanel()}>
-                    <div className='row-text'>
+                <div className='table-row'>
+                    <div className='row-text' onClick={()=>props.openSlidingPanel()}>
                         255194
                     </div>
-                    <div className='row-text' style={{width:'22%'}}>
+                    <div className='row-text' style={{width:'22%'}} onClick={()=>props.openSlidingPanel()}>
                         Rashmi Ranjan Satapathy
                     </div>
-                    <div className='row-text'>
+                    <div className='row-text' onClick={()=>props.openSlidingPanel()}> 
                         9999888866
                     </div>
-                    <div className='row-text'>
+                    <div className='row-text' onClick={()=>props.openSlidingPanel()}>
                         ₹ 46,000
                     </div>
-                    <div className='row-text' style={{width:'20%'}}>
+                    <div className='row-text' style={{width:'20%'}} onClick={()=>props.openSlidingPanel()}>
                         Consent Pending
                     </div>
-                    <div className='row-text' style={{width:'22%'}}>
+                    <div className='row-text' style={{width:'22%'}} onClick={()=>props.openSlidingPanel()}>
                         Thursday, March 31 2022 10:40:10 PM
                     </div>
-                    <div className='icon-container'>
+                    <div className='icon-container' onClick={()=>handleNavigation()}>
                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="#0b090d" viewBox="0 0 256 256"><path d="M178.83,130.83l-80,80a4,4,0,0,1-5.66-5.66L170.34,128,93.17,50.83a4,4,0,0,1,5.66-5.66l80,80A4,4,0,0,1,178.83,130.83Z"></path></svg>
                     </div>
                 </div>
