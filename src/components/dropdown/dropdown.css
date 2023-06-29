@@ -1,0 +1,13 @@
+.dropdown {
+    width: 100%;
+    padding: 14px;
+    outline: 1px solid;
+    border-radius: 8px;
+    color: #0B090D;
+    border: none;
+    border-right: 15px solid transparent;
+}
+
+.placeholder{
+    color: #8C8C8C !important;
+}
