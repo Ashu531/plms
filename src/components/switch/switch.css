@@ -1,0 +1,33 @@
+button {
+  all: unset;
+}
+
+.SwitchRoot {
+  width: 30px;
+  height: 20px;
+  background-color: #8C8C8C;
+  border-radius: 9999px;
+  position: relative;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
+.SwitchRoot[data-state='checked'] {
+  background-color: #0DB78F;
+}
+
+.SwitchThumb {
+  display: block;
+  width: 12px;
+  height: 12px;
+  background-color: white;
+  border-radius: 9999px;
+  transition: transform 100ms;
+  transform: translateX(3px);
+  will-change: transform;
+}
+.SwitchThumb[data-state='checked'] {
+  transform: translateX(15px);
+}
+
+.Label {
+  color: #444444;
+}
