@@ -19,22 +19,21 @@ export function Dropdown({
     const defaultPlaceholder = 'Select';
     const [dropdownValue, setDropdownValue] = useState(placeholder ? placeholder : defaultPlaceholder);
 
-    useEffect(() => {
-        console.log("hdfbdjh", dropdownValue);
-    }, [dropdownValue])
-
     return (
       <div className={`${classes} column`}style={{width: '100%', gap: '8px'}}>
   
         <Label showCheck={showCheck} error={error} label={label} required={required} />
 
-        <div style={{textAlign: 'start'}}>
+        <div style={{textAlign: 'start', width: '100%'}}>
             <select
                 onChange={(e) => onChange != null ? onChange(e.target.value) : setDropdownValue(e.target.value)}
                 className="dropdown text-montserrat text-16 text-weight-5"
                 disabled = {disabled}
                 value={value ? value : dropdownValue}
-                style={(value && value == -1) || (value == null && dropdownValue == placeholder) ? {color: '#8C8C8C'} : {}}
+                style={{
+                    color: (value && value == -1) || (value == null && dropdownValue == placeholder) ? '#8C8C8C' : '#0B090D',
+                    outline: error ? '1px solid #DE3B4F' : '1px solid #EAEAEA'
+                }}
             >
                 {placeholder && <option>{placeholder}</option>}
                 {items.map((item, index) => (

@@ -3,13 +3,20 @@ import './input.css';
 
 import errorIcon from '../../assets/Icons/cross.svg';
 import checkIcon from '../../assets/Icons/check.svg';
+import SwitchComponent from "../switch/switch.jsx";
+import { amountValidation } from "../../helpers/validations";
 
 export function Input({
   autoFocus = false,
   label,
   required=false,
   showCheck=false,
+  disabler=false,
+  disablerLabel='',
+  disablerState,
+  onDisablerStateChange,
   placeholder,
+  leadingText,
   value,
   onChange,
   disabled,
@@ -31,7 +38,15 @@ export function Input({
   const inputChange = e => {
     let currValue = e.target.value;
 
+
+    if(leadingText && currValue.length >= leadingText.length){
+      currValue = currValue.substring(leadingText.length + 2);
+    }
+
     if (type == "number") {
+
+      if(currValue.length > 0 && isNaN(currValue))
+        return;
 
       onChange != null ? onChange(currValue) : setInputValue(currValue.trim());
 
@@ -44,18 +59,27 @@ export function Input({
   return (
     <div className={`${classes} column`}style={{width: '100%', gap: '8px'}}>
 
-      <Label showCheck={showCheck} error={error} label={label} required={required} />
+      <Label 
+        showCheck={showCheck} 
+        error={error} 
+        label={label} 
+        required={required} 
+        disabler={disabler} 
+        disablerLabel={disablerLabel} 
+        disablerState={disablerState}
+        onDisablerStateChange={onDisablerStateChange}
+      />
 
-      <div style={{textAlign: 'start'}}>
+      <div style={{textAlign: 'start', width: '100%'}}>
         <input
           className="input text-montserrat text-16 text-weight-5"
           placeholder={placeholder}
-          value={value ? value : inputValue}
+          value={leadingText ? `${leadingText}  ${value ? value : inputValue}` : value ? value : inputValue}
           onChange={inputChange}
           disabled={disabled}
           autoFocus={autoFocus ? true : false}
           onKeyDown={handleKey}
-          type={type}
+          type={'text'}
           maxLength={maxLength}
           onWheel={(e) => e.target.blur()}
           style={
@@ -72,16 +96,28 @@ export function Label({
   showCheck,
   error,
   label,
-  required
+  required,
+  disabler,
+  disablerLabel,
+  disablerState,
+  onDisablerStateChange
 }) {
   return (
-    <div className="row label text-montserrat text-12 text-weight-5" style={{gap: '5px'}}>
-        <div className={required ? 'required' : ''}>{label}</div>
+    <div className="row" style={{justifyContent: 'space-between'}}>
+      <div className="row label text-montserrat text-12 text-weight-5" style={{gap: '5px'}}>
+          <div className={required ? 'required' : ''}>{label}</div>
 
-        {(error || showCheck) && <img 
-          src={error ? errorIcon : checkIcon}
-          style={{width: '14px', height: '14px'}}
-        />}
+          {(error || showCheck) && <img 
+            src={error ? errorIcon : checkIcon}
+            style={{width: '14px', height: '14px'}}
+          />}
+      </div>
+      {(disabler || disablerLabel || disablerState || onDisablerStateChange) && <SwitchComponent 
+        label={disablerLabel} 
+        checked={disablerState}
+        onChange={onDisablerStateChange}
+        enabled={disabler}
+      />}
     </div>
   );
 }
