@@ -6,6 +6,10 @@ import TabBar from '../../components/tabBar/tabBar.jsx';
 import Upload from '../../components/upload/upload.jsx';
 import addIcon from '../../assets/Icons/addIcon.svg'
 import './/detail.css'
+import ActivityCard from '../../components/activityCard/activityCard.jsx';
+import FinancialForm from '../../components/financialForm/financialForm.jsx';
+import StudentDetailForm, { formViewTypes, studentFormInputTypes } from '../../forms/studentDetails.jsx';
+import LoanDetailsForm, { loanFormInputTypes } from '../../forms/loanDetails.jsx';
 
 export default function DetailPage(props) {
 
@@ -31,8 +35,8 @@ export default function DetailPage(props) {
                         <span className='lead-page-subheading'>+91 90401 46344</span>
                     </div>
                 </div>
-                <div className='column'>
-                    <div className='row'>
+                <div className='column' style={{alignItems:'flex-end'}}>
+                    <div className='row' style={{justifyContent:'flex-end'}}>
                         <span className='lead-page-intruction-label'>Lead Consent: </span>
                         <img src={consentIcon} />
                     </div>
@@ -49,9 +53,46 @@ export default function DetailPage(props) {
                 selected={tab}
             />
             {
+                tab === 0 && 
+                <div className='row full-width' style={{flexWrap: 'wrap', gap: '20px', justifyContent: 'space-between', alignItems: 'flex-start'}}>
+                <div style={{width: '40%'}}>
+                    <StudentDetailForm
+                        viewType={formViewTypes.CREATE} 
+                        formData={{
+                            leadId: '327669',
+                            name: 'Rashmi Ranjan Sathapathy',
+                            institute: 'Skill Lync',
+                            mobile: '9040146344',
+                            email: 'rrsatzat@gmail.com'
+                        }}
+                    />
+                    </div>
+                    <div style={{width: '40%'}}>
+                        <LoanDetailsForm
+                            viewType={formViewTypes.CREATE} 
+                            formData={{
+                                name: 'Rashmi Ranjan Sathapathy',
+                                sameAsStudent: false,
+                                course: 'Embedded Software Development',
+                                courseFee: '59000',
+                                loanAmount: '55000',
+                                tenure: -1,
+                                advanceEmi: -1
+                            }}
+                        />
+                    </div>
+                </div>
+            }
+            {
+                tab === 1 && 
+                <div className='financials-container row full-width'>
+                    <FinancialForm />
+                </div>
+            }
+            {
                 tab === 2 && 
                 <div className='document-container row full-width'>
-                    <div className='column' style={{width: '40%',gap:20}}>
+                    <div className='column' style={{gap:20}}>
                         <DocumentCard
                           title={'PAN Card'}
                           desc={'Upload a clear image of your PAN Card clearly stating your name and date of birth.'}
@@ -75,10 +116,37 @@ export default function DetailPage(props) {
                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="#ffffff" viewBox="0 0 256 256"><path d="M210.83,98.83l-80,80a4,4,0,0,1-5.66,0l-80-80a4,4,0,0,1,5.66-5.66L128,170.34l77.17-77.17a4,4,0,1,1,5.66,5.66Z"></path></svg>
                         </div>
                     </div>
+                    <div className='activity-container-divider' />
                     <div className='row'>
                         <Upload />
                     </div>
                 </div>    
+            }
+            {
+                tab === 3 &&
+                <div className='activity-container row full-width'>
+                    <div className='activity-container column '>
+                        <span className='activity-container-heading'>Comments</span>
+                        <div className='column' style={{gap: 10,marginTop: 16}}>
+                            <ActivityCard 
+                              title={'“Cx said i am not interested now in course i wil try after some days”'}
+                              name={'Ujjawal Chauhan'}
+                              time={'2022-04-12 18:34:49'}
+                            />
+                        </div>
+                    </div>
+                    <div className='activity-container-divider' />
+                    <div className='activity-container column'>
+                        <span className='activity-container-heading'>Activity Log</span>
+                        <div className='column' style={{gap: 10,marginTop: 16}}>
+                            <ActivityCard 
+                                title={'“Cx said i am not interested now in course i wil try after some days”'}
+                                name={'Ujjawal Chauhan'}
+                                time={'2022-04-12 18:34:49'}
+                            />
+                        </div>
+                    </div>
+                </div>
             }
         </div>
     </div>

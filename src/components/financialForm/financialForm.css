@@ -1,0 +1,25 @@
+.financial-form-container{
+    width: 100%;
+    justify-content: flex-start;
+    gap: 20px;
+}
+
+.financial-form-header{
+    color: #0B090D;
+    font-size: 20px;
+    font-family: 'Montserrat';
+    font-weight: 600;
+    text-transform: capitalize;
+}
+
+.financial-form-header{
+    color: #0B090D;
+    font-size: 20px;
+    font-family: 'Montserrat';
+    font-weight: 600;
+    text-transform: capitalize;
+}
+
+.finacial-form-divider{
+    width: 20%;
+}

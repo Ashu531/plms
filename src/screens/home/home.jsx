@@ -39,7 +39,7 @@ export default function Home() {
     }
 
     const _closeLeadForm=()=>{
-        setOpenLeadForm(true)
+        setOpenLeadForm(false)
     }
 
 
@@ -146,34 +146,6 @@ export default function Home() {
                 </div>
             </div>
             }
-            {/* <div className='row' style={{flexWrap: 'wrap', gap: '20px', justifyContent: 'center', alignItems: 'flex-start'}}>
-                <div style={{width: '40%'}}>
-                    <StudentDetailForm
-                        viewType={formViewTypes.CREATE} 
-                        // formData={{
-                        //     leadId: '327669',
-                        //     name: 'Rashmi Ranjan Sathapathy',
-                        //     institute: 'Skill Lync',
-                        //     mobile: '9040146344',
-                        //     email: 'rrsatzat@gmail.com'
-                        // }}
-                    />
-                </div>
-                <div style={{width: '40%'}}>
-                    <LoanDetailsForm
-                        viewType={formViewTypes.CREATE} 
-                        // formData={{
-                        //     name: 'Rashmi Ranjan Sathapathy',
-                        //     sameAsStudent: false,
-                        //     course: 'Embedded Software Development',
-                        //     courseFee: '59000',
-                        //     loanAmount: '55000',
-                        //     tenure: -1,
-                        //     advanceEmi: -1
-                        // }}
-                    />
-                </div>
-            </div> */}
 
             
             {
@@ -190,7 +162,7 @@ export default function Home() {
              {
                  openLeadForm &&
                  <LeadForm 
-                     _closeLeadForm={()=>_closeLeadForm()}
+                    closeLeadModal={()=>_closeLeadForm()}
                  />
              }
         </div>

@@ -49,6 +49,7 @@
     height: 90%;
     margin-top: 2rem;
     box-sizing: border-box;
+    justify-content: space-between;
     align-items: flex-start;
 }
 
@@ -69,4 +70,23 @@
     font-family: 'Montserrat';
     font-weight: 500;
     margin-left: 16px;
+}
+
+.activity-container{
+    height: 90%;
+    margin-top: 2rem;
+    box-sizing: border-box;
+    align-items: flex-start;
+}
+
+.activity-container-heading{
+    color: #0B090D;
+    font-size: 20px;
+    font-family: 'Montserrat';
+    font-weight: 600;
+    text-transform: capitalize;
+}
+
+.activity-container-divider{
+    width: 20%;
 }

@@ -158,7 +158,7 @@ export default function Upload({
                 <a href='https://credenc-fms-school.s3.ap-south-1.amazonaws.com/Bulk%2BBatch(Sample).csv' download="Sample.csv" ><img src={downloadIcon}/></a>}
             </div> */}
             <div className="dropzone" onClick={() => fileInputField.current.click()} onDrop={handleDrop} onDragOver={handleDragOver}>
-                <input type='file' ref={fileInputField} onChange={handleSelected}/>
+                {/* <input type='file' ref={fileInputField} onChange={handleSelected}/> */}
                 <img src={cloudIcon} onDragOver={handleDragOver} height={60} width={60} style={{objectFit: 'contain'}}/>
                 <div className="title" style={{color: '#6699ff', margin: '1rem 0px 0px'}} onDragOver={handleDragOver}>Drag & Drop files</div>
                 <span className='or-text'>or</span>
