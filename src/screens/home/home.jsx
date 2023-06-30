@@ -15,6 +15,7 @@ import { Dropdown } from '../../components/dropdown/dropdown.jsx';
 import DetailPage from '../detail/detail.jsx';
 import StudentDetailForm, { formViewTypes, studentFormInputTypes } from '../../forms/studentDetails.jsx';
 import LoanDetailsForm, { loanFormInputTypes } from '../../forms/loanDetails.jsx';
+import UserConsentModal from '../../components/userConsentModal/userConsentModal.jsx';
 
 export default function Home() {
 
@@ -23,6 +24,7 @@ export default function Home() {
     const [openPanel,setOpenPanel] = useState(false)
     const [openLeadForm,setOpenLeadForm] = useState(false)
     const [screen,setScreen] = useState(0)
+    const [consentModal,setConsentModal] = useState(false)
 
     let history = useHistory();
 
@@ -53,6 +55,10 @@ export default function Home() {
 
     const navigatePage=(i)=>{
         setScreen(i)
+    }
+
+    const closeUserConsentModal=()=>{
+        setConsentModal(false)
     }
 
     useEffect(() => {
@@ -163,6 +169,12 @@ export default function Home() {
                  openLeadForm &&
                  <LeadForm 
                     closeLeadModal={()=>_closeLeadForm()}
+                 />
+             }
+             {
+                 consentModal && 
+                 <UserConsentModal 
+                    closeUserConsentModal={()=>closeUserConsentModal()}
                  />
              }
         </div>
