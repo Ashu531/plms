@@ -7,14 +7,31 @@ import Status from '../../components/status/status.jsx';
 import './home.css'
 import Table from '../../components/table/table.jsx';
 import Header from '../../components/header/header.jsx'
-import { Input } from '../../components/input/input.jsx';
-import { Dropdown } from '../../components/dropdown/dropdown.jsx';
-import StudentDetailForm, { formViewTypes, studentFormInputTypes } from '../../forms/studentDetails.jsx';
-import LoanDetailsForm, { loanFormInputTypes } from '../../forms/loanDetails.jsx';
+import SlidingPanel from '../../components/sliding-panel/sliding_panel.jsx'
+import LeadForm from '../../components/leadForm/leadform.jsx';
 
 export default function Home() {
 
+    const [openPanel,setOpenPanel] = useState(false)
+    const [openLeadForm,setOpenLeadForm] = useState(false)
     const [query, setQuery] = useState('');
+
+    const openSlidingPanel = () =>{
+        setOpenPanel(true)
+    }
+
+    const closeSlidingPanel=()=>{
+        setOpenPanel(false)
+    }
+
+    const _openLeadForm=()=>{
+        setOpenLeadForm(true)
+    }
+
+    const _closeLeadForm=()=>{
+        setOpenLeadForm(true)
+    }
+
     const onSearch = async (query) => {
         setQuery(query);
     }
@@ -166,12 +183,22 @@ export default function Home() {
                         fontFamily: 'Montserrat',
                         fontWeight: 500
                     }}
+                    onClick={()=>_openLeadForm()}
                   />
              </div>
              <div className='table-container'>
-                <Table />
+                <Table openSlidingPanel={()=>openSlidingPanel()} />
              </div>
-             
+             {
+                 openPanel && 
+                 <SlidingPanel closeSlidingPanel={()=>closeSlidingPanel()} />
+             }
+             {
+                 openLeadForm &&
+                 <LeadForm 
+                     _closeLeadForm={()=>_closeLeadForm()}
+                 />
+             }
         </div>
     )
 }

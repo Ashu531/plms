@@ -1,0 +1,38 @@
+.confirm-modal{
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 999;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    background: rgba(68, 68, 68, 0.15);
+    backdrop-filter: blur(10px);
+    width: 100%;
+}
+
+.overlay{
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+    width: 70%;
+    height: 100%;
+}
+
+.confirm-modal-content{
+    padding: 2.4rem;
+    width: 30%;
+    height: 100%;
+    position: absolute;
+    right: 0px;
+    backdrop-filter: blur(40px);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background: #FFFFFF;
+    /* border: 1px solid #404040; */
+    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.25);
+}

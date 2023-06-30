@@ -1,0 +1,27 @@
+.lead-form-modal{
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 999;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(5px);
+}
+
+.lead-form-modal-content{
+    padding: 2.4rem;
+    width: 48rem;
+    backdrop-filter: blur(40px);
+    border-radius: 2.4rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background: #FFFFFF;
+    border: 1px solid #404040;
+    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.25);
+}
