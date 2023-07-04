@@ -9,12 +9,14 @@ import Table from '../../components/table/table.jsx';
 import Header from '../../components/header/header.jsx'
 import SlidingPanel from '../../components/sliding-panel/sliding_panel.jsx'
 import LeadForm from '../../components/leadForm/leadform.jsx';
+import StudentDetailForm, { formViewTypes } from '../../forms/studentDetails.jsx';
+import LoanDetailsForm from '../../forms/loanDetails.jsx';
+import ChoiceBox from '../../components/checklist/checklist.jsx';
 
 export default function Home() {
 
     const [openPanel,setOpenPanel] = useState(false)
     const [openLeadForm,setOpenLeadForm] = useState(false)
-    const [query, setQuery] = useState('');
 
     const openSlidingPanel = () =>{
         setOpenPanel(true)
@@ -32,6 +34,10 @@ export default function Home() {
         setOpenLeadForm(true)
     }
 
+    ///////////////////////////////////////////////////////////////
+    // Search Start
+
+    const [query, setQuery] = useState('');
     const onSearch = async (query) => {
         setQuery(query);
     }
@@ -47,6 +53,9 @@ export default function Home() {
     
         return () => clearTimeout(delayDebounce)
     }, [query]);
+
+    // Search End
+    //////////////////////////////////////////////////////////////////
 
     return (
         <div className='home-container'>
@@ -100,29 +109,16 @@ export default function Home() {
 
             <div className='row' style={{flexWrap: 'wrap', gap: '20px', justifyContent: 'center', alignItems: 'flex-start'}}>
                 <div style={{width: '40%'}}>
-                    <StudentDetailForm
-                        viewType={formViewTypes.CREATE} 
-                        // formData={{
-                        //     leadId: '327669',
-                        //     name: 'Rashmi Ranjan Sathapathy',
-                        //     institute: 'Skill Lync',
-                        //     mobile: '9040146344',
-                        //     email: 'rrsatzat@gmail.com'
-                        // }}
-                    />
-                </div>
-                <div style={{width: '40%'}}>
-                    <LoanDetailsForm
-                        viewType={formViewTypes.CREATE} 
-                        // formData={{
-                        //     name: 'Rashmi Ranjan Sathapathy',
-                        //     sameAsStudent: false,
-                        //     course: 'Embedded Software Development',
-                        //     courseFee: '59000',
-                        //     loanAmount: '55000',
-                        //     tenure: -1,
-                        //     advanceEmi: -1
-                        // }}
+                    <ChoiceBox
+                        title={'Additional Documents'}
+                        list={[
+                            {value: 0, label: 'item 1'},
+                            {value: 1, label: 'item 2'},
+                            {value: 2, label: 'item 3'},
+                            {value: 3, label: 'item 4'},
+                            {value: 4, label: 'item 5'},
+                        ]}
+                        onSelect={(selected) => console.log(selected)}
                     />
                 </div>
             </div>
