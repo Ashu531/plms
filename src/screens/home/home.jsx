@@ -44,6 +44,8 @@ export default function Home() {
         setOpenLeadForm(false)
     }
 
+    ///////////////////////////////////////////////////////////////
+    // Search Start
 
     const onSearch = async (query) => {
         setQuery(query);
@@ -53,14 +55,6 @@ export default function Home() {
         //search api here
     }
 
-    const navigatePage=(i)=>{
-        setScreen(i)
-    }
-
-    const closeUserConsentModal=()=>{
-        setConsentModal(false)
-    }
-
     useEffect(() => {
         const delayDebounce = setTimeout(() => {
             handleSearch(query);
@@ -68,6 +62,19 @@ export default function Home() {
     
         return () => clearTimeout(delayDebounce)
     }, [query]);
+
+    // Search End
+    //////////////////////////////////////////////////////////////////
+
+
+    const navigatePage=(i)=>{
+        setScreen(i)
+    }
+
+    const closeUserConsentModal=()=>{
+        setConsentModal(false)
+    }
+    
 
     return (
         <div className='home-container'>
