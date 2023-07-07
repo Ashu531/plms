@@ -1,13 +1,12 @@
 .button-component{
     display: flex;;
-    justify-content: space-evenly;
+    justify-content: center;
     align-items: center;
-    box-sizing: border-box;
+    position: relative;
+    gap: 10px;
     font-size: 1.4rem;
     line-height: 2.1rem;
-    position: relative;
-    width: auto !important;
-    padding: 0px 12px;
+    padding: 8px 15px;
 }
 .img{
     width: 2rem;
@@ -16,7 +15,6 @@
 }
 
 .text{
-    margin: 0 0.6rem;
     text-align: center;
     color: #ffffff;
     cursor: pointer;

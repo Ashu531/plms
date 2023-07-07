@@ -4,16 +4,13 @@ import './status.css';
 export default function Status({
     lightText,
     boldText,
-    bgColor,
-    textColor,
-    style={},
-    onClick
+    onClick,
+    selected
 }) {
 
   return (
     <div 
-        className={`status-container column`} 
-        style={{background: bgColor, color: textColor, ...style}} 
+        className={`status-container column ${selected ? 'selected' : ''}`}
         onClick={onClick}
     >
         <div className='text-12 text-montserrat text-capitalize'>{lightText}</div>

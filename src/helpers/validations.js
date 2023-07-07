@@ -1,4 +1,4 @@
-const excludeSpecialCharactersRegex = /^[a-zA-Z0-9äöüÄÖÜ]*$/;
+const excludeSpecialCharactersRegex = /^[a-zA-Z0-9äöüÄÖÜ ]*$/;
 const emailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
 const mobileRegex = /^(\+\d{1,3}[- ]?)?\d{10}$/;
 const amountRegex = /^\d+(\.\d{1,2})?$/;

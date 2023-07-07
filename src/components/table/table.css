@@ -8,7 +8,7 @@
 .table-header{
     display: flex;
     width: 100%;
-    padding: 5px 5px 5px 20px;
+    padding: 5px 10px 5px 20px;
     align-items: center;
     gap: 15px;
     border-radius: 8px;
@@ -19,6 +19,7 @@
 }
 
 .header-text{
+    flex: 2 1 0px;
     color: #0B090D;
     font-size: 16px;
     font-family: 'Montserrat';
@@ -26,7 +27,6 @@
     display: flex;
     align-items: center;
     justify-content: flex-start;
-    width: 12%;
 }
 
 .table-row{
@@ -49,11 +49,11 @@
 }
 
 .row-text{
+    flex: 2 1 0px;
     color: #0B090D;
     font-size: 12px;
     font-family: 'Montserrat';
     font-weight: 500;
-    width: 12%;
     text-align: start;
 }
 
@@ -67,16 +67,30 @@
 }
 
 .icon-container{
-    height: 38px;
-    width: 38px;
-    border-radius: 8px;
     background: #FFF;
+    cursor: pointer;
+    border-radius: 8px !important;
+    padding: 16px 0 !important;
     display: flex;
     justify-content: center;
     align-items: center;
-    cursor: pointer;
 }
 
 :hover.icon-container{
     background: #8F14CC;
+}
+
+.caret-icon{
+    position: relative;
+    right: 3px;
+    width: 12px;
+    height: 12px;
+    border-right: 1.5px solid #0B090D;
+    border-bottom: 1.5px solid #0B090D;
+    transform: rotate(-45deg);
+}
+
+:hover.icon-container > .caret-icon{
+    border-right: 1.5px solid #FFFFFF;
+    border-bottom: 1.5px solid #FFFFFF;
 }

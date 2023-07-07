@@ -9,14 +9,6 @@
     color: blue;
     overflow: scroll;
 }
-.tab{
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    width: 100%;
-    margin-top: 24px;
-}
 
 .lead-count{
     color: #0B090D;

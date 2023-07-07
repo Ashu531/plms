@@ -1,7 +1,7 @@
 import React,{useEffect, useState} from 'react'
 import caretIcon from '../../assets/Icons/caretIcon.svg'
 import LoanDetailsForm from '../../forms/loanDetails.jsx'
-import StudentDetailForm,{formViewTypes} from '../../forms/studentDetails.jsx'
+import StudentDetailForm,{formViewTypes} from '../../forms/leadDetails.jsx'
 import userConsentIcon from '../../assets/Icons/userConsentIcon.svg'
 import closeIcon from '../../assets/Icons/cross-icon.svg'
 import Button from '../button/button.jsx'

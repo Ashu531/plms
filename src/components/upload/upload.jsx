@@ -6,7 +6,7 @@ import csvIconBlue from "../../assets/Icons/csv-icon-blue.png";
 import downloadIcon from "../../assets/Icons/download-icon-blue.svg";
 import fileIconGrey from "../../assets/Icons/file-icon-grey.svg";
 import axios from "axios";
-import './/upload.css'
+import './upload.css'
 
 export default function Upload({
     closeUpload,

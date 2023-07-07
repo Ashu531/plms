@@ -8,9 +8,16 @@
     background-color: #F7F0FF;
     color: #8F14CC;
     cursor: pointer;
+    transition: padding 0.3s;
 }
 
 :hover.status-container{
+    background-color: #0DB78F;
+    color: #FFFFFF;
+}
+
+.selected{
+    padding: 14px;
     background-color: #0DB78F;
     color: #FFFFFF;
 }

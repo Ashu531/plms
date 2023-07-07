@@ -1,14 +1,24 @@
 import React, { useEffect, useState } from 'react';
 import { Dropdown } from '../components/dropdown/dropdown.jsx';
 import { Input } from '../components/input/input.jsx';
-import { formViewTypes } from './studentDetails.jsx';
+import { formViewTypes } from './leadDetails.jsx';
 import inrIcon from '../assets/Icons/inrIcon.svg';
 import { amountValidation, basicValidation, emailValidation, mobileValidation } from '../helpers/validations.js';
+
+
+export const createLoanFormState = {
+    name: '',
+    course: '',
+    courseFee: '',
+    loanAmount: '',
+    tenure: '',
+    advanceEmi: ''
+}
 
 export default function LoanDetailsForm({
     viewType,
     prefilledFields=[],
-    formData
+    formData,
 }) {
 
     const defaultState = {

@@ -8,7 +8,7 @@ import addIcon from '../../assets/Icons/addIcon.svg'
 import './/detail.css'
 import ActivityCard from '../../components/activityCard/activityCard.jsx';
 import FinancialForm from '../../components/financialForm/financialForm.jsx';
-import StudentDetailForm, { formViewTypes, studentFormInputTypes } from '../../forms/studentDetails.jsx';
+import StudentDetailForm, { formViewTypes, studentFormInputTypes } from '../../forms/leadDetails.jsx';
 import LoanDetailsForm, { loanFormInputTypes } from '../../forms/loanDetails.jsx';
 
 export default function DetailPage(props) {

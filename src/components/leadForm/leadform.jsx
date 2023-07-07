@@ -1,16 +1,39 @@
-import React,{useEffect, useState} from 'react'
-import caretIcon from '../../assets/Icons/caretIcon.svg'
-import LoanDetailsForm from '../../forms/loanDetails.jsx'
-import StudentDetailForm,{formViewTypes} from '../../forms/studentDetails.jsx'
-import Button from '../button/button.jsx'
-import './leadform.css'
+import React,{useEffect, useState} from 'react';
+import './leadform.css';
+import caretIcon from '../../assets/Icons/caretIcon.svg';
+import LoanDetailsForm, { createLoanFormState, loanFormInputTypes } from '../../forms/loanDetails.jsx';
+import LeadDetailForm,{createLeadFormState, formViewTypes, studentFormInputTypes} from '../../forms/leadDetails.jsx';
+import Button from '../button/button.jsx';
 
-export default function LeadForm(props) {
+export default function LeadForm({
+    instituteName
+}) {
+
+    const [ leadFormState, setLeadFormState ] = useState({ ...createLeadFormState });
+    const [ loanFormState, setLoanFormState ] = useState({ ...createLoanFormState });
+
+
+    const initForm = () => {
+        let newLeadFormState = {...leadFormState};
+        newLeadFormState.institute = instituteName;
+
+        setLeadFormState({ ...newLeadFormState });
+    }
+
+
+    useEffect(() => {
+
+        
+
+    }, [leadFormState.name])
+
+    useEffect(() => {
+        initForm();
+    }, [])
 
   return (
    <div className='lead-form-modal'>
        <div className='lead-form-modal-content'>
-           <div className='lead-form-modal-container'>
                 <div className='lead-form-modal-header row full-width-modal'>
                     <div className='row'>
                         <img src={caretIcon} onClick={()=>props?.closeLeadModal()} style={{cursor:'pointer'}} />
@@ -20,42 +43,30 @@ export default function LeadForm(props) {
                         <span className='lead-modal-instructions' style={{justifyContent:'flex-start'}}>*Mandatory Fields<br/>**You must fill all mandatory fields to save a lead</span>
                     </div>
                 </div>
-                <div className='row full-width' style={{flexWrap: 'wrap', gap: '20px', justifyContent: 'space-between', alignItems: 'flex-start',marginTop: '3rem'}}>
-                     <div style={{width: '40%'}}>
-                        <StudentDetailForm
+                <div className='row full-width' style={{flexWrap: 'wrap', gap: '20px', justifyContent: 'space-between', alignItems: 'flex-start', marginTop: '1rem'}}>
+                     <div style={{width: '48%'}}>
+                        <LeadDetailForm
                             viewType={formViewTypes.CREATE} 
+                            prefilledFields={[studentFormInputTypes.institute]}
                             formData={{
-                                leadId: '327669',
-                                name: 'Rashmi Ranjan Sathapathy',
-                                institute: 'Skill Lync',
-                                mobile: '9040146344',
-                                email: 'rrsatzat@gmail.com'
+                                institute: 'Some institute'
                             }}
                         />
                     </div>
-                    <div style={{width: '40%'}}>
+                    <div style={{width: '48%'}}>
                         <LoanDetailsForm
                             viewType={formViewTypes.CREATE} 
-                            formData={{
-                                name: 'Rashmi Ranjan Sathapathy',
-                                sameAsStudent: false,
-                                course: 'Embedded Software Development',
-                                courseFee: '59000',
-                                loanAmount: '55000',
-                                tenure: -1,
-                                advanceEmi: -1
-                            }}
+                            formData={{}}
                         />
                     </div>
                 </div>
-                <div className='lead-form-modal-footer row full-width-modal'>
+                <div className='row' style={{gap: '1rem'}}>
                     <Button
                         text='Save Draft'
                         classes={{
                             borderRadius: 8,
                             border: '1px solid #8F14CC',
-                            height: '44px',
-                            width: '150px',
+                            height: '44px'
                         }}
                         textClass={{
                             color: '#8F14CC',
@@ -69,8 +80,7 @@ export default function LeadForm(props) {
                         classes={{
                             background: '#8F14CC',
                             borderRadius: '8px',
-                            height: '44px',
-                            width: '150px',
+                            height: '44px'
                         }}
                         textClass={{
                             color: '#FFF',
@@ -84,8 +94,7 @@ export default function LeadForm(props) {
                         classes={{
                             background: '#8F14CC',
                             borderRadius: '8px',
-                            height: '44px',
-                            width: '150px',
+                            height: '44px'
                         }}
                         textClass={{
                             color: '#FFF',
@@ -95,7 +104,6 @@ export default function LeadForm(props) {
                         }}
                     />
                 </div>
-            </div>
        </div>
    </div>
   )

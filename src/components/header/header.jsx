@@ -20,10 +20,10 @@ export default function Header({
         />
        </div>
         <div className='header-content'>
-            <img src={userIcon} />
-            <img src={draftIcon} />
-            <img src={downloads} />
-            <img src={bellIcon} />
+            <img src={userIcon} style={{width: '36px', height: '36px'}} />
+            <img src={draftIcon} style={{width: '36px', height: '36px'}} />
+            <img src={downloads} style={{width: '36px', height: '36px'}} />
+            <img src={bellIcon} style={{width: '36px', height: '36px'}} />
             <div className='logout-container'>
                 <img src={logoutIcon} />
                 <span className='logout-text'>Log Out</span>

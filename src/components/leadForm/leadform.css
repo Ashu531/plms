@@ -9,12 +9,14 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(5px);
+    background-color: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(8px);
 }
 
 .lead-form-modal-content{
-    width: 90%;
+    position: relative;
+    padding: 30px 75px;
+    width: 80%;
     backdrop-filter: blur(40px);
     border-radius: 2.4rem;
     display: flex;
@@ -24,17 +26,12 @@
     border: 1px solid #EAEAEA;
     background: #FFF;
     height: 95%;
-}
-
-.lead-form-modal-container{
-    box-sizing: border-box;
-    position: relative;
-    padding: 2.4rem;
+    overflow: scroll;
 }
 
 .lead-form-modal-header{
-    position: absolute;
-    top: 30px;
+    position: sticky;
+    top: 0;
     /* left: 75px; */
 }
 

@@ -2,7 +2,16 @@ import React, { useEffect, useState } from 'react';
 import { Input } from '../components/input/input.jsx';
 import { basicValidation, emailValidation, mobileValidation } from '../helpers/validations.js';
 
-export default function StudentDetailForm({
+
+export const createLeadFormState = {
+    leadId: '',
+    name: '',
+    institute: '',
+    mobile: '',
+    email: ''
+}
+
+export default function LeadDetailForm({
     viewType,
     prefilledFields=[],
     formData
