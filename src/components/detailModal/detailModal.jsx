@@ -3,11 +3,13 @@ import './/detailModal.css'
 import uploadIcon from '../../assets/Icons/uploadIcon.svg'
 import pendingIcon from '../../assets/Icons/pendingIcon.svg'
 import Button from '../button/button.jsx';
+import consentIcon from '../../assets/Icons/consentIcon.svg'
 import axios from 'axios';
 
 export default function DetailModal(props) {
 
   const [pendecyData,setPendecyData] = useState([])
+  const [consent,setUserConsent] = useState(false)
 
    useEffect(()=>{
         getQuickViewData()
@@ -33,6 +35,11 @@ export default function DetailModal(props) {
         }).
         then(res => {
             handlePendencyData(res.data.data)
+            console.log(res.data)
+            if(res.data.consent === 'Y'){
+                setUserConsent(true)
+            }
+            // setPendecyData(res.data.data)
         }).catch(err=>console.log(err));
    }
    
@@ -47,12 +54,20 @@ export default function DetailModal(props) {
         })
    }
 
+   const goToDetailPage=()=>{
+        let i = 1;
+        props?.openDetailPage(i);
+   }
+
     return (
         <div className='detail-modal' >
             <div className='detail-modal-header'>
                 <div className='modal-header-content'>
-                    <div className='modal-header-name'>
-                    {props?.leadData?.fullName}
+                    <div className='modal-header-name row' >
+                        <span className='modal-header-name'>{props?.leadData?.fullName}</span>
+                        {
+                            consent && <img src={consentIcon} style={{marginLeft: 10,objectFit:'contain'}} />
+                        }
                     </div>
                     <div className='modal-header-lead'>
                     {props?.leadData?.leadId}
@@ -87,8 +102,20 @@ export default function DetailModal(props) {
                     </div>
                    
                         <div className='column full-width' style={{marginTop: 12}} >
+                            {
+                                !consent && 
+                                <div className='row full-width'>
+                                        <div className='row'>
+                                                            <div className='pending-icon-content'>
+                                                                <img src={pendingIcon} />
+                                                            </div>
+                                                            <div className='table-label'>Consent</div>
+                                        </div>
+                                        <div className='table-link' onClick={()=>props?.openUserConsentModal()}>Ask for Consent</div>
+                                </div>
+                            }
                                     {
-                                         pendecyData.map((item,index)=>{
+                                       pendecyData.length > 0 &&  pendecyData.map((item,index)=>{
                                             return(
                                                 <div className='row full-width' key={index}>
                                                         <div className='row'>
@@ -97,7 +124,7 @@ export default function DetailModal(props) {
                                                             </div>
                                                             <div className='table-label'>{item}</div>
                                                         </div>
-                                                        <div className='table-link'>Ask for consent</div>
+                                                        <div className='table-link'>Upload Now</div>
                                                 </div>
                                              )
                                         })
@@ -137,6 +164,7 @@ export default function DetailModal(props) {
                         fontFamily: 'Montserrat',
                         fontWeight: 600
                     }}
+                    onClick={()=>goToDetailPage()}
                 />
                 <Button 
                     text='View Full Details'
@@ -152,6 +180,7 @@ export default function DetailModal(props) {
                         fontFamily: 'Montserrat',
                         fontWeight: 600
                     }}
+                    onClick={()=>goToDetailPage()}
                 />
             </div>
         </div>

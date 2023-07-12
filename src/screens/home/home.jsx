@@ -75,15 +75,6 @@ export default function Home() {
   const [statusList, setStatusList] = useState([...statuses]);
 
 
-  const updateTableData = (data, index) => {
-
-    let newData = [...tableData];
-    newData[index] = data;
-
-    setTableData(newData);
-
-  }
-
   const openSlidingPanel = () => {
     setOpenPanel(true);
   };
@@ -167,7 +158,16 @@ export default function Home() {
     setStatusList(newStatusList);
   }
 
-  const getTableData=async(index)=>{
+  const updateTableData = (data, index) => {
+
+    let newData = [...tableData];
+    newData[index] = data;
+
+    setTableData(newData);
+
+  }
+
+  const getTableData = async (index) => {
 
     let endpoint;
 
@@ -186,7 +186,7 @@ export default function Home() {
           break;
     }
 
-    return await axios.get(`${API_URL}/api/loan/${endpoint}`,{
+    return await axios.get(`${API_URL}/api/loan/${endpoint}`, {
         headers: {
             token: `fb5b3d9080d36e1e3eead4b0cebcb430b1c654b5`,
         },
@@ -200,6 +200,7 @@ export default function Home() {
   //////////////////////////////////////////////////////////////////
 
   const navigatePage = (i) => {
+    closeSlidingPanel()
     setScreen(i);
   };
 
@@ -260,6 +261,41 @@ export default function Home() {
   useEffect(() => {
     updateScreen()
   }, [])
+
+  const openUserConsentModal = () => {
+    closeSlidingPanel()
+    setConsentModal(true);
+  };
+
+  const getQuickViewData=async()=>{
+    await axios.get(`${API_URL}/api/loan/overview/${leadInfo?.leadId}/`,{
+        headers: {
+            token: `fb5b3d9080d36e1e3eead4b0cebcb430b1c654b5`,
+        },
+    }).
+    then(res => {
+        submitConsent(res.data.data)
+    }).catch(err=>console.log(err));
+  }
+
+  const submitConsent = async(data) => {
+    let detail = {
+        mobile : data.data.borrowerData.mobile,
+        firstName : data.data.borrowerData.firstName,
+        lastName : data.data.borrowerData.lastName,
+        borrowerUuid: data.data.borrowerData.borrowerUuid,
+        email: data.data.borrowerData.email
+    }
+
+    const response = await axios.post(`${API_URL}/api/loan/ask/consent/${leadInfo.leadId}/`,detail,{
+        headers: {
+            token: `fb5b3d9080d36e1e3eead4b0cebcb430b1c654b5`,
+        },
+    })
+    .then(res => res.data)
+    .catch(error => error.response.data);
+    closeUserConsentModal()
+}
 
   return (
     <div className="home-container">
@@ -338,6 +374,8 @@ export default function Home() {
         <SlidingPanel 
           closeSlidingPanel={() => closeSlidingPanel()} 
           leadData={leadInfo}
+          openDetailPage={(i) => navigatePage(i)}
+          openUserConsentModal={()=>openUserConsentModal()}
         />
       )}
       {openLeadForm && <LeadForm onBackPress={_closeLeadForm} instituteName={'Dummy Institute'} />}
@@ -345,6 +383,7 @@ export default function Home() {
       {consentModal && (
         <UserConsentModal
           closeUserConsentModal={() => closeUserConsentModal()}
+          submitConsent={()=>getQuickViewData()}
         />
       )}
     </div>

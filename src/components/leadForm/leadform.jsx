@@ -297,51 +297,52 @@ export default function LeadForm({
                         />
                     </div>
                 </div>
-                <div className='lead-form-modal-footer row full-width-modal'>
-                    <div className='row' style={{gap: '1rem'}}>
-                        <Button
-                            text='Save Draft'
-                            classes={{
-                                borderRadius: 8,
-                                border: '1px solid #8F14CC',
-                                height: '44px'
-                            }}
-                            textClass={{
-                                color: '#8F14CC',
-                                fontSize: '14px',
-                                fontFamily: 'Montserrat',
-                                fontWeight: 600
-                            }}
-                        />
-                        <Button 
-                            text='Save & Add Another Lead'
-                            classes={{
-                                background: '#8F14CC',
-                                borderRadius: '8px',
-                                height: '44px'
-                            }}
-                            textClass={{
-                                color: '#FFF',
-                                fontSize: '14px',
-                                fontFamily: 'Montserrat',
-                                fontWeight: 600
-                            }}
-                        />
-                        <Button 
-                            text='Save Lead'
-                            classes={{
-                                background: '#8F14CC',
-                                borderRadius: '8px',
-                                height: '44px'
-                            }}
-                            textClass={{
-                                color: '#FFF',
-                                fontSize: '14px',
-                                fontFamily: 'Montserrat',
-                                fontWeight: 600
-                            }}
-                        />
-                    </div>
+                <div className='row' style={{gap: '1rem'}}>
+                    <Button
+                        text='Save Draft'
+                        classes={{
+                            borderRadius: 8,
+                            border: '1px solid #8F14CC',
+                            height: '44px'
+                        }}
+                        textClass={{
+                            color: '#8F14CC',
+                            fontSize: '14px',
+                            fontFamily: 'Montserrat',
+                            fontWeight: 600
+                        }}
+                        onClick={()=>{}}
+                    />
+                    <Button 
+                        text='Save & Add Another Lead'
+                        classes={{
+                            background: '#8F14CC',
+                            borderRadius: '8px',
+                            height: '44px'
+                        }}
+                        textClass={{
+                            color: '#FFF',
+                            fontSize: '14px',
+                            fontFamily: 'Montserrat',
+                            fontWeight: 600
+                        }}
+                        onClick={()=>{}}
+                    />
+                    <Button 
+                        text='Save Lead'
+                        classes={{
+                            background: '#8F14CC',
+                            borderRadius: '8px',
+                            height: '44px'
+                        }}
+                        textClass={{
+                            color: '#FFF',
+                            fontSize: '14px',
+                            fontFamily: 'Montserrat',
+                            fontWeight: 600
+                        }}
+                        onClick={()=>{}}
+                    />
                 </div>
        </div>
    </div>
