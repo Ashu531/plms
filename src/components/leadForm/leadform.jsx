@@ -6,7 +6,8 @@ import LeadDetailForm,{createLeadFormState, formViewTypes, studentFormInputTypes
 import Button from '../button/button.jsx';
 
 export default function LeadForm({
-    instituteName
+    instituteName,
+    ...props
 }) {
 
     const [ leadFormState, setLeadFormState ] = useState({ ...createLeadFormState });
@@ -74,6 +75,7 @@ export default function LeadForm({
                             fontFamily: 'Montserrat',
                             fontWeight: 600
                         }}
+                        onClick={()=>{}}
                     />
                     <Button 
                         text='Save & Add Another Lead'
@@ -88,6 +90,7 @@ export default function LeadForm({
                             fontFamily: 'Montserrat',
                             fontWeight: 600
                         }}
+                        onClick={()=>{}}
                     />
                     <Button 
                         text='Save Lead'
@@ -102,6 +105,7 @@ export default function LeadForm({
                             fontFamily: 'Montserrat',
                             fontWeight: 600
                         }}
+                        onClick={()=>{}}
                     />
                 </div>
        </div>

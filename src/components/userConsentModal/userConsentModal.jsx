@@ -6,6 +6,7 @@ import userConsentIcon from '../../assets/Icons/userConsentIcon.svg'
 import closeIcon from '../../assets/Icons/cross-icon.svg'
 import Button from '../button/button.jsx'
 import './/userConsentModal.css'
+import axios from 'axios';
 
 export default function UserConsentModal(props) {
 
@@ -35,6 +36,7 @@ export default function UserConsentModal(props) {
                           fontFamily: 'Montserrat',
                           fontWeight: 500
                       }}
+                      onClick={()=>props?.submitConsent()}
                     />
                 </div>
             </div>
