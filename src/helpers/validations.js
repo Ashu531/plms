@@ -26,7 +26,7 @@ export const emailValidation = (str) => {
     if(str.length == 0)
         return 'cannot be empty';
 
-    if(str.match(emailRegex) == '')
+    if(str.match(emailRegex) == null)
         return 'invalid';
 
     return null;
@@ -40,7 +40,7 @@ export const mobileValidation = (str) => {
     if(str.length == 0)
         return 'cannot be empty';
 
-    if(str.match(mobileRegex) == '')
+    if(str.match(mobileRegex) == null)
         return 'invalid';
 
     return null;
@@ -54,7 +54,7 @@ export const amountValidation = (str) => {
     if(str.length == 0)
         return 'cannot be empty';
 
-    if(str.match(amountRegex) == '')
+    if(str.match(amountRegex) == null)
         return 'invalid';
 
     return null;

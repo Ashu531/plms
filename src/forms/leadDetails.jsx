@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { Input } from '../components/input/input.jsx';
-import { basicValidation, emailValidation, mobileValidation } from '../helpers/validations.js';
 
 
 export const createLeadFormState = {
@@ -13,20 +12,13 @@ export const createLeadFormState = {
 
 export default function LeadDetailForm({
     viewType,
-    prefilledFields=[],
-    formData
+    leadIdState,
+    nameState,
+    instituteState,
+    mobileState,
+    emailState,
+    onChange,
 }) {
-
-    const defaultState = {
-        value: '',
-        error: null
-    };
-
-    const [leadIdState, setLeadIdState] = useState({...defaultState});
-    const [nameState, setNameState] = useState({...defaultState});
-    const [instituteState, setInstituteState] = useState({...defaultState});
-    const [mobileState, setMobileState] = useState({...defaultState});
-    const [emailState, setEmailState] = useState({...defaultState});
 
     const leadIdLabel = () => 'Lead ID';
     const nameLabel = () => 'Student Name';
@@ -109,45 +101,11 @@ export default function LeadDetailForm({
         }
     }
 
-
-
-    const handleLeadIdChange = (str) => {
-        setLeadIdState({...leadIdState, value: str});
-    };
-    
-    const handleNameChange = (str) => {
-        setNameState({...nameState, value: str});
-    };
-
-    const handleInstituteChange = (str) => {
-        setInstituteState({...instituteState, value: str});
-    };
-
-    const handleMobileChange = (str) => {
-        setMobileState({...mobileState, value: str});
-    };
-
-    const handleEmailChange = (str) => {
-        setEmailState({...emailState, value: str});
-    };
-
-    const onChange = (type, str) => {
-        switch(type){
-            case studentFormInputTypes.leadId: return handleLeadIdChange(str);
-            case studentFormInputTypes.name: return handleNameChange(str);
-            case studentFormInputTypes.institute: return handleInstituteChange(str);
-            case studentFormInputTypes.mobile: return handleMobileChange(str);
-            case studentFormInputTypes.email: return handleEmailChange(str);
-        }
-    }
-
-
-
-    const leadIdDisabled = () => prefilledFields.indexOf(studentFormInputTypes.leadId) > -1;
-    const nameDisabled = () => prefilledFields.indexOf(studentFormInputTypes.name) > -1;
-    const instituteDisabled = () => prefilledFields.indexOf(studentFormInputTypes.institute) > -1;
-    const mobileDisabled = () => prefilledFields.indexOf(studentFormInputTypes.mobile) > -1;
-    const emailDisabled = () => prefilledFields.indexOf(studentFormInputTypes.email) > -1;
+    const leadIdDisabled = () => leadIdState.disabled;
+    const nameDisabled = () => nameState.disabled;
+    const instituteDisabled = () => instituteState.disabled;
+    const mobileDisabled = () => mobileState.disabled;
+    const emailDisabled = () => emailState.disabled;
 
     const getDisabled = (type) => {
 
@@ -188,75 +146,6 @@ export default function LeadDetailForm({
         }
 
     }
-
-
-    useEffect(() => {
-        const delayDebounce = setTimeout(() => {
-            const error = basicValidation(leadIdState.value);
-            if(error != 'cannot be empty'){
-                setLeadIdState({...leadIdState, error: error})
-            }
-        }, 0)
-    
-        return () => clearTimeout(delayDebounce)
-    }, [leadIdState.value]);
-
-    useEffect(() => {
-        const delayDebounce = setTimeout(() => {
-            const error = basicValidation(nameState.value);
-            if(error != 'cannot be empty'){
-                setNameState({...nameState, error: error})
-            }
-        }, 0)
-    
-        return () => clearTimeout(delayDebounce)
-    }, [nameState.value]);
-
-    useEffect(() => {
-        const delayDebounce = setTimeout(() => {
-            const error = basicValidation(instituteState.value);
-            if(error != 'cannot be empty'){
-                setInstituteState({...instituteState, error: error})
-            }
-        }, 0)
-    
-        return () => clearTimeout(delayDebounce)
-    }, [instituteState.value]);
-
-    useEffect(() => {
-        const delayDebounce = setTimeout(() => {
-            const error = mobileValidation(mobileState.value);
-            if(error != 'cannot be empty'){
-                setMobileState({...mobileState, error: error})
-            }
-        }, 0)
-    
-        return () => clearTimeout(delayDebounce)
-    }, [mobileState.value]);
-
-    useEffect(() => {
-        const delayDebounce = setTimeout(() => {
-            const error = emailValidation(emailState.value);
-            if(error != 'cannot be empty'){
-                setEmailState({...emailState, error: error})
-            }
-        }, 0)
-    
-        return () => clearTimeout(delayDebounce)
-    }, [emailState.value]);
-
-    useEffect(() => {
-
-        if(formData != null){
-            onChange(studentFormInputTypes.leadId, formData['leadId'] ? formData['leadId'] : '');
-            onChange(studentFormInputTypes.name, formData['name'] ? formData['name'] : '');
-            onChange(studentFormInputTypes.institute, formData['institute'] ? formData['institute'] : '');
-            onChange(studentFormInputTypes.mobile, formData['mobile'] ? formData['mobile'] : '');
-            onChange(studentFormInputTypes.email, formData['email'] ? formData['email'] : '');
-
-        }
-
-    }, []);
 
 
   return (
