@@ -43,10 +43,10 @@ export default function Table({
                 { list.map((item, index) => (
                     <div key={`${item}-${index}`} className='table-row' onClick={() => onRowClick(item, index)}>
                         <div className='row-text'>{ item.leadId }</div>
-                        <div className='row-text'>{ item.name }</div>
+                        <div className='row-text'>{ item.fullName }</div>
                         <div className='row-text'>{ item.mobile }</div>
-                        <div className='row-text'>{ item.amount }</div>
-                        <div className='row-text'>{ item.update }</div>
+                        <div className='row-text'>{ item.loanRequired }</div>
+                        <div className='row-text'>{ item.status }</div>
                         <div className='row-text' style={{flex: '3 1 0px'}}>{ item.updateTime }</div>
                         <div className='row-text icon-container' style={{flex: '1 1 0px'}} onClick={(e) => handleIconClick(e, item, index)}>
                             <div className='caret-icon'></div>

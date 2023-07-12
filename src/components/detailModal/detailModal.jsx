@@ -1,20 +1,61 @@
-import React, { useEffect } from 'react';
+import React, { useEffect,useState } from 'react';
 import './/detailModal.css'
 import uploadIcon from '../../assets/Icons/uploadIcon.svg'
 import pendingIcon from '../../assets/Icons/pendingIcon.svg'
 import Button from '../button/button.jsx';
+import axios from 'axios';
 
-export default function DetailModal(props) 
-{
+export default function DetailModal(props) {
+
+  const [pendecyData,setPendecyData] = useState([])
+
+   useEffect(()=>{
+        getQuickViewData()
+        getPendencyData()
+   },[])
+
+   const getQuickViewData=async()=>{
+        await axios.get(`${API_URL}/api/loan/overview/${props?.leadData?.leadId}/`,{
+            headers: {
+                token: `fb5b3d9080d36e1e3eead4b0cebcb430b1c654b5`,
+            },
+        }).
+        then(res => {
+            console.log(res.data.data)
+        }).catch(err=>console.log(err));
+   }
+
+   const getPendencyData=async()=>{
+        await axios.get(`${API_URL}/api/loan/pendencies/${props?.leadData?.leadId}/`,{
+            headers: {
+                token: `fb5b3d9080d36e1e3eead4b0cebcb430b1c654b5`,
+            },
+        }).
+        then(res => {
+            handlePendencyData(res.data.data)
+        }).catch(err=>console.log(err));
+   }
+   
+
+   const handlePendencyData=(item)=>{
+        let pendencyArr = Object.entries(item);
+        let pendencyOriginals = []
+        pendencyArr.map((item,index)=>{
+            if(item[1] === false)
+            pendencyOriginals.push(item[0])
+            setPendecyData(pendencyOriginals)
+        })
+   }
+
     return (
         <div className='detail-modal' >
             <div className='detail-modal-header'>
                 <div className='modal-header-content'>
                     <div className='modal-header-name'>
-                    Rashmi Ranjan Satapathy
+                    {props?.leadData?.fullName}
                     </div>
                     <div className='modal-header-lead'>
-                    Lead ID: 25883
+                    {props?.leadData?.leadId}
                     </div>
                 </div>
                 <div className='upload-icon-content'>
@@ -31,11 +72,11 @@ export default function DetailModal(props)
                     <div className='column full-width' style={{marginTop: 12}}>
                         <div className='row full-width'>
                             <span className='table-label'>Mobile Number</span>
-                            <span className='table-value'>+91 9999988888</span>
+                            <span className='table-value'>{props?.leadData?.mobile}</span>
                         </div>
                         <div className='row full-width'>
                             <span className='table-label'>Email</span>
-                            <span className='table-value'>rashmi.satapathy.2588@gmail.com</span>
+                            <span className='table-value'> {props?.leadData?.emailId}</span>
                         </div>
                     </div>
                 </div>
@@ -44,17 +85,25 @@ export default function DetailModal(props)
                     <div className='modal-header'>
                     Pendencies
                     </div>
-                    <div className='column full-width' style={{marginTop: 12}}>
-                        <div className='row full-width'>
-                            <div className='row'>
-                                <div className='pending-icon-content'>
-                                    <img src={pendingIcon} />
-                                </div>
-                                <span className='table-label'>Consent</span>
-                            </div>
-                            <div className='table-link'>Ask for consent</div>
+                   
+                        <div className='column full-width' style={{marginTop: 12}} >
+                                    {
+                                         pendecyData.map((item,index)=>{
+                                            return(
+                                                <div className='row full-width' key={index}>
+                                                        <div className='row'>
+                                                            <div className='pending-icon-content'>
+                                                                <img src={pendingIcon} />
+                                                            </div>
+                                                            <div className='table-label'>{item}</div>
+                                                        </div>
+                                                        <div className='table-link'>Ask for consent</div>
+                                                </div>
+                                             )
+                                        })
+                                    }
+                                    
                         </div>
-                    </div>
                 </div>
                 <div className='modal-divider' style={{margin: '24px 0px'}}/>
                 <div className='column full-width'>
@@ -63,13 +112,13 @@ export default function DetailModal(props)
                     </div>
                    <div className='update-content'>
                         <div className='update-content-header'>
-                            Lead updated to Consent Not Given
+                            {props?.leadData?.status}
                         </div>
-                        <div className='row'>
+                        {/* <div className='row'>
                             <div className='update-text'>
                             Ujjawal Chauhan
                             </div>
-                        </div>
+                        </div> */}
                    </div>
                 </div>
             </div>

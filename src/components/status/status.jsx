@@ -5,7 +5,8 @@ export default function Status({
     lightText,
     boldText,
     onClick,
-    selected
+    selected,
+    count
 }) {
 
   return (
@@ -13,7 +14,7 @@ export default function Status({
         className={`status-container column ${selected ? 'selected' : ''}`}
         onClick={onClick}
     >
-        <div className='text-12 text-montserrat text-capitalize'>{lightText}</div>
+        <div className='text-12 text-montserrat text-capitalize'>{count} Cases</div>
         <div className='text-20 text-weight-5 text-montserrat text-capitalize'>{boldText}</div>
     </div>
   )

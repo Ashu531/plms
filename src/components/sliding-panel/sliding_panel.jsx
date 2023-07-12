@@ -12,7 +12,7 @@ export default function SlidingPanel(props)
                 </div>
             </div> 
             <div className='confirm-modal-content'>
-                <DetailModal />
+                <DetailModal leadData={props?.leadData} />
             </div>
         </div>
     )

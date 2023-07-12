@@ -10,6 +10,7 @@ import Header from "../../components/header/header.jsx";
 import SlidingPanel from "../../components/sliding-panel/sliding_panel.jsx";
 import LeadForm from "../../components/leadForm/leadform.jsx";
 import { useHistory } from "react-router-dom";
+import axios from 'axios';
 import { Input } from "../../components/input/input.jsx";
 import { Dropdown } from "../../components/dropdown/dropdown.jsx";
 import DetailPage from "../detail/detail.jsx";
@@ -155,32 +156,26 @@ let leadList = [
 
 let statuses = [
   {
-    lightText: "478 Cases",
     boldText: "All",
     selected: true,
   },
   {
-    lightText: "478 Cases",
     boldText: "Incomplete",
     selected: false,
   },
   {
-    lightText: "478 Cases",
     boldText: "In Process",
     selected: false,
   },
   {
-    lightText: "478 Cases",
     boldText: "Closed",
     selected: false,
   },
   {
-    lightText: "478 Cases",
     boldText: "Approved",
     selected: false,
   },
   {
-    lightText: "478 Cases",
     boldText: "Disbursed",
     selected: false,
   },
@@ -188,15 +183,31 @@ let statuses = [
 
 export default function Home() {
   const [query, setQuery] = useState("");
-
+  const [leadInfo,setLeadInfo] = useState({})
   const [openPanel, setOpenPanel] = useState(false);
   const [openLeadForm, setOpenLeadForm] = useState(false);
   const [screen, setScreen] = useState(0);
   const [consentModal, setConsentModal] = useState(false);
-
+  const [tableData,setTableData] = useState([])
   const [statusList, setStatusList] = useState([...statuses]);
 
+  useEffect(()=>{
+    getListData()
+  },[])
+
   let history = useHistory();
+
+  const getListData=async()=>{
+    await axios.get(`${API_URL}/api/loan/all/`,{
+        headers: {
+            token: `fb5b3d9080d36e1e3eead4b0cebcb430b1c654b5`,
+        },
+    }).
+    then(res => {
+        console.log(res.data.data)
+        setTableData(res.data.data.leads)
+    }).catch(err=>console.log(err));
+  }
 
   const openSlidingPanel = () => {
     setOpenPanel(true);
@@ -221,14 +232,24 @@ export default function Home() {
     setQuery(query);
   };
 
-  const handleSearch = (query) => {
+  const handleSearch = async(query) => {
     //search api here
+    await axios.get(`${API_URL}/api/loan/search/filter/?search=${query}`,{
+        headers: {
+            token: `fb5b3d9080d36e1e3eead4b0cebcb430b1c654b5`,
+        },
+    }).
+    then(res => {
+        setTableData(res.data.data.leads)
+    }).catch(err=>console.log(err));
   };
 
   useEffect(() => {
     const delayDebounce = setTimeout(() => {
-      handleSearch(query);
-    }, 500);
+        if(query.length > 0){
+            handleSearch(query);
+        }
+     }, 500);
 
     return () => clearTimeout(delayDebounce);
   }, [query]);
@@ -240,6 +261,9 @@ export default function Home() {
   // Status Start
 
   const handleStatusChange = (status, index) => {
+
+    toggleStatus(index)
+
     let newStatusList = [...statusList];
 
     newStatusList.forEach((status, i) => {
@@ -250,8 +274,83 @@ export default function Home() {
       }
     });
 
+
+
     setStatusList([...newStatusList]);
   };
+
+  const toggleStatus=(index)=>{
+      console.log(index)
+    if(index === 1){
+        getIncompleteData()
+    }else if(index === 2){
+        getInProcessData()
+    }else if(index === 3){
+        getRejectedData()
+    }else if(index === 4){
+        getApprovedData()
+    }else if(index === 5){
+        getDisbursedData()
+    }else{
+        getListData()
+    }
+  }
+
+  const getInProcessData=async()=>{
+    await axios.get(`${API_URL}/api/loan/inprocess/`,{
+        headers: {
+            token: `fb5b3d9080d36e1e3eead4b0cebcb430b1c654b5`,
+        },
+    }).
+    then(res => {
+        setTableData(res.data.data.leads)
+    }).catch(err=>console.log(err));
+  }
+
+  const getRejectedData=async()=>{
+    await axios.get(`${API_URL}/api/loan/rejected/`,{
+        headers: {
+            token: `fb5b3d9080d36e1e3eead4b0cebcb430b1c654b5`,
+        },
+    }).
+    then(res => {
+        setTableData(res.data.data.leads)
+    }).catch(err=>console.log(err));
+  }
+
+  const getApprovedData=async()=>{
+    await axios.get(`${API_URL}/api/loan/approved/`,{
+        headers: {
+            token: `fb5b3d9080d36e1e3eead4b0cebcb430b1c654b5`,
+        },
+    }).
+    then(res => {
+        setTableData(res.data.data.leads)
+    }).catch(err=>console.log(err));
+  }
+
+  const getDisbursedData=async()=>{
+    await axios.get(`${API_URL}/api/loan/disbursed/`,{
+        headers: {
+            token: `fb5b3d9080d36e1e3eead4b0cebcb430b1c654b5`,
+        },
+    }).
+    then(res => {
+        setTableData(res.data.data.leads)
+    }).catch(err=>console.log(err));
+  }
+  
+
+  const getIncompleteData=async()=>{
+    await axios.get(`${API_URL}/api/loan/incomplete/`,{
+        headers: {
+            token: `fb5b3d9080d36e1e3eead4b0cebcb430b1c654b5`,
+        },
+    }).
+    then(res => {
+        setTableData(res.data.data.leads)
+    }).catch(err=>console.log(err));
+  }
 
   // Status End
   //////////////////////////////////////////////////////////////////
@@ -278,6 +377,7 @@ export default function Home() {
                 boldText={status.boldText}
                 selected={status.selected}
                 onClick={() => handleStatusChange(status, index)}
+                count={tableData.length}
               />
             ))}
           </div>
@@ -286,7 +386,7 @@ export default function Home() {
             className="row"
             style={{ justifyContent: "space-between", margin: "24px 0 0 0" }}
           >
-            <div className="lead-count">Showing 478 Incomplete leads</div>
+            <div className="lead-count">Showing {tableData.length} Incomplete leads</div>
             <Button
               leadingIcon={addIcon}
               text="Create"
@@ -306,23 +406,41 @@ export default function Home() {
           </div>
 
           <div className="table-container">
-            <Table
-              list={[...leadList]}
-              onIconClick={(item, index) => {navigatePage(1)}}
-              onRowClick={(item, index) => {openSlidingPanel()}}
-            />
+              {
+                  tableData.length > 0 ? 
+                  <Table
+                        list={[...tableData]}
+                        onIconClick={(item, index) => {
+                            setLeadInfo(item)
+                            navigatePage(1)}}
+                        onRowClick={(item, index) => {
+                            setLeadInfo(item)
+                            openSlidingPanel()
+                        }}
+                  /> : 
+                  <div className='no-result-content'>
+                    <span>No Results</span>
+                  </div>
+              }
+            
           </div>
         </div>
       )}
 
       {screen === 1 && (
         <div className="full-width">
-          <DetailPage goToHomePage={(i) => navigatePage(i)} />
+          <DetailPage 
+           goToHomePage={(i) => navigatePage(i)} 
+           leadData={leadInfo}
+           />
         </div>
       )}
 
       {openPanel && (
-        <SlidingPanel closeSlidingPanel={() => closeSlidingPanel()} />
+        <SlidingPanel 
+          closeSlidingPanel={() => closeSlidingPanel()} 
+          leadData={leadInfo}
+        />
       )}
       {openLeadForm && <LeadForm closeLeadModal={_closeLeadForm} instituteName={'Dummy Institute'} />}
 
