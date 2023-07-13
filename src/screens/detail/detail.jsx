@@ -17,10 +17,12 @@ export default function DetailPage(props) {
  const [tab,setTab] = useState(0);
  const [activities,setActivities] = useState([])
  const [comments,setComments] = useState([])
+ const [leadData,setLeadData] = useState({})
 
  useEffect(()=>{
      getActivityData()
      getUserComment()
+     getLeadOverview()
  },[])
 
  const getUserComment=async()=>{
@@ -42,6 +44,17 @@ export default function DetailPage(props) {
     }).
     then(res => {
         setActivities(res.data.data.data)
+    }).catch(err=>console.log(err));
+ }
+
+ const getLeadOverview=async()=>{
+    await axios.get(`${API_URL}/api/loan/overview/${props?.leadData?.leadId}/`,{
+        headers: {
+            token: `fb5b3d9080d36e1e3eead4b0cebcb430b1c654b5`,
+        },
+    }).
+    then(res => {
+        setLeadData(res.data.data.data)
     }).catch(err=>console.log(err));
  }
 
@@ -70,7 +83,7 @@ export default function DetailPage(props) {
                         <span className='lead-page-intruction-label'>Lead Consent: </span>
                         <img src={consentIcon} />
                     </div>
-                    <span className='consent-link'>
+                    <span className='consent-link' onClick={()=>props?.openUserConsentModal()}>
                         Ask for Consent
                     </span>
                 </div>
@@ -116,7 +129,9 @@ export default function DetailPage(props) {
             {
                 tab === 1 && 
                 <div className='financials-container row full-width'>
-                    <FinancialForm />
+                    <FinancialForm 
+                        leadData={leadData}
+                    />
                 </div>
             }
             {

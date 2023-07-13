@@ -8,26 +8,49 @@ import logoutIcon from '../../assets/Icons/logoutIcon.svg'
 import Search from '../search/search.jsx';
 
 export default function Header({
-    onSearchChange
+    onSearchChange,
+    goToDraftPage,
+    screen
 }) {
 
   return (
    <div className='plms-header'>
        <div style={{width: '40%'}}>
-        <Search
-            placeholder={'Search Leads'}
-            onChange={onSearchChange}
-        />
+           {
+             screen === 0 && <Search
+                                placeholder={'Search Leads'}
+                                onChange={onSearchChange}
+                            />
+           }
+
+            {/* {
+             screen === 1 && <div className='header-title'>
+                 Lead Detail
+                 </div>
+           } */}
+
+           {
+             screen === 2 && <div className='header-title'>
+                 Drafts
+                 </div>
+           }
+
+            {
+             screen === 3 && <div className='header-title'>
+                 Downloads
+                 </div>
+           }
+        
        </div>
         <div className='header-content'>
-            <img src={userIcon} style={{width: '36px', height: '36px'}} />
-            <img src={draftIcon} style={{width: '36px', height: '36px'}} />
-            <img src={downloads} style={{width: '36px', height: '36px'}} />
-            <img src={bellIcon} style={{width: '36px', height: '36px'}} />
-            <div className='logout-container'>
+            {/* <img src={userIcon} style={{width: '36px', height: '36px'}} /> */}
+            <img src={draftIcon} style={{width: '36px', height: '36px',cursor: 'pointer'}} onClick={()=>goToDraftPage()} />
+            {/* <img src={downloads} style={{width: '36px', height: '36px',cursor: 'pointer'}} /> */}
+            {/* <img src={bellIcon} style={{width: '36px', height: '36px'}} /> */}
+            {/* <div className='logout-container'>
                 <img src={logoutIcon} />
                 <span className='logout-text'>Log Out</span>
-            </div>
+            </div> */}
         </div>
    </div>
   )
