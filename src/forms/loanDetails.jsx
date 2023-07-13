@@ -19,7 +19,14 @@ export default function LoanDetailsForm({
     const courseFeeLabel = () => 'course Fee';
     const loanAmountLabel = () => 'Loan Amount';
     const tenureLabel = () => 'Tenure (in months)';
-    const advanceEmiLabel = () => 'Advance EMI'
+    const advanceEmiLabel = () => 'Advance EMI';
+
+    const advanceEmiOptions = [
+        {id: 1, label: 1, disabled: false},
+        {id: 2, label: 2, disabled: false},
+        {id: 3, label: 3, disabled: false},
+        {id: 4, label: 4, disabled: false},
+    ]
 
     const getLabel = (type) => {
         
@@ -83,7 +90,7 @@ export default function LoanDetailsForm({
     const coursePlaceholder = () => '';
     const courseFeePlaceholder = () => '';
     const loanAmountPlaceholder = () => '';
-    const tenurePlaceholder = () => '-Select-';
+    const tenurePlaceholder = () => '';
     const advanceEmiPlaceholder = () => '-Select-';
     
     const getPlaceholder = (type) => {
@@ -216,18 +223,21 @@ export default function LoanDetailsForm({
             type={getType(loanFormInputTypes.loanAmount)}
         />
 
-        <Dropdown 
+        <Input
             label={getLabel(loanFormInputTypes.tenure)}
             required={getRequired(loanFormInputTypes.tenure)}
             showCheck={getCheck(loanFormInputTypes.tenure)}
             placeholder={getPlaceholder(loanFormInputTypes.tenure)}
+            // leadingText={'₹'}
             value={getValue(loanFormInputTypes.tenure)}
             onChange={(str) => onChange(loanFormInputTypes.tenure, str)}
             disabled={getDisabled(loanFormInputTypes.tenure)}
             error={getError(loanFormInputTypes.tenure)}
+            type={getType(loanFormInputTypes.tenure)}
         />
 
         <Dropdown 
+            items={advanceEmiOptions}
             label={getLabel(loanFormInputTypes.advanceEmi)}
             required={getRequired(loanFormInputTypes.advanceEmi)}
             showCheck={getCheck(loanFormInputTypes.advanceEmi)}

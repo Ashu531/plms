@@ -12,6 +12,7 @@ import FinancialForm from '../../components/financialForm/financialForm.jsx';
 import { EditableLeadForm } from '../../components/leadForm/leadform.jsx';
 import { formViewTypes } from '../../forms/leadDetails.jsx';
 import Lead from '../../entities/formDetails.js';
+import { saveForm } from '../../helpers/apis';
 
 export default function DetailPage(props) {
 
@@ -29,14 +30,18 @@ export default function DetailPage(props) {
     'Random',
     '500',
     '400',
-    -1,
-    -1
+    '3',
+    2
  ));
 
  useEffect(()=>{
      getActivityData()
      getUserComment()
  },[])
+
+ const handleSave = async () => {
+    let res = await saveForm(formData.current.requestData());
+ }
 
  const getUserComment=async()=>{
     await axios.get(`${API_URL}/api/loan/lead/comments/${props?.leadData?.leadId}/`,{
@@ -103,6 +108,7 @@ export default function DetailPage(props) {
                     viewType={formViewTypes.VIEW}
                     formData={formData.current}
                     showHeadings={true}
+                    handleSave={handleSave}
                 />
             }
             {

@@ -74,4 +74,20 @@ export const amountValidation = (str) => {
 
 }
 
+export const dropdownValidation = (str) => {
+    
+    checkForNull(str);
+
+    str = str.trim();
+
+    if(str.length == 0)
+        return 'cannot be empty';
+
+    if(str < 0){
+        return 'invalid'
+    }
+
+    return null;
+}
+
 
