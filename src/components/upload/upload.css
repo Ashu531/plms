@@ -201,10 +201,12 @@
 
 .cross-icon-container{
     padding: 0.7rem 0.8rem 0.2rem 0.7rem;
-    background: #f1f3f8;
-    border-radius: 50%;
+    /* background: #f1f3f8; */
+    /* border-radius: 50%; */
     cursor: pointer;
-
+    position: absolute;
+    top: 0px;
+    right: 20px;
     
 }
 

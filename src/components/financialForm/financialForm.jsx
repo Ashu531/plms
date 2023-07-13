@@ -285,7 +285,7 @@ export default function FinancialForm({
                         // type={getType(financialFormInputTypes.companyName)}
                     />
                 </div>
-                <div style={{width: '30%'}}>
+                <div style={{width: '45%'}}>
                          <Button 
                         text='Submit'
                         classes={{
