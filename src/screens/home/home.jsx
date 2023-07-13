@@ -201,8 +201,11 @@ export default function Home() {
   //////////////////////////////////////////////////////////////////
 
   const navigatePage = (i) => {
-    closeSlidingPanel()
-    setScreen(i);
+      if(i !== 1){
+        closeSlidingPanel()
+      }
+    
+        setScreen(i);
   };
 
   const closeUserConsentModal = () => {
@@ -210,7 +213,7 @@ export default function Home() {
   };
 
   useEffect(() => {
-    if(screen == 0){
+    if(screen === 0){
       setLeadInfo({});
     }
   }, [screen])
@@ -303,6 +306,11 @@ const goToDraftPage=()=>{
     setScreen(i)
 }
 
+const handleTableIconClick=(item,index)=>{
+    setLeadInfo(item)
+    navigatePage(1)
+}
+
   return (
     <div className="home-container">
       
@@ -358,8 +366,8 @@ const goToDraftPage=()=>{
                   <Table
                         list={[...tableData[getSelectedStatusIndex()]]}
                         onIconClick={(item, index) => {
-                            setLeadInfo(item)
-                            navigatePage(1)}}
+                                handleTableIconClick(item,index)
+                            }}
                         onRowClick={(item, index) => {
                             setLeadInfo(item)
                             openSlidingPanel()

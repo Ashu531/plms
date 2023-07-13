@@ -68,11 +68,21 @@ export default function FinancialForm({
         handleFinancialData()
     },[leadData])
 
+
     const handleFinancialData=()=>{
-        setMonthySalary({
-            ...monthySalary,
-            value: leadData?.borrowerData?.netMonthlyIncome,
-        })
+
+        if(leadData?.borrowerData?.netMonthlyIncome?.length > 0){
+            setMonthySalary({
+                ...monthySalary,
+                value: leadData?.borrowerData?.netMonthlyIncome,
+            })
+        }else{
+            setMonthySalary({
+                ...monthySalary,
+                value: '',
+            })
+        }
+        
         setCompanyName({
             ...companyName,
             value: leadData?.borrowerData?.lastCurrentEmployer,
@@ -218,7 +228,7 @@ export default function FinancialForm({
             employmentStatusId : employmentStatus.value
         }
 
-        await axios.post(`${API_URL}/api/loan/overview/LEAD-${leadData?.borrowerData.leadId}/`,data,{
+        await axios.post(`${API_URL}/api/loan/financial/details/LEAD-${leadData?.borrowerData.leadId}/`,data,{
             headers: {
                 token: `fb5b3d9080d36e1e3eead4b0cebcb430b1c654b5`,
             },
