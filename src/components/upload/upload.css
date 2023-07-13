@@ -2,11 +2,11 @@
     align-items: center;
     justify-content: center;
     border-radius: 8px;
-    border: 1px solid #8F14CC;
+    /* border: 1px solid #8F14CC; */
 }
 
 .content-box {
-    min-width: 50rem;
+    /* min-width: 50rem; */
     /* background-color: var(--background-top); */
     border-radius: 0.8rem;
     display: flex;
@@ -201,10 +201,12 @@
 
 .cross-icon-container{
     padding: 0.7rem 0.8rem 0.2rem 0.7rem;
-    background: #f1f3f8;
-    border-radius: 50%;
+    /* background: #f1f3f8; */
+    /* border-radius: 50%; */
     cursor: pointer;
-
+    position: absolute;
+    top: 0px;
+    right: 20px;
     
 }
 

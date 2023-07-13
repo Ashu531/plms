@@ -230,7 +230,7 @@ export default function FinancialForm({
 
         await axios.post(`${API_URL}/api/loan/financial/details/LEAD-${leadData?.borrowerData.leadId}/`,data,{
             headers: {
-                token: `fb5b3d9080d36e1e3eead4b0cebcb430b1c654b5`,
+                token: `af2ecb4b5b2697d6de6204bf5a4e13c46dcfee27`,
             },
         }).
         then(res => {
@@ -285,7 +285,7 @@ export default function FinancialForm({
                         // type={getType(financialFormInputTypes.companyName)}
                     />
                 </div>
-                <div style={{width: '30%'}}>
+                <div style={{width: '45%'}}>
                          <Button 
                         text='Submit'
                         classes={{

@@ -48,7 +48,7 @@ export default function DetailPage(props) {
  const getUserComment=async()=>{
     await axios.get(`${API_URL}/api/loan/lead/comments/${props?.leadData?.leadId}/`,{
         headers: {
-            token: `fb5b3d9080d36e1e3eead4b0cebcb430b1c654b5`,
+            token: `af2ecb4b5b2697d6de6204bf5a4e13c46dcfee27`,
         },
     }).
     then(res => {
@@ -59,7 +59,7 @@ export default function DetailPage(props) {
  const getActivityData=async()=>{
     await axios.get(`${API_URL}/api/loan/update/history/${props?.leadData?.leadId}/`,{
         headers: {
-            token: `fb5b3d9080d36e1e3eead4b0cebcb430b1c654b5`,
+            token: `af2ecb4b5b2697d6de6204bf5a4e13c46dcfee27`,
         },
     }).
     then(res => {
@@ -70,7 +70,7 @@ export default function DetailPage(props) {
  const getLeadOverview=async()=>{
     await axios.get(`${API_URL}/api/loan/overview/${props?.leadData?.leadId}/`,{
         headers: {
-            token: `fb5b3d9080d36e1e3eead4b0cebcb430b1c654b5`,
+            token: `af2ecb4b5b2697d6de6204bf5a4e13c46dcfee27`,
         },
     }).
     then(res => {
@@ -161,7 +161,7 @@ export default function DetailPage(props) {
                     </div>
                     <div className='activity-container-divider' />
                     <div className='row'>
-                        <Upload />
+                        <Upload showBorder={true} />
                     </div>
                 </div>    
             }

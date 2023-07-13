@@ -95,9 +95,9 @@ export default function Upload({
       if (uplaodType === 'bulk_optional_students') {
         data.append(`${'attach_students'}`, file);
       } else data.append(`${uplaodType}`, file);
-      const res = await axios.post(`${API_URL}/api/fees/v2/${uplaodType}/verify/`, data, {
+      const res = await axios.post(`${API_URL}/api/loan/upload/documents/`, data, {
         headers: {
-          token: `${token}`,
+          token: `af2ecb4b5b2697d6de6204bf5a4e13c46dcfee27`,
         },
         onUploadProgress: data => {
           let prog = [...progress];
@@ -128,7 +128,7 @@ export default function Upload({
   }, [deletedFiles]);
 
   return (
-    <div className="bulk-upload" onClick={() => closeUpload(false)}>
+    <div className="bulk-upload" onClick={() => closeUpload(false)} style={showBorder ? { border: '1px solid #8F14CC'} : null}>
       <div
         className="content-box"
         style={{ width: `${width}`, height: `${height}` }}
@@ -158,7 +158,7 @@ export default function Upload({
                 <a href='https://credenc-fms-school.s3.ap-south-1.amazonaws.com/Bulk%2BBatch(Sample).csv' download="Sample.csv" ><img src={downloadIcon}/></a>}
             </div> */}
             <div className="dropzone" onClick={() => fileInputField.current.click()} onDrop={handleDrop} onDragOver={handleDragOver}>
-                {/* <input type='file' ref={fileInputField} onChange={handleSelected}/> */}
+                <input type='file' ref={fileInputField} onChange={handleSelected} style={{visibility: 'hidden'}} />
                 <img src={cloudIcon} onDragOver={handleDragOver} height={60} width={60} style={{objectFit: 'contain'}}/>
                 <div className="title" style={{color: '#6699ff', margin: '1rem 0px 0px'}} onDragOver={handleDragOver}>Drag & Drop files</div>
                 <span className='or-text'>or</span>
@@ -178,20 +178,20 @@ export default function Upload({
             </div>
             {selectedFiles.length > 0 && <div className="file-container">
                 {selectedFiles.map((file, i) => (
-                    <div key={i} className={`file ${i === selectedFiles.length - 1 ? 'curved-bottom': ''} ${deletedFiles[i] === -1 ? 'deleted' : ''}`}>
-                        <div className="icon-container">
+                    <div key={i} className={`file ${i === selectedFiles.length - 1 ? 'curved-bottom': ''} ${deletedFiles[i] === -1 ? 'deleted' : ''}`} style={showBorder ? {position:'relative',padding: 16}:{position:'relative',padding: '16px 8px'}}>
+                        <div className="icon-container" style={{background: 'none'}}>
                             {/* <img src={fileIconGrey} /> */}
                         </div>
                         <div style={{textAlign: 'start', flexGrow: '1', marginLeft: '1.2rem'}}>
                             <div className="title" style={{fontSize: '2rem', color: '#3377ff', textTransform: 'capitalize'}}>{file.name}</div>
                             <div className="subtitle">{getFileSize(file.size)}</div>
-                            <div className="status-bar">
+                            <div className="status-bar" style={{marginTop: 8}}>
                               <div className={`status ${error.status ? 'error': ''}`} style={{width: `${progress[i]}%`}}></div>
                             </div>
                             <div className="error-text">{error.message}</div>
                         </div>
                         <div className="cross-icon-container">
-                            <img src={crossIcon} onClick={() => removeFile(i)}/>
+                            <img src={crossIcon} onClick={() => removeFile(i)} height={24} width={24} style={{objectFit:'contain'}} />
                         </div>
                     </div>
                 ))}
