@@ -10,6 +10,7 @@ import LeadForm from "../../components/leadForm/leadform.jsx";
 import axios from 'axios';
 import DetailPage from "../detail/detail.jsx";
 import UserConsentModal from "../../components/userConsentModal/userConsentModal.jsx";
+import DraftPage from "../draft/draft.jsx";
 
 const statuses = [
   {
@@ -200,8 +201,11 @@ export default function Home() {
   //////////////////////////////////////////////////////////////////
 
   const navigatePage = (i) => {
-    closeSlidingPanel()
-    setScreen(i);
+      if(i !== 1){
+        closeSlidingPanel()
+      }
+    
+        setScreen(i);
   };
 
   const closeUserConsentModal = () => {
@@ -209,7 +213,7 @@ export default function Home() {
   };
 
   useEffect(() => {
-    if(screen == 0){
+    if(screen === 0){
       setLeadInfo({});
     }
   }, [screen])
@@ -287,22 +291,39 @@ export default function Home() {
         email: data.data.borrowerData.email
     }
 
-    const response = await axios.post(`${API_URL}/api/loan/ask/consent/${leadInfo.leadId}/`,detail,{
-        headers: {
-            token: `fb5b3d9080d36e1e3eead4b0cebcb430b1c654b5`,
-        },
-    })
-    .then(res => res.data)
-    .catch(error => error.response.data);
+    // const response = await axios.post(`${API_URL}/api/loan/ask/consent/${leadInfo.leadId}/`,detail,{
+    //     headers: {
+    //         token: `fb5b3d9080d36e1e3eead4b0cebcb430b1c654b5`,
+    //     },
+    // })
+    // .then(res => res.data)
+    // .catch(error => error.response.data);
     closeUserConsentModal()
+}
+
+const goToDraftPage=()=>{
+    let i = 2
+    setScreen(i)
+}
+
+const handleTableIconClick=(item,index)=>{
+    setLeadInfo(item)
+    navigatePage(1)
 }
 
   return (
     <div className="home-container">
-      {screen === 0 && (
-        <div className="column full-width">
-          <Header onSearchChange={onSearch} />
-
+      
+         {
+            screen !== 1 &&  
+            <Header 
+                onSearchChange={onSearch} 
+                goToDraftPage={()=>goToDraftPage()}
+                screen={screen}
+           />
+         } 
+        {screen === 0 && (
+          <div className='full-width column'>
           <div className="row" style={{ gap: "1rem", minHeight: '80px' }}>
             {statusList.map((status, index) => (
               <Status
@@ -320,7 +341,7 @@ export default function Home() {
             className="row"
             style={{ justifyContent: "space-between", margin: "24px 0 0 0" }}
           >
-            <div className="lead-count">Showing {tableData.length} Incomplete leads</div>
+            <div className="lead-count">Showing {tableData.length} leads</div>
             <Button
               leadingIcon={addIcon}
               text="Create"
@@ -345,8 +366,8 @@ export default function Home() {
                   <Table
                         list={[...tableData[getSelectedStatusIndex()]]}
                         onIconClick={(item, index) => {
-                            setLeadInfo(item)
-                            navigatePage(1)}}
+                                handleTableIconClick(item,index)
+                            }}
                         onRowClick={(item, index) => {
                             setLeadInfo(item)
                             openSlidingPanel()
@@ -356,15 +377,24 @@ export default function Home() {
                     <span>No Results</span>
                   </div>
               }
-            
+            </div>
           </div>
-        </div>
       )}
 
       {screen === 1 && (
         <div className="full-width">
           <DetailPage 
            goToHomePage={(i) => navigatePage(i)} 
+           leadData={leadInfo}
+           openUserConsentModal={()=>openUserConsentModal()}
+           />
+        </div>
+      )}
+
+    {screen === 2 && (
+        <div className="full-width">
+          <DraftPage 
+           openLeadForm={() => _openLeadForm()} 
            leadData={leadInfo}
            />
         </div>

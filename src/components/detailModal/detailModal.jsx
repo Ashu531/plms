@@ -105,7 +105,7 @@ export default function DetailModal(props) {
                             {
                                 !consent && 
                                 <div className='row full-width'>
-                                        <div className='row'>
+                                        <div className='row' style={{width: 'auto'}}>
                                                             <div className='pending-icon-content'>
                                                                 <img src={pendingIcon} />
                                                             </div>
@@ -118,7 +118,7 @@ export default function DetailModal(props) {
                                        pendecyData.length > 0 &&  pendecyData.map((item,index)=>{
                                             return(
                                                 <div className='row full-width' key={index}>
-                                                        <div className='row'>
+                                                        <div className='row' style={{width: 'auto'}}>
                                                             <div className='pending-icon-content'>
                                                                 <img src={pendingIcon} />
                                                             </div>

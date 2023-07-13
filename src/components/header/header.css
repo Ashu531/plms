@@ -9,8 +9,8 @@
 .header-content{
     width: 30%;
     display: flex;
-    justify-content: space-between;
-    align-items: center;
+    justify-content: flex-end;
+    align-items: flex-end;
 }
 
 .logout-container{
@@ -27,4 +27,15 @@
     font-size: 14px;
     font-family: 'Montserrat';
     font-weight: 600;
+}
+
+.header-title{
+    color: #000;
+    font-size: 24px;
+    font-family: 'Montserrat';
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+    text-transform: uppercase;
+    text-align: start;
 }

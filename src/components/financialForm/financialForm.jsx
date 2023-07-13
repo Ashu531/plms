@@ -1,12 +1,58 @@
 import React,{useEffect, useState} from 'react'
+import Button from '../button/button.jsx'
 import { Dropdown } from '../dropdown/dropdown.jsx'
 import { Input } from '../input/input.jsx'
 import './/financialForm.css'
+import axios from 'axios';
+
+const employmentStatusList = [
+    {
+        'label': 'Salaried',
+        'value' : 3,
+        'disabled' : false
+    },
+    {
+        'label': 'Self-Employed',
+        'value' : 2,
+        'disabled' : false
+    },
+    {
+        'label': 'Unemployed',
+        'value' : 4,
+        'disabled' : false
+    },
+    {
+        'label': 'Other',
+        'value' : 5,
+        'disabled' : false
+    },
+    {
+        'label': 'Business',
+        'value' : 6,
+        'disabled' : false
+    },
+    {
+        'label': 'Corporate',
+        'value' : 7,
+        'disabled' : false
+    },
+    {
+        'label': 'Pensioner',
+        'value' : 8,
+        'disabled' : false
+    },
+]
 
 export default function FinancialForm({
     viewType,
     prefilledFields=[],
+    leadData
 }) {
+
+    const [employmentStatus, setEmploymentStatus] = useState({...defaultDropdownState});
+    const [monthySalary, setMonthySalary] = useState({...defaultState});
+    const [companyName, setCompanyName] = useState({...defaultState});
+
 
     const defaultState = {
         value: '',
@@ -18,9 +64,42 @@ export default function FinancialForm({
         error: null
     }
 
-    const [employmentStatus, setEmploymentStatus] = useState({...defaultDropdownState});
-    const [monthySalary, setMonthySalary] = useState({...defaultState});
-    const [companyName, setCompanyName] = useState({...defaultState});
+    useEffect(()=>{
+        handleFinancialData()
+    },[leadData])
+
+
+    const handleFinancialData=()=>{
+
+        if(leadData?.borrowerData?.netMonthlyIncome?.length > 0){
+            setMonthySalary({
+                ...monthySalary,
+                value: leadData?.borrowerData?.netMonthlyIncome,
+            })
+        }else{
+            setMonthySalary({
+                ...monthySalary,
+                value: '',
+            })
+        }
+        
+        setCompanyName({
+            ...companyName,
+            value: leadData?.borrowerData?.lastCurrentEmployer,
+        })
+
+        employmentStatusList.forEach((item,index)=>{
+            if(item.value === leadData?.borrowerData?.employmentStatusId){
+                setEmploymentStatus({
+                    ...employmentStatus,
+                    value : leadData?.borrowerData?.employmentStatusId
+                })
+            }
+        })
+
+    }
+
+ 
 
     const employmentStatusLabel = () => 'Employment Status ';
     const monthySalaryLabel = () => 'Current Monthly Salary';
@@ -141,6 +220,24 @@ export default function FinancialForm({
 
     }
 
+    const submitData=async()=>{
+
+        let data = {
+            netMonthlyIncome: monthySalary.value,
+            lastCurrentEmployer: companyName.value,
+            employmentStatusId : employmentStatus.value
+        }
+
+        await axios.post(`${API_URL}/api/loan/financial/details/LEAD-${leadData?.borrowerData.leadId}/`,data,{
+            headers: {
+                token: `fb5b3d9080d36e1e3eead4b0cebcb430b1c654b5`,
+            },
+        }).
+        then(res => {
+            console.log(res)
+        }).catch(err=>console.log(err));
+    }
+
   return (
     <div className='financial-form-container column'>
         <div className='financial-form-header'>
@@ -149,6 +246,7 @@ export default function FinancialForm({
         <div className='column'>
             <div className='row full-width'>
                 <Dropdown
+                    items={employmentStatusList}
                     label={getLabel(financialFormInputTypes.employmentStatus)}
                     required={getRequired(financialFormInputTypes.employmentStatus)}
                     showCheck={getCheck(financialFormInputTypes.employmentStatus)}
@@ -172,7 +270,7 @@ export default function FinancialForm({
                     // type={getType(financialFormInputTypes.monthySalary)}
                 />
             </div>
-            <div className='row'>
+            <div className='row' style={{justifyContent:"space-between"}}>
                 <div style={{width:'45%'}}>
                     <Input
                         label={getLabel(financialFormInputTypes.companyName)}
@@ -187,8 +285,25 @@ export default function FinancialForm({
                         // type={getType(financialFormInputTypes.companyName)}
                     />
                 </div>
+                <div style={{width: '30%'}}>
+                         <Button 
+                        text='Submit'
+                        classes={{
+                            background: '#8F14CC',
+                            borderRadius: '8px',
+                            height: '44px'
+                        }}
+                        textClass={{
+                            color: '#FFF',
+                            fontSize: '14px',
+                            fontFamily: 'Montserrat',
+                            fontWeight: 600
+                        }}
+                        onClick={()=>submitData()}
+                    />
             </div>
-
+            </div>
+            
         </div>
     </div>
   )
