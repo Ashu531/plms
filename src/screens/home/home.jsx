@@ -1,186 +1,69 @@
 import React, { useEffect, useState } from "react";
 import Button from "../../components/button/button.jsx";
 import addIcon from "../../assets/Icons/addIcon.svg";
-import profileIcon from "../../assets/Icons/userIcon.svg";
-import checkIcon from "../../assets/Icons/check.svg";
 import Status from "../../components/status/status.jsx";
 import "./home.css";
 import Table from "../../components/table/table.jsx";
 import Header from "../../components/header/header.jsx";
 import SlidingPanel from "../../components/sliding-panel/sliding_panel.jsx";
 import LeadForm from "../../components/leadForm/leadform.jsx";
-import { useHistory } from "react-router-dom";
 import axios from 'axios';
-import { Input } from "../../components/input/input.jsx";
-import { Dropdown } from "../../components/dropdown/dropdown.jsx";
 import DetailPage from "../detail/detail.jsx";
-import StudentDetailForm, {
-  formViewTypes,
-  studentFormInputTypes,
-} from "../../forms/leadDetails.jsx";
-import LoanDetailsForm, {
-  loanFormInputTypes,
-} from "../../forms/loanDetails.jsx";
 import UserConsentModal from "../../components/userConsentModal/userConsentModal.jsx";
 import DraftPage from "../draft/draft.jsx";
 
-let leadList = [
-  {
-    leadId: "255194",
-    name: "John Doe",
-    mobile: "9999888866",
-    amount: "90000",
-    update: "consent pending",
-    updateTime: "19/05/2022 : 5:53:01 PM",
-  },
-  {
-    leadId: "255194",
-    name: "John Doe",
-    mobile: "9999888866",
-    amount: "90000",
-    update: "consent pending",
-    updateTime: "19/05/2022 : 5:53:01 PM",
-  },
-  {
-    leadId: "255194",
-    name: "John Doe",
-    mobile: "9999888866",
-    amount: "90000",
-    update: "consent pending",
-    updateTime: "19/05/2022 : 5:53:01 PM",
-  },
-  {
-    leadId: "255194",
-    name: "John Doe",
-    mobile: "9999888866",
-    amount: "90000",
-    update: "consent pending",
-    updateTime: "19/05/2022 : 5:53:01 PM",
-  },
-  {
-    leadId: "255194",
-    name: "John Doe",
-    mobile: "9999888866",
-    amount: "90000",
-    update: "consent pending",
-    updateTime: "19/05/2022 : 5:53:01 PM",
-  },
-  {
-    leadId: "255194",
-    name: "John Doe",
-    mobile: "9999888866",
-    amount: "90000",
-    update: "consent pending",
-    updateTime: "19/05/2022 : 5:53:01 PM",
-  },
-  {
-    leadId: "255194",
-    name: "John Doe",
-    mobile: "9999888866",
-    amount: "90000",
-    update: "consent pending",
-    updateTime: "19/05/2022 : 5:53:01 PM",
-  },
-  {
-    leadId: "255194",
-    name: "John Doe",
-    mobile: "9999888866",
-    amount: "90000",
-    update: "consent pending",
-    updateTime: "19/05/2022 : 5:53:01 PM",
-  },
-  {
-    leadId: "255194",
-    name: "John Doe",
-    mobile: "9999888866",
-    amount: "90000",
-    update: "consent pending",
-    updateTime: "19/05/2022 : 5:53:01 PM",
-  },
-  {
-    leadId: "255194",
-    name: "John Doe",
-    mobile: "9999888866",
-    amount: "90000",
-    update: "consent pending",
-    updateTime: "19/05/2022 : 5:53:01 PM",
-  },
-  {
-    leadId: "255194",
-    name: "John Doe",
-    mobile: "9999888866",
-    amount: "90000",
-    update: "consent pending",
-    updateTime: "19/05/2022 : 5:53:01 PM",
-  },
-  {
-    leadId: "255194",
-    name: "John Doe",
-    mobile: "9999888866",
-    amount: "90000",
-    update: "consent pending",
-    updateTime: "19/05/2022 : 5:53:01 PM",
-  },
-  {
-    leadId: "255194",
-    name: "John Doe",
-    mobile: "9999888866",
-    amount: "90000",
-    update: "consent pending",
-    updateTime: "19/05/2022 : 5:53:01 PM",
-  },
-  {
-    leadId: "255194",
-    name: "John Doe",
-    mobile: "9999888866",
-    amount: "90000",
-    update: "consent pending",
-    updateTime: "19/05/2022 : 5:53:01 PM",
-  },
-  {
-    leadId: "255194",
-    name: "John Doe",
-    mobile: "9999888866",
-    amount: "90000",
-    update: "consent pending",
-    updateTime: "19/05/2022 : 5:53:01 PM",
-  },
-  {
-    leadId: "255194",
-    name: "John Doe",
-    mobile: "9999888866",
-    amount: "90000",
-    update: "consent pending",
-    updateTime: "19/05/2022 : 5:53:01 PM",
-  },
-];
-
-let statuses = [
+const statuses = [
   {
     boldText: "All",
     selected: true,
+    count: 0
   },
   {
     boldText: "Incomplete",
     selected: false,
+    count: 0
   },
   {
     boldText: "In Process",
     selected: false,
+    count: 0
   },
   {
     boldText: "Closed",
     selected: false,
+    count: 0
   },
   {
     boldText: "Approved",
     selected: false,
+    count: 0
   },
   {
     boldText: "Disbursed",
     selected: false,
+    count: 0
   },
 ];
+
+const statusIndices = {
+  ALL: 0,
+  INCOMPLETE: 1,
+  IN_PROCESS: 2,
+  CLOSED: 3,
+  APPROVED: 4,
+  DISBURSED: 5
+}
+
+const statusEndpoints = {
+  ALL: 'all/',
+  INCOMPLETE: 'incomplete/',
+  IN_PROCESS: 'inprocess/',
+  CLOSED: 'rejected/',
+  APPROVED: 'approved/',
+  DISBURSED: 'disbursed/'
+}
+
+
 
 export default function Home() {
   const [query, setQuery] = useState("");
@@ -189,32 +72,16 @@ export default function Home() {
   const [openLeadForm, setOpenLeadForm] = useState(false);
   const [screen, setScreen] = useState(0);
   const [consentModal, setConsentModal] = useState(false);
-  const [tableData,setTableData] = useState([])
+  const [tableData,setTableData] = useState(Array(6).fill([]))
   const [statusList, setStatusList] = useState([...statuses]);
 
-  useEffect(()=>{
-    getListData()
-  },[])
-
-  let history = useHistory();
-
-  const getListData=async()=>{
-    await axios.get(`${API_URL}/api/loan/all/`,{
-        headers: {
-            token: `fb5b3d9080d36e1e3eead4b0cebcb430b1c654b5`,
-        },
-    }).
-    then(res => {
-        console.log(res.data.data)
-        setTableData(res.data.data.leads)
-    }).catch(err=>console.log(err));
-  }
 
   const openSlidingPanel = () => {
     setOpenPanel(true);
   };
 
   const closeSlidingPanel = () => {
+    setLeadInfo({});
     setOpenPanel(false);
   };
 
@@ -261,9 +128,17 @@ export default function Home() {
   //////////////////////////////////////////////////////////////////
   // Status Start
 
-  const handleStatusChange = (status, index) => {
+  const getSelectedStatusIndex = () => {
+    let index = statusList.findIndex(status => status.selected == true)
 
-    toggleStatus(index)
+    if(index == -1){
+      throw 'Some error occurred';
+    }
+
+    return index;
+  }
+
+  const handleStatusChange = (status, index) => {
 
     let newStatusList = [...statusList];
 
@@ -275,81 +150,50 @@ export default function Home() {
       }
     });
 
-
-
     setStatusList([...newStatusList]);
   };
 
-  const toggleStatus=(index)=>{
-      console.log(index)
-    if(index === 1){
-        getIncompleteData()
-    }else if(index === 2){
-        getInProcessData()
-    }else if(index === 3){
-        getRejectedData()
-    }else if(index === 4){
-        getApprovedData()
-    }else if(index === 5){
-        getDisbursedData()
-    }else{
-        getListData()
+  const updateStatusList = (count, index) => {
+    let newStatusList = [...statusList];
+    newStatusList[index] = {...newStatusList[index], count: count}
+    setStatusList(newStatusList);
+  }
+
+  const updateTableData = (data, index) => {
+
+    let newData = [...tableData];
+    newData[index] = data;
+
+    setTableData(newData);
+
+  }
+
+  const getTableData = async (index) => {
+
+    let endpoint;
+
+    switch(index){
+      case statusIndices.ALL: endpoint = statusEndpoints.ALL; 
+          break;
+      case statusIndices.INCOMPLETE: endpoint = statusEndpoints.INCOMPLETE; 
+          break;
+      case statusIndices.IN_PROCESS: endpoint = statusEndpoints.IN_PROCESS; 
+          break;
+      case statusIndices.CLOSED: endpoint = statusEndpoints.CLOSED; 
+          break;
+      case statusIndices.APPROVED: endpoint = statusEndpoints.APPROVED; 
+          break;
+      case statusIndices.DISBURSED: endpoint = statusEndpoints.DISBURSED; 
+          break;
     }
-  }
 
-  const getInProcessData=async()=>{
-    await axios.get(`${API_URL}/api/loan/inprocess/`,{
+    return await axios.get(`${API_URL}/api/loan/${endpoint}`, {
         headers: {
             token: `fb5b3d9080d36e1e3eead4b0cebcb430b1c654b5`,
         },
     }).
     then(res => {
-        setTableData(res.data.data.leads)
-    }).catch(err=>console.log(err));
-  }
-
-  const getRejectedData=async()=>{
-    await axios.get(`${API_URL}/api/loan/rejected/`,{
-        headers: {
-            token: `fb5b3d9080d36e1e3eead4b0cebcb430b1c654b5`,
-        },
-    }).
-    then(res => {
-        setTableData(res.data.data.leads)
-    }).catch(err=>console.log(err));
-  }
-
-  const getApprovedData=async()=>{
-    await axios.get(`${API_URL}/api/loan/approved/`,{
-        headers: {
-            token: `fb5b3d9080d36e1e3eead4b0cebcb430b1c654b5`,
-        },
-    }).
-    then(res => {
-        setTableData(res.data.data.leads)
-    }).catch(err=>console.log(err));
-  }
-
-  const getDisbursedData=async()=>{
-    await axios.get(`${API_URL}/api/loan/disbursed/`,{
-        headers: {
-            token: `fb5b3d9080d36e1e3eead4b0cebcb430b1c654b5`,
-        },
-    }).
-    then(res => {
-        setTableData(res.data.data.leads)
-    }).catch(err=>console.log(err));
-  }
-  
-
-  const getIncompleteData=async()=>{
-    await axios.get(`${API_URL}/api/loan/incomplete/`,{
-        headers: {
-            token: `fb5b3d9080d36e1e3eead4b0cebcb430b1c654b5`,
-        },
-    }).
-    then(res => {
-        setTableData(res.data.data.leads)
+        return res.data.data;
     }).catch(err=>console.log(err));
   }
 
@@ -365,6 +209,60 @@ export default function Home() {
     setConsentModal(false);
   };
 
+  useEffect(() => {
+    if(screen == 0){
+      setLeadInfo({});
+    }
+  }, [screen])
+
+  const getLeadsAndCount = async (data) => {
+    return await data;
+  }
+
+  const updateScreen = async () => {
+    let allData = getTableData(statusIndices.ALL);
+    let incompleteData = getTableData(statusIndices.INCOMPLETE);
+    let inProcessData = getTableData(statusIndices.IN_PROCESS);
+    let closedData = getTableData(statusIndices.CLOSED);
+    let approvedData = getTableData(statusIndices.APPROVED);
+    let disbursedData = getTableData(statusIndices.DISBURSED);
+
+    let newTableData = [...tableData];
+    let newStatusList = [...statusList];
+
+    allData = await allData;
+    newTableData[statusIndices.ALL] = allData.leads;
+    newStatusList[statusIndices.ALL] = {...newStatusList[statusIndices.ALL], count: allData.count}
+
+    incompleteData = await incompleteData;
+    newTableData[statusIndices.INCOMPLETE] = incompleteData.leads;
+    newStatusList[statusIndices.INCOMPLETE] = {...newStatusList[statusIndices.INCOMPLETE], count: incompleteData.count}
+
+    inProcessData = await inProcessData;
+    newTableData[statusIndices.IN_PROCESS] = inProcessData.leads;
+    newStatusList[statusIndices.IN_PROCESS] = {...newStatusList[statusIndices.IN_PROCESS], count: inProcessData.count}
+
+    closedData = await closedData;
+    newTableData[statusIndices.CLOSED] = closedData.leads;
+    newStatusList[statusIndices.CLOSED] = {...newStatusList[statusIndices.CLOSED], count: closedData.count}
+
+    approvedData = await approvedData;
+    newTableData[statusIndices.APPROVED] = approvedData.leads;
+    newStatusList[statusIndices.APPROVED] = {...newStatusList[statusIndices.APPROVED], count: approvedData.count}
+
+    disbursedData = await disbursedData;
+    newTableData[statusIndices.DISBURSED] = disbursedData.leads;
+    newStatusList[statusIndices.DISBURSED] = {...newStatusList[statusIndices.DISBURSED], count: disbursedData.count}
+
+    setTableData(newTableData);
+    setStatusList(newStatusList);
+    
+  }
+
+  useEffect(() => {
+    updateScreen()
+  }, [])
+
   const openUserConsentModal = () => {
     closeSlidingPanel()
     setConsentModal(true);
@@ -379,9 +277,9 @@ export default function Home() {
     then(res => {
         submitConsent(res.data.data)
     }).catch(err=>console.log(err));
-}
+  }
 
-  const submitConsent=async(data)=>{
+  const submitConsent = async(data) => {
     let detail = {
         mobile : data.data.borrowerData.mobile,
         firstName : data.data.borrowerData.firstName,
@@ -426,7 +324,7 @@ const goToDraftPage=()=>{
                 boldText={status.boldText}
                 selected={status.selected}
                 onClick={() => handleStatusChange(status, index)}
-                count={tableData.length}
+                count={status.count}
               />
             ))}
           </div>
@@ -458,7 +356,7 @@ const goToDraftPage=()=>{
               {
                   tableData.length > 0 ? 
                   <Table
-                        list={[...tableData]}
+                        list={[...tableData[getSelectedStatusIndex()]]}
                         onIconClick={(item, index) => {
                             setLeadInfo(item)
                             navigatePage(1)}}
@@ -502,7 +400,7 @@ const goToDraftPage=()=>{
           openUserConsentModal={()=>openUserConsentModal()}
         />
       )}
-      {openLeadForm && <LeadForm closeLeadModal={_closeLeadForm} instituteName={'Dummy Institute'} />}
+      {openLeadForm && <LeadForm onBackPress={_closeLeadForm} instituteName={'Dummy Institute'} />}
 
       {consentModal && (
         <UserConsentModal

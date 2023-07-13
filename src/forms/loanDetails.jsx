@@ -2,46 +2,17 @@ import React, { useEffect, useState } from 'react';
 import { Dropdown } from '../components/dropdown/dropdown.jsx';
 import { Input } from '../components/input/input.jsx';
 import { formViewTypes } from './leadDetails.jsx';
-import inrIcon from '../assets/Icons/inrIcon.svg';
-import { amountValidation, basicValidation, emailValidation, mobileValidation } from '../helpers/validations.js';
-
-
-export const createLoanFormState = {
-    name: '',
-    course: '',
-    courseFee: '',
-    loanAmount: '',
-    tenure: '',
-    advanceEmi: ''
-}
 
 export default function LoanDetailsForm({
     viewType,
-    prefilledFields=[],
-    formData,
+    borrowerNameState,
+    courseState,
+    courseFeeState,
+    loanAmountState,
+    tenureState,
+    advanceEmiState,
+    onChange
 }) {
-
-    const defaultState = {
-        value: '',
-        error: null
-    };
-
-    const defaultNameState = {
-        ...defaultState,
-        sameAsStudent: false
-    }
-
-    const defaultDropdownState = {
-        value: -1,
-        error: null
-    }
-
-    const [nameState, setNameState] = useState({...defaultNameState});
-    const [courseState, setCourseState] = useState({...defaultState});
-    const [courseFeeState, setCourseFeeState] = useState({...defaultState});
-    const [loanAmountState, setLoanAmountState] = useState({...defaultState});
-    const [tenureState, setTenureState] = useState({...defaultDropdownState});
-    const [advanceEmiState, setAdvanceEmiState] = useState({...defaultDropdownState});
 
     const nameLabel = () => 'Borrower Name';
     const courseLabel = () => 'Course';
@@ -128,7 +99,7 @@ export default function LoanDetailsForm({
 
     const getValue = (type) => {
         switch(type){
-            case loanFormInputTypes.name: return nameState.value;
+            case loanFormInputTypes.name: return borrowerNameState.value;
             case loanFormInputTypes.course: return courseState.value;
             case loanFormInputTypes.courseFee: return courseFeeState.value;
             case loanFormInputTypes.loanAmount: return loanAmountState.value;
@@ -138,56 +109,12 @@ export default function LoanDetailsForm({
     }
 
 
-
-    const handleNameChange = (changeType, str, checked) => {
-        switch(changeType){
-            case 0: return setNameState({...nameState, value: str});
-            case 1: return setNameState({...nameState, sameAsStudent: checked});
-            case 2: return setNameState({...nameState, value: str, sameAsStudent: checked});
-        }
-            
-    };
-    
-    const handleCourseChange = (str) => {
-        setCourseState({...courseState, value: str});
-    };
-
-    const handleCourseFeeChange = (str) => {
-        setCourseFeeState({...courseFeeState, value: str});
-    };
-
-    const handleLoanAmountChange = (str) => {
-        setLoanAmountState({...loanAmountState, value: str});
-    };
-
-    const handleTenureChange = (str) => {
-        setTenureState({...tenureState, value: str});
-    };
-
-    const handleAdvanceEmiChange = (str) => {
-        setAdvanceEmiState({...advanceEmiState, value: str});
-    };
-
-
-
-    const onChange = (type, str, checked, changeType) => {
-        switch(type){
-            case loanFormInputTypes.name: return handleNameChange(changeType, str, checked);
-            case loanFormInputTypes.course: return handleCourseChange(str);
-            case loanFormInputTypes.courseFee: return handleCourseFeeChange(str);
-            case loanFormInputTypes.loanAmount: return handleLoanAmountChange(str);
-            case loanFormInputTypes.tenure: return handleTenureChange(str);
-            case loanFormInputTypes.advanceEmi: return handleAdvanceEmiChange(str);
-        }
-    }
-
-
-    const nameDisabled = () => prefilledFields.indexOf(loanFormInputTypes.name) > -1;
-    const courseDisabled = () => prefilledFields.indexOf(loanFormInputTypes.course) > -1;
-    const courseFeeDisabled = () => prefilledFields.indexOf(loanFormInputTypes.courseFee) > -1;
-    const loanAmountDisabled = () => prefilledFields.indexOf(loanFormInputTypes.loanAmount) > -1;
-    const tenureDisabled = () => prefilledFields.indexOf(loanFormInputTypes.tenure) > -1;
-    const advanceEmiDisabled = () => prefilledFields.indexOf(loanFormInputTypes.advanceEmi) > -1;
+    const nameDisabled = () => borrowerNameState.disabled || borrowerNameState.sameAsStudent;
+    const courseDisabled = () => courseState.disabled;
+    const courseFeeDisabled = () => courseFeeState.disabled;
+    const loanAmountDisabled = () => loanAmountState.disabled;
+    const tenureDisabled = () => tenureState.disabled;
+    const advanceEmiDisabled = () => advanceEmiState.disabled;
 
     const getDisabled = (type) => {
 
@@ -209,7 +136,7 @@ export default function LoanDetailsForm({
     const getError = (type) => {
 
         switch(type){
-            case loanFormInputTypes.name: return nameState.error;
+            case loanFormInputTypes.name: return borrowerNameState.error;
             case loanFormInputTypes.course: return courseState.error;
             case loanFormInputTypes.courseFee: return courseFeeState.error;
             case loanFormInputTypes.loanAmount: return loanAmountState.error;
@@ -232,88 +159,6 @@ export default function LoanDetailsForm({
 
     }
 
-
-    useEffect(() => {
-        const delayDebounce = setTimeout(() => {
-            const error = basicValidation(nameState.value);
-            if(error != 'cannot be empty'){
-                setNameState({...nameState, error: error})
-            }
-        }, 0)
-    
-        return () => clearTimeout(delayDebounce)
-    }, [nameState.value]);
-
-    useEffect(() => {
-        const delayDebounce = setTimeout(() => {
-            const error = basicValidation(courseState.value);
-            if(error != 'cannot be empty'){
-                setCourseState({...courseState, error: error})
-            }
-        }, 0)
-    
-        return () => clearTimeout(delayDebounce)
-    }, [courseState.value]);
-
-    useEffect(() => {
-        const delayDebounce = setTimeout(() => {
-            const error = amountValidation(courseFeeState.value);
-            if(error != 'cannot be empty'){
-                setCourseFeeState({...courseFeeState, error: error})
-            }
-        }, 0)
-    
-        return () => clearTimeout(delayDebounce)
-    }, [courseFeeState.value]);
-
-    useEffect(() => {
-        const delayDebounce = setTimeout(() => {
-            const error = amountValidation(loanAmountState.value);
-            if(error != 'cannot be empty'){
-                setLoanAmountState({...loanAmountState, error: error})
-            }
-        }, 0)
-    
-        return () => clearTimeout(delayDebounce)
-    }, [loanAmountState.value]);
-
-    // useEffect(() => {
-    //     const delayDebounce = setTimeout(() => {
-    //         const error = amountValidation(tenureState.value);
-    //         if(error != 'cannot be empty'){
-    //             setTenureState({...tenureState, error: error})
-    //         }
-    //     }, 0)
-    
-    //     return () => clearTimeout(delayDebounce)
-    // }, [tenureState.value]);
-
-    // useEffect(() => {
-    //     const delayDebounce = setTimeout(() => {
-    //         const error = amountValidation(advanceEmiState.value);
-    //         if(error != 'cannot be empty'){
-    //             setAdvanceEmiState({...advanceEmiState, error: error})
-    //         }
-    //     }, 0)
-    
-    //     return () => clearTimeout(delayDebounce)
-    // }, [advanceEmiState.value]);
-
-
-    useEffect(() => {
-
-        if(formData != null){
-            onChange(loanFormInputTypes.name, formData['name'] ? formData['name'] : '', formData['sameAsStudent'] == true, 2);
-            onChange(loanFormInputTypes.course, formData['course'] ? formData['course'] : '');
-            onChange(loanFormInputTypes.courseFee, formData['courseFee'] ? formData['courseFee'] : '');
-            onChange(loanFormInputTypes.loanAmount, formData['loanAmount'] ? formData['loanAmount'] : '');
-            onChange(loanFormInputTypes.tenure, formData['tenure'] ? formData['tenure'] : '');
-            onChange(loanFormInputTypes.advanceEmi, formData['advanceEmi'] ? formData['advanceEmi'] : '');
-        }
-
-    }, []);
-
-
   return (
     <div className='column' style={{width: '100%', gap:'15px'}}>
 
@@ -323,7 +168,7 @@ export default function LoanDetailsForm({
             showCheck={getCheck(loanFormInputTypes.name)}
             disabler={viewType != formViewTypes.VIEW}
             disablerLabel={'Same as Student'}
-            disablerState={nameState.sameAsStudent}
+            disablerState={borrowerNameState.sameAsStudent}
             onDisablerStateChange={(value) => onChange(loanFormInputTypes.name, null, value, 1)}
             placeholder={getPlaceholder(loanFormInputTypes.name)}
             value={getValue(loanFormInputTypes.name)}

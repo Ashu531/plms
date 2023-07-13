@@ -10,14 +10,12 @@ export default function SwitchComponent({
     align='flex-end'
 }) {
 
-    const [isChecked, setIsChecked] = useState(false);
-
   return (
       <div className="row" style={{ gap: '5px', justifyContent: align }}>
         <Switch.Root 
             className="SwitchRoot" 
-            checked={checked != null ? checked : isChecked} 
-            onCheckedChange={(value) => onChange != null ? onChange(value) : setIsChecked(value)}
+            checked={checked}
+            onCheckedChange={(value) => { if(onChange != null) onChange(value) }}
             disabled={!enabled}
         >
           <Switch.Thumb className="SwitchThumb" />

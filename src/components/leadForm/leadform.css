@@ -15,7 +15,7 @@
 
 .lead-form-modal-content{
     position: relative;
-    padding: 30px 75px;
+    padding: 20px 75px;
     width: 80%;
     backdrop-filter: blur(40px);
     border-radius: 2.4rem;
@@ -26,14 +26,17 @@
     border: 1px solid #EAEAEA;
     background: #FFF;
     height: 95%;
-    overflow: scroll;
 }
 
-.lead-form-modal-header{
+/* .lead-form-modal-header{
     position: sticky;
     top: 0;
-    /* left: 75px; */
 }
+
+.lead-form-modal-footer{
+    position: sticky;
+    bottom: 0;
+} */
 
 .full-width-modal{
     width: 90% !important;
@@ -57,7 +60,20 @@
     text-align: start;
 }
 
-.lead-form-modal-footer{
-    position: fixed;
-    bottom: 30px;
+.form-heading {
+    flex: 1 1 0px;
+    color: #0B090D;
+    text-transform: capitalize;
+    text-align: start;
+}
+
+.clickable-heading{
+    flex: 1 1 0px;
+}
+
+.clickable-text {
+    color: #0B090D;
+    text-decoration-line: underline;
+    text-transform: capitalize;
+    cursor: pointer;
 }

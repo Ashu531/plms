@@ -27,8 +27,6 @@ export function Input({
   maxLength=100
 }) {
 
-  const [inputValue, setInputValue] = useState('');
-
   const handleKey = (e) => {
     if (e.keyCode === 13) {
       onEnter();
@@ -48,11 +46,13 @@ export function Input({
       if(currValue.length > 0 && isNaN(currValue))
         return;
 
-      onChange != null ? onChange(currValue) : setInputValue(currValue.trim());
+      if(onChange != null){
+        onChange(currValue);
+      }
 
     } 
     
-    else onChange != null ? onChange(currValue) : setInputValue(currValue);
+    else if(onChange != null) onChange(currValue);
 
   }
 
@@ -74,7 +74,7 @@ export function Input({
         <input
           className="input text-montserrat text-16 text-weight-5"
           placeholder={placeholder}
-          value={leadingText ? `${leadingText}  ${value ? value : inputValue}` : value ? value : inputValue}
+          value={leadingText ? `${leadingText}  ${value}` : value}
           onChange={inputChange}
           disabled={disabled}
           autoFocus={autoFocus ? true : false}
