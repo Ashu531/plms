@@ -21,6 +21,7 @@ export default function Upload({
     updateFiles,
     token,
     uplaodType,
+    showBorder,
     templateText=['Student', 'students'],
   }) {
 
@@ -97,7 +98,7 @@ export default function Upload({
       } else data.append(`${uplaodType}`, file);
       const res = await axios.post(`${API_URL}/api/loan/upload/documents/`, data, {
         headers: {
-          token: `af2ecb4b5b2697d6de6204bf5a4e13c46dcfee27`,
+          token: `082daf7e87044f5a49b39d53e0ae794faa6e119d`,
         },
         onUploadProgress: data => {
           let prog = [...progress];
@@ -128,7 +129,11 @@ export default function Upload({
   }, [deletedFiles]);
 
   return (
-    <div className="bulk-upload" onClick={() => closeUpload(false)} style={showBorder ? { border: '1px solid #8F14CC'} : null}>
+    <div 
+      className="bulk-upload-container" 
+      // onClick={() => closeUpload(false)} 
+      // style={showBorder ? { border: '1px solid #8F14CC'} : null}
+      >
       <div
         className="content-box"
         style={{ width: `${width}`, height: `${height}` }}

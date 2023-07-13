@@ -18,7 +18,7 @@ export default function Table({
             <div className='table-header'>
                 <div className='header-text'>
                     Lead ID
-                    <img src={sortIcon}/>
+                    {/* <img src={sortIcon}/> */}
                 </div>
                 <div className='header-text'>
                     Applicant
@@ -28,14 +28,14 @@ export default function Table({
                 </div>
                 <div className='header-text'>
                     Amount
-                    <img src={sortIcon} style={{marginLeft: 5}}/>
+                    {/* <img src={sortIcon} style={{marginLeft: 5}}/> */}
                 </div>
                 <div className='header-text'>
                     Last Update
                 </div>
                 <div className='header-text' style={{flex: '3 1 0px'}}>
                     Time of Update
-                    <img src={sortIcon} style={{marginLeft: 5}}/>
+                    {/* <img src={sortIcon} style={{marginLeft: 5}}/> */}
                 </div>
                 <div className='header-text' style={{flex: '1 1 0px'}}></div>
             </div>

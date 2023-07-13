@@ -107,7 +107,7 @@ export default function Home() {
     //search api here
     await axios.get(`${API_URL}/api/loan/search/filter/?search=${query}`,{
         headers: {
-            token: `af2ecb4b5b2697d6de6204bf5a4e13c46dcfee27`,
+            token: `082daf7e87044f5a49b39d53e0ae794faa6e119d`,
         },
     }).
     then(res => {
@@ -193,7 +193,7 @@ export default function Home() {
 
     return await axios.get(`${API_URL}/api/loan/${endpoint}`, {
         headers: {
-            token: `af2ecb4b5b2697d6de6204bf5a4e13c46dcfee27`,
+            token: `082daf7e87044f5a49b39d53e0ae794faa6e119d`,
         },
     }).
     then(res => {
@@ -278,7 +278,7 @@ export default function Home() {
   const getQuickViewData=async()=>{
     await axios.get(`${API_URL}/api/loan/overview/${leadInfo?.leadId}/`,{
         headers: {
-            token: `af2ecb4b5b2697d6de6204bf5a4e13c46dcfee27`,
+            token: `082daf7e87044f5a49b39d53e0ae794faa6e119d`,
         },
     }).
     then(res => {
@@ -297,7 +297,7 @@ export default function Home() {
 
     // const response = await axios.post(`${API_URL}/api/loan/ask/consent/${leadInfo.leadId}/`,detail,{
     //     headers: {
-    //         token: `af2ecb4b5b2697d6de6204bf5a4e13c46dcfee27`,
+    //         token: `082daf7e87044f5a49b39d53e0ae794faa6e119d`,
     //     },
     // })
     // .then(res => res.data)
