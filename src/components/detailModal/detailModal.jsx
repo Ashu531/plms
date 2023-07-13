@@ -19,7 +19,7 @@ export default function DetailModal(props) {
    const getQuickViewData=async()=>{
         await axios.get(`${API_URL}/api/loan/overview/${props?.leadData?.leadId}/`,{
             headers: {
-                token: `fb5b3d9080d36e1e3eead4b0cebcb430b1c654b5`,
+                token: `af2ecb4b5b2697d6de6204bf5a4e13c46dcfee27`,
             },
         }).
         then(res => {
@@ -30,7 +30,7 @@ export default function DetailModal(props) {
    const getPendencyData=async()=>{
         await axios.get(`${API_URL}/api/loan/pendencies/${props?.leadData?.leadId}/`,{
             headers: {
-                token: `fb5b3d9080d36e1e3eead4b0cebcb430b1c654b5`,
+                token: `af2ecb4b5b2697d6de6204bf5a4e13c46dcfee27`,
             },
         }).
         then(res => {
@@ -124,7 +124,7 @@ export default function DetailModal(props) {
                                                             </div>
                                                             <div className='table-label'>{item}</div>
                                                         </div>
-                                                        <div className='table-link'>Upload Now</div>
+                                                        <div className='table-link' onClick={()=>props?.openUploadModal()}>Upload Now</div>
                                                 </div>
                                              )
                                         })

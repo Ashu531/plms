@@ -2,11 +2,11 @@
     align-items: center;
     justify-content: center;
     border-radius: 8px;
-    border: 1px solid #8F14CC;
+    /* border: 1px solid #8F14CC; */
 }
 
 .content-box {
-    min-width: 50rem;
+    /* min-width: 50rem; */
     /* background-color: var(--background-top); */
     border-radius: 0.8rem;
     display: flex;

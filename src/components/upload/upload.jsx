@@ -97,7 +97,7 @@ export default function Upload({
       } else data.append(`${uplaodType}`, file);
       const res = await axios.post(`${API_URL}/api/loan/upload/documents/`, data, {
         headers: {
-          token: `fb5b3d9080d36e1e3eead4b0cebcb430b1c654b5`,
+          token: `af2ecb4b5b2697d6de6204bf5a4e13c46dcfee27`,
         },
         onUploadProgress: data => {
           let prog = [...progress];
@@ -128,7 +128,7 @@ export default function Upload({
   }, [deletedFiles]);
 
   return (
-    <div className="bulk-upload" onClick={() => closeUpload(false)}>
+    <div className="bulk-upload" onClick={() => closeUpload(false)} style={showBorder ? { border: '1px solid #8F14CC'} : null}>
       <div
         className="content-box"
         style={{ width: `${width}`, height: `${height}` }}
@@ -178,7 +178,7 @@ export default function Upload({
             </div>
             {selectedFiles.length > 0 && <div className="file-container">
                 {selectedFiles.map((file, i) => (
-                    <div key={i} className={`file ${i === selectedFiles.length - 1 ? 'curved-bottom': ''} ${deletedFiles[i] === -1 ? 'deleted' : ''}`} style={{position:'relative',padding: 16}}>
+                    <div key={i} className={`file ${i === selectedFiles.length - 1 ? 'curved-bottom': ''} ${deletedFiles[i] === -1 ? 'deleted' : ''}`} style={showBorder ? {position:'relative',padding: 16}:{position:'relative',padding: '16px 8px'}}>
                         <div className="icon-container" style={{background: 'none'}}>
                             {/* <img src={fileIconGrey} /> */}
                         </div>

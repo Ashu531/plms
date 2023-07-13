@@ -11,6 +11,7 @@ import axios from 'axios';
 import DetailPage from "../detail/detail.jsx";
 import UserConsentModal from "../../components/userConsentModal/userConsentModal.jsx";
 import DraftPage from "../draft/draft.jsx";
+import UploadModal from "../../components/uploadModal/uploadModal.jsx";
 
 const statuses = [
   {
@@ -74,6 +75,8 @@ export default function Home() {
   const [consentModal, setConsentModal] = useState(false);
   const [tableData,setTableData] = useState(Array(6).fill([]))
   const [statusList, setStatusList] = useState([...statuses]);
+  const [statusCount,setStatusCount] = useState(0)
+  const [uploadModal,setUploadModal] = useState(false)
 
 
   const openSlidingPanel = () => {
@@ -81,7 +84,7 @@ export default function Home() {
   };
 
   const closeSlidingPanel = () => {
-    setLeadInfo({});
+    // setLeadInfo({});
     setOpenPanel(false);
   };
 
@@ -104,11 +107,11 @@ export default function Home() {
     //search api here
     await axios.get(`${API_URL}/api/loan/search/filter/?search=${query}`,{
         headers: {
-            token: `fb5b3d9080d36e1e3eead4b0cebcb430b1c654b5`,
+            token: `af2ecb4b5b2697d6de6204bf5a4e13c46dcfee27`,
         },
     }).
     then(res => {
-        setTableData(res.data.data.leads)
+        setTableData(res?.data?.data?.leads)
     }).catch(err=>console.log(err));
   };
 
@@ -151,6 +154,7 @@ export default function Home() {
     });
 
     setStatusList([...newStatusList]);
+    setStatusCount(status?.count)
   };
 
   const updateStatusList = (count, index) => {
@@ -189,10 +193,13 @@ export default function Home() {
 
     return await axios.get(`${API_URL}/api/loan/${endpoint}`, {
         headers: {
-            token: `fb5b3d9080d36e1e3eead4b0cebcb430b1c654b5`,
+            token: `af2ecb4b5b2697d6de6204bf5a4e13c46dcfee27`,
         },
     }).
     then(res => {
+        if(endpoint === statusEndpoints.ALL){
+            setStatusCount(res?.data?.data?.count)
+        }
         return res.data.data;
     }).catch(err=>console.log(err));
   }
@@ -201,11 +208,8 @@ export default function Home() {
   //////////////////////////////////////////////////////////////////
 
   const navigatePage = (i) => {
-      if(i !== 1){
-        closeSlidingPanel()
-      }
-    
-        setScreen(i);
+       closeSlidingPanel()
+       setScreen(i);
   };
 
   const closeUserConsentModal = () => {
@@ -234,28 +238,28 @@ export default function Home() {
     let newStatusList = [...statusList];
 
     allData = await allData;
-    newTableData[statusIndices.ALL] = allData.leads;
-    newStatusList[statusIndices.ALL] = {...newStatusList[statusIndices.ALL], count: allData.count}
+    newTableData[statusIndices.ALL] = allData?.leads;
+    newStatusList[statusIndices.ALL] = {...newStatusList[statusIndices.ALL], count: allData?.count}
 
     incompleteData = await incompleteData;
-    newTableData[statusIndices.INCOMPLETE] = incompleteData.leads;
-    newStatusList[statusIndices.INCOMPLETE] = {...newStatusList[statusIndices.INCOMPLETE], count: incompleteData.count}
+    newTableData[statusIndices.INCOMPLETE] = incompleteData?.leads;
+    newStatusList[statusIndices.INCOMPLETE] = {...newStatusList[statusIndices.INCOMPLETE], count: incompleteData?.count}
 
     inProcessData = await inProcessData;
-    newTableData[statusIndices.IN_PROCESS] = inProcessData.leads;
-    newStatusList[statusIndices.IN_PROCESS] = {...newStatusList[statusIndices.IN_PROCESS], count: inProcessData.count}
+    newTableData[statusIndices.IN_PROCESS] = inProcessData?.leads;
+    newStatusList[statusIndices.IN_PROCESS] = {...newStatusList[statusIndices.IN_PROCESS], count: inProcessData?.count}
 
     closedData = await closedData;
-    newTableData[statusIndices.CLOSED] = closedData.leads;
-    newStatusList[statusIndices.CLOSED] = {...newStatusList[statusIndices.CLOSED], count: closedData.count}
+    newTableData[statusIndices.CLOSED] = closedData?.leads;
+    newStatusList[statusIndices.CLOSED] = {...newStatusList[statusIndices.CLOSED], count: closedData?.count}
 
     approvedData = await approvedData;
-    newTableData[statusIndices.APPROVED] = approvedData.leads;
-    newStatusList[statusIndices.APPROVED] = {...newStatusList[statusIndices.APPROVED], count: approvedData.count}
+    newTableData[statusIndices.APPROVED] = approvedData?.leads;
+    newStatusList[statusIndices.APPROVED] = {...newStatusList[statusIndices.APPROVED], count: approvedData?.count}
 
     disbursedData = await disbursedData;
-    newTableData[statusIndices.DISBURSED] = disbursedData.leads;
-    newStatusList[statusIndices.DISBURSED] = {...newStatusList[statusIndices.DISBURSED], count: disbursedData.count}
+    newTableData[statusIndices.DISBURSED] = disbursedData?.leads;
+    newStatusList[statusIndices.DISBURSED] = {...newStatusList[statusIndices.DISBURSED], count: disbursedData?.count}
 
     setTableData(newTableData);
     setStatusList(newStatusList);
@@ -274,7 +278,7 @@ export default function Home() {
   const getQuickViewData=async()=>{
     await axios.get(`${API_URL}/api/loan/overview/${leadInfo?.leadId}/`,{
         headers: {
-            token: `fb5b3d9080d36e1e3eead4b0cebcb430b1c654b5`,
+            token: `af2ecb4b5b2697d6de6204bf5a4e13c46dcfee27`,
         },
     }).
     then(res => {
@@ -293,7 +297,7 @@ export default function Home() {
 
     // const response = await axios.post(`${API_URL}/api/loan/ask/consent/${leadInfo.leadId}/`,detail,{
     //     headers: {
-    //         token: `fb5b3d9080d36e1e3eead4b0cebcb430b1c654b5`,
+    //         token: `af2ecb4b5b2697d6de6204bf5a4e13c46dcfee27`,
     //     },
     // })
     // .then(res => res.data)
@@ -309,6 +313,15 @@ const goToDraftPage=()=>{
 const handleTableIconClick=(item,index)=>{
     setLeadInfo(item)
     navigatePage(1)
+}
+
+const closeUploadModal=()=>{
+    setUploadModal(false)
+}
+
+const openUploadModal=()=>{
+    // closeSlidingPanel()
+    setUploadModal(true)
 }
 
   return (
@@ -332,7 +345,7 @@ const handleTableIconClick=(item,index)=>{
                 boldText={status.boldText}
                 selected={status.selected}
                 onClick={() => handleStatusChange(status, index)}
-                count={status.count}
+                count={status?.count}
               />
             ))}
           </div>
@@ -341,7 +354,7 @@ const handleTableIconClick=(item,index)=>{
             className="row"
             style={{ justifyContent: "space-between", margin: "24px 0 0 0" }}
           >
-            <div className="lead-count">Showing {tableData.length} leads</div>
+            <div className="lead-count">Showing {statusCount} leads</div>
             <Button
               leadingIcon={addIcon}
               text="Create"
@@ -406,6 +419,7 @@ const handleTableIconClick=(item,index)=>{
           leadData={leadInfo}
           openDetailPage={(i) => navigatePage(i)}
           openUserConsentModal={()=>openUserConsentModal()}
+          openUploadModal={()=>openUploadModal()}
         />
       )}
       {openLeadForm && <LeadForm onBackPress={_closeLeadForm} instituteName={'Dummy Institute'} />}
@@ -416,6 +430,13 @@ const handleTableIconClick=(item,index)=>{
           submitConsent={()=>getQuickViewData()}
         />
       )}
+
+      {
+          uploadModal &&
+          <UploadModal 
+            closeUploadModal={()=>closeUploadModal()}
+          />
+      }
     </div>
   );
 }
