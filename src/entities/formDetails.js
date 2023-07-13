@@ -1,4 +1,4 @@
-class Lead {
+export default class Lead {
         #leadId;
         #studentName;
         #institute;
@@ -79,6 +79,68 @@ class Lead {
 
     get advanceEmi() {
         return this.#advanceEmi;
+    }
+
+    set leadId(leadId) {
+        this.#leadId = leadId;
+    }
+
+    set studentName(studentName) {
+        this.#studentName = studentName;
+    }
+
+    set institute(institute) {
+        this.#institute = institute;
+    }
+
+    set mobile(mobile) {
+        this.#mobile = mobile;
+    }
+
+    set email(email) {
+        this.#email = email;
+    }
+
+    set borrowerName(borrowerName) {
+        this.#borrowerName = borrowerName;
+    }
+
+    set course(course) {
+        this.#course = course;
+    }
+
+    set courseFee(courseFee) {
+        this.#courseFee = courseFee;
+    }
+
+    set loanAmount(loanAmount) {
+        this.#loanAmount = loanAmount;
+    }
+
+    set tenure(tenure) {
+        this.#tenure = tenure;
+    }
+
+    set advanceEmi(advanceEmi) {
+        this.#advanceEmi = advanceEmi;
+    }
+
+
+    requestData() {
+        return {
+            "leadId": this.leadId,
+            "student_name": this.studentName,
+            "college": this.institute,
+            "number": this.mobile,
+            "email": this.email,
+            "nameSameAsBorrower": this.studentName == this.borrowerName,
+            "name": this.borrowerName,
+            "course_name": this.course,
+            "course_fee": this.courseFee,
+            "loan_amount": this.loanAmount,
+            "tenure": this.tenure,
+            "emi": this.advanceEmi,
+        }
     }
 
 }

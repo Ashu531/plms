@@ -59,3 +59,21 @@
     font-weight: 500;
     text-align: start;
 }
+
+.form-heading {
+    flex: 1 1 0px;
+    color: #0B090D;
+    text-transform: capitalize;
+    text-align: start;
+}
+
+.clickable-heading{
+    flex: 1 1 0px;
+}
+
+.clickable-text {
+    color: #0B090D;
+    text-decoration-line: underline;
+    text-transform: capitalize;
+    cursor: pointer;
+}

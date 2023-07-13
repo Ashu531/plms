@@ -1,4 +1,4 @@
-import React,{useEffect, useState} from 'react';
+import React,{useEffect, useState, useRef} from 'react';
 import caretIcon from '../../assets/Icons/caretIcon.svg'
 import consentIcon from '../../assets/Icons/consentIcon.svg'
 import DocumentCard from '../../components/documentCard/documentCard.jsx';
@@ -9,14 +9,29 @@ import axios from 'axios';
 import './/detail.css'
 import ActivityCard from '../../components/activityCard/activityCard.jsx';
 import FinancialForm from '../../components/financialForm/financialForm.jsx';
-import StudentDetailForm, { formViewTypes, studentFormInputTypes } from '../../forms/leadDetails.jsx';
-import LoanDetailsForm, { loanFormInputTypes } from '../../forms/loanDetails.jsx';
+import { EditableLeadForm } from '../../components/leadForm/leadform.jsx';
+import { formViewTypes } from '../../forms/leadDetails.jsx';
+import Lead from '../../entities/formDetails.js';
 
 export default function DetailPage(props) {
 
  const [tab,setTab] = useState(0);
  const [activities,setActivities] = useState([])
  const [comments,setComments] = useState([])
+
+ const formData = useRef(new Lead(
+    '1234',
+    'John Doe',
+    'Dummy',
+    '7868667889',
+    'abc123@xyz.com',
+    'John Snow',
+    'Random',
+    '500',
+    '400',
+    -1,
+    -1
+ ));
 
  useEffect(()=>{
      getActivityData()
@@ -84,34 +99,11 @@ export default function DetailPage(props) {
             />
             {
                 tab === 0 && 
-                <div className='row full-width' style={{flexWrap: 'wrap', gap: '20px', justifyContent: 'space-between', alignItems: 'flex-start'}}>
-                <div style={{width: '40%'}}>
-                    <StudentDetailForm
-                        viewType={formViewTypes.CREATE} 
-                        formData={{
-                            leadId: '327669',
-                            name: 'Rashmi Ranjan Sathapathy',
-                            institute: 'Skill Lync',
-                            mobile: '9040146344',
-                            email: 'rrsatzat@gmail.com'
-                        }}
-                    />
-                    </div>
-                    <div style={{width: '40%'}}>
-                        <LoanDetailsForm
-                            viewType={formViewTypes.CREATE} 
-                            formData={{
-                                name: 'Rashmi Ranjan Sathapathy',
-                                sameAsStudent: false,
-                                course: 'Embedded Software Development',
-                                courseFee: '59000',
-                                loanAmount: '55000',
-                                tenure: -1,
-                                advanceEmi: -1
-                            }}
-                        />
-                    </div>
-                </div>
+                <EditableLeadForm
+                    viewType={formViewTypes.VIEW}
+                    formData={formData.current}
+                    showHeadings={true}
+                />
             }
             {
                 tab === 1 && 
