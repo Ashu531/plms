@@ -12,7 +12,20 @@ import FinancialForm from '../../components/financialForm/financialForm.jsx';
 import { EditableLeadForm } from '../../components/leadForm/leadform.jsx';
 import { formViewTypes } from '../../forms/leadDetails.jsx';
 import Lead from '../../entities/formDetails.js';
-import { saveForm } from '../../helpers/apis';
+import { saveForm } from '../../helpers/apis.js';
+import ChoiceBox, { Checklist, checklistTypes } from '../../components/checklist/checklist.jsx';
+
+
+const documentTypes = [
+    'Aadhaar Card', 
+    'Passport', 
+    'Driving License', 
+    'Voter ID', 
+    'Landline Bill', 
+    'Electricity Bill', 
+    'Gas Bill', 
+    'Water Bill'
+]
 
 export default function DetailPage(props) {
 
@@ -20,6 +33,7 @@ export default function DetailPage(props) {
  const [activities,setActivities] = useState([])
  const [comments,setComments] = useState([])
  const [leadData,setLeadData] = useState({})
+ const [additionalDocuments, setAdditionalDocuments] = useState([]);
 
  const formData = useRef(new Lead(
     '1234',
@@ -151,13 +165,11 @@ export default function DetailPage(props) {
                           desc={'Upload a clear image of your PAN Card clearly stating your name and date of birth.'}
                           instruction={'Format: PDF, PNG, JPEG, JPG.'}
                         />
-                        <div className='add-info-container row full-width'>
-                            <div className='row'>
-                                <img src={addIcon} height={20} width={20} style={{objectFit:'contain'}} />
-                                <span className='add-doc-text'>Additional Documents</span>
-                            </div>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="#ffffff" viewBox="0 0 256 256"><path d="M210.83,98.83l-80,80a4,4,0,0,1-5.66,0l-80-80a4,4,0,0,1,5.66-5.66L128,170.34l77.17-77.17a4,4,0,1,1,5.66,5.66Z"></path></svg>
-                        </div>
+                        <ChoiceBox
+                            title={'Additional Documents'}
+                            list={documentTypes}
+                            onSelect={(items) => console.log(items)}
+                        />
                     </div>
                     <div className='activity-container-divider' />
                     <div className='row'>

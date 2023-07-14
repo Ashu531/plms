@@ -1,14 +1,20 @@
 .checklist-container{
-    max-height: 0;
+    /* max-height: 0; */
+    display: none;
     transition: max-height 0.1s;
-    border-radius: 0 0 8px 8px;
+    border-radius: 8px 8px 0 0;
     overflow: hidden;
-    background-color: #AAAAAA;
+    background-color: #FFFFFF;
     color: #444444;
 }
 
 .checklist-expanded{
-    max-height: 300px;
+    /* max-height: 300px; */
+    display: block;
+    position: absolute;
+    top: 40px;
+    z-index: 99;
+    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
 }
 
 .list-item {
@@ -16,7 +22,7 @@
 }
 
 .list-item:hover {
-    background-color: #CACACA;
+    background-color: #F4F4F4;
 }
 
 .checkbox {
@@ -35,12 +41,10 @@
     padding: 8px 15px;
     border-radius: 8px;
     background-color: #8F14CC;
-    transition: border-radius 0.6s;
 }
 
 .expanded {
-    transition: border-radius 0.1s;
-    border-radius: 8px 8px 0 0;
+    border-radius: 0 0 8px 8px;
 }
 
 .title {

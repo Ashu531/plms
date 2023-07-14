@@ -7,23 +7,21 @@ import caretDown from '../../assets/Icons/caretDown.svg';
 export function Checklist({
     list=[],
     type,
-    selected=new Array(list.length).fill(null),
+    selected=[],
     onSelect,
     expanded
 }) {
 
-    const [selectedChoices, setSelectedChoices] = useState([...selected]);
+    const [selectedChoices, setSelectedChoices] = useState(new Set([...selected]));
 
 
     const handleClick = (item, index) => {
-        let choices = [...selectedChoices];
-        if(choices[index] == null){
-            choices[index] = item;
+        if(selectedChoices.has(item)){
+            setSelectedChoices(prev => {prev.delete(item); return new Set(prev);})
         } else {
-            choices[index] = null;
+            setSelectedChoices(prev => new Set(prev.add(item)));
         }
 
-        setSelectedChoices(choices);
 
         if(onSelect != null){
             onSelect(choices);
@@ -34,13 +32,13 @@ export function Checklist({
     <div className={`column checklist-container ${expanded ? 'checklist-expanded' : ''}`}>
         {list.map((item, index) => (
             <div 
-                key={`${item['label']}-${index}`} 
+                key={`${item}-${index}`} 
                 className='row list-item'
                 style={{gap: '10px'}}
                 onClick={() => handleClick(item, index)}
             >
-                <input type={'checkbox'} className='checkbox' checked={selectedChoices[index] != null} /> 
-                <div className='label text-montserrat text-16'>{item['label']}</div>
+                <input type={'checkbox'} className='checkbox' checked={selectedChoices.has(item)} /> 
+                <div className='label text-montserrat text-16'>{item}</div>
             </div>
         ))}
     </div>
@@ -91,7 +89,7 @@ export default function ChoiceBox({
     const [ expanded, setExpanded ] = useState(false);
 
   return (
-    <div>
+    <div style={{position: 'relative'}}>
         <DropTitle 
             expanded={expanded}
             title={title}
@@ -99,7 +97,6 @@ export default function ChoiceBox({
             trailingIcon={caretDown}
             onClick={() => setExpanded(!expanded)}
         />
-
         <Checklist 
             list={[...list]}
             onSelect={onSelect}

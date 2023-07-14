@@ -10,6 +10,7 @@ import './upload.css'
 
 export default function Upload({
     closeUpload,
+    showBorder,
     headingText='',
     width='',
     height='',
