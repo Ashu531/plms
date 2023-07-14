@@ -4,7 +4,6 @@ import closeIcon from '../../assets/Icons/cross-icon.svg'
 import './/uploadModal.css'
 
 export default function UploadModal(props) {
-  console.log('coming++++')
   return (
    <div className='upload-modal'>
        <div className='upload-modal-content'>
