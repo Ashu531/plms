@@ -1,4 +1,4 @@
-.list{
+.plms-list{
     list-style-type: none;
     overflow: hidden;
     /* padding: 0 0 0 12px; */
@@ -9,7 +9,7 @@
     justify-content: flex-start;
     align-items: flex-start;
 }
-.item{
+.plms-item{
     display: inline;
     text-align: center;
     text-decoration: none;
@@ -25,7 +25,7 @@
     color: #ffffff;
 } */
 
-  .active-tab{
+  .plms-active-tab{
     color: #ffffff;
     border-bottom: solid var(--primary-base);
     font-weight: 500;

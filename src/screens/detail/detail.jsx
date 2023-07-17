@@ -43,7 +43,7 @@ export default function DetailPage(props) {
  const getUserComment=async()=>{
     await axios.get(`${API_URL}/api/loan/lead/comments/${props?.leadData?.leadId}/`,{
         headers: {
-            token: `082daf7e87044f5a49b39d53e0ae794faa6e119d`,
+            token: `${props?.token}`,
         },
     }).
     then(res => {
@@ -54,7 +54,7 @@ export default function DetailPage(props) {
  const getActivityData=async()=>{
     await axios.get(`${API_URL}/api/loan/update/history/${props?.leadData?.leadId}/`,{
         headers: {
-            token: `082daf7e87044f5a49b39d53e0ae794faa6e119d`,
+            token: `${props?.token}`,
         },
     }).
     then(res => {
@@ -65,7 +65,7 @@ export default function DetailPage(props) {
  const getLeadOverview=async()=>{
     await axios.get(`${API_URL}/api/loan/overview/${props?.leadData?.leadId}/`,{
         headers: {
-            token: `082daf7e87044f5a49b39d53e0ae794faa6e119d`,
+            token: `${props?.token}`,
         },
     }).
     then(res => {

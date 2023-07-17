@@ -19,7 +19,7 @@ export default function DetailModal(props) {
    const getQuickViewData=async()=>{
         await axios.get(`${API_URL}/api/loan/overview/${props?.leadData?.leadId}/`,{
             headers: {
-                token: `082daf7e87044f5a49b39d53e0ae794faa6e119d`,
+                token: `${props?.token}`,
             },
         }).
         then(res => {
@@ -30,7 +30,7 @@ export default function DetailModal(props) {
    const getPendencyData=async()=>{
         await axios.get(`${API_URL}/api/loan/pendencies/${props?.leadData?.leadId}/`,{
             headers: {
-                token: `082daf7e87044f5a49b39d53e0ae794faa6e119d`,
+                token: `${props?.token}`,
             },
         }).
         then(res => {

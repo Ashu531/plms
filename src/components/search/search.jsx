@@ -15,6 +15,7 @@ export default function Search({
             id='search-input' 
             className='text-14 text-montserrat text-weight-5' 
             placeholder={placeholder}
+            style={{background: 'transparent'}}
         />
     </div>
   )

@@ -12,6 +12,7 @@ import DetailPage from "../detail/detail.jsx";
 import UserConsentModal from "../../components/userConsentModal/userConsentModal.jsx";
 import DraftPage from "../draft/draft.jsx";
 import UploadModal from "../../components/uploadModal/uploadModal.jsx";
+import DownloadPage from "../downloads/downloads.jsx";
 
 const statuses = [
   {
@@ -66,7 +67,7 @@ const statusEndpoints = {
 
 
 
-export default function Home() {
+export default function Home({token}) {
   const [query, setQuery] = useState("");
   const [leadInfo,setLeadInfo] = useState({})
   const [openPanel, setOpenPanel] = useState(false);
@@ -77,6 +78,7 @@ export default function Home() {
   const [statusList, setStatusList] = useState([...statuses]);
   const [statusCount,setStatusCount] = useState(0)
   const [uploadModal,setUploadModal] = useState(false)
+  const [noResult,setNoResult] = useState(false)
 
 
   const openSlidingPanel = () => {
@@ -107,7 +109,7 @@ export default function Home() {
     //search api here
     await axios.get(`${API_URL}/api/loan/search/filter/?search=${query}`,{
         headers: {
-            token: `082daf7e87044f5a49b39d53e0ae794faa6e119d`,
+            token: `${token}`,
         },
     }).
     then(res => {
@@ -191,17 +193,29 @@ export default function Home() {
           break;
     }
 
-    return await axios.get(`${API_URL}/api/loan/${endpoint}`, {
+    return await axios.get(`${API_URL}/api/loan/${endpoint}`,{
         headers: {
-            token: `082daf7e87044f5a49b39d53e0ae794faa6e119d`,
+            token: `${token}`,
         },
     }).
     then(res => {
-        if(endpoint === statusEndpoints.ALL){
-            setStatusCount(res?.data?.data?.count)
+        console.log(res)
+        if(res?.status === 200){
+            if(endpoint === statusEndpoints.ALL){
+                setStatusCount(res?.data?.data?.count)
+            }
+            return res.data.data;
+        }else{
+            setNoResult(true)
         }
-        return res.data.data;
-    }).catch(err=>console.log(err));
+        
+    }).catch(err=>{
+
+        console.log(err.response)
+        if(err.response.status !== 200){
+            setNoResult(true)
+        }
+    });
   }
 
   // Status End
@@ -238,28 +252,53 @@ export default function Home() {
     let newStatusList = [...statusList];
 
     allData = await allData;
-    newTableData[statusIndices.ALL] = allData?.leads;
-    newStatusList[statusIndices.ALL] = {...newStatusList[statusIndices.ALL], count: allData?.count}
+    console.log(allData,"jhvgjk")
+    if(allData?.leads && allData?.leads.length > 0){
+        newTableData[statusIndices.ALL] = allData?.leads;
+        newStatusList[statusIndices.ALL] = {...newStatusList[statusIndices.ALL], count: allData?.count}
+    }else{
+        setNoResult(true)
+    }
 
     incompleteData = await incompleteData;
+    if(incompleteData?.leads && incompleteData?.leads.length > 0){
     newTableData[statusIndices.INCOMPLETE] = incompleteData?.leads;
     newStatusList[statusIndices.INCOMPLETE] = {...newStatusList[statusIndices.INCOMPLETE], count: incompleteData?.count}
+    }else{
+        setNoResult(true)
+    }
 
     inProcessData = await inProcessData;
-    newTableData[statusIndices.IN_PROCESS] = inProcessData?.leads;
-    newStatusList[statusIndices.IN_PROCESS] = {...newStatusList[statusIndices.IN_PROCESS], count: inProcessData?.count}
+    if(inProcessData?.leads && inProcessData?.leads.length > 0){
+        newTableData[statusIndices.IN_PROCESS] = inProcessData?.leads;
+        newStatusList[statusIndices.IN_PROCESS] = {...newStatusList[statusIndices.IN_PROCESS], count: inProcessData?.count}
+    }else{
+        setNoResult(true)
+    }
 
     closedData = await closedData;
+    if(closedData?.leads && closedData?.leads.length > 0){
     newTableData[statusIndices.CLOSED] = closedData?.leads;
     newStatusList[statusIndices.CLOSED] = {...newStatusList[statusIndices.CLOSED], count: closedData?.count}
+     }else{
+        setNoResult(true)
+    }
 
     approvedData = await approvedData;
+    if(approvedData?.leads && approvedData?.leads.length > 0){
     newTableData[statusIndices.APPROVED] = approvedData?.leads;
     newStatusList[statusIndices.APPROVED] = {...newStatusList[statusIndices.APPROVED], count: approvedData?.count}
+    }else{
+        setNoResult(true)
+    }
 
     disbursedData = await disbursedData;
+    if(disbursedData?.leads && disbursedData?.leads.length > 0){
     newTableData[statusIndices.DISBURSED] = disbursedData?.leads;
     newStatusList[statusIndices.DISBURSED] = {...newStatusList[statusIndices.DISBURSED], count: disbursedData?.count}
+    }else{
+        setNoResult(true)
+    }
 
     setTableData(newTableData);
     setStatusList(newStatusList);
@@ -267,7 +306,7 @@ export default function Home() {
   }
 
   useEffect(() => {
-    updateScreen()
+        updateScreen()
   }, [])
 
   const openUserConsentModal = () => {
@@ -278,7 +317,7 @@ export default function Home() {
   const getQuickViewData=async()=>{
     await axios.get(`${API_URL}/api/loan/overview/${leadInfo?.leadId}/`,{
         headers: {
-            token: `082daf7e87044f5a49b39d53e0ae794faa6e119d`,
+            token: `${token}`,
         },
     }).
     then(res => {
@@ -297,7 +336,7 @@ export default function Home() {
 
     // const response = await axios.post(`${API_URL}/api/loan/ask/consent/${leadInfo.leadId}/`,detail,{
     //     headers: {
-    //         token: `082daf7e87044f5a49b39d53e0ae794faa6e119d`,
+    //         token: `3de1186482cdde561ca24e0e03f0753cd2616eba`,
     //     },
     // })
     // .then(res => res.data)
@@ -307,6 +346,11 @@ export default function Home() {
 
 const goToDraftPage=()=>{
     let i = 2
+    setScreen(i)
+}
+
+const goToDownloads=()=>{
+    let i = 3
     setScreen(i)
 }
 
@@ -332,6 +376,7 @@ const openUploadModal=()=>{
             <Header 
                 onSearchChange={onSearch} 
                 goToDraftPage={()=>goToDraftPage()}
+                goToDownloads={()=>goToDownloads()}
                 screen={screen}
            />
          } 
@@ -375,7 +420,7 @@ const openUploadModal=()=>{
 
           <div className="table-container">
               {
-                  tableData.length > 0 ? 
+                tableData &&  tableData?.length > 0 &&
                   <Table
                         list={[...tableData[getSelectedStatusIndex()]]}
                         onIconClick={(item, index) => {
@@ -385,12 +430,16 @@ const openUploadModal=()=>{
                             setLeadInfo(item)
                             openSlidingPanel()
                         }}
-                  /> : 
+                  /> 
+              }
+            </div>
+
+              { noResult &&
                   <div className='no-result-content'>
                     <span>No Results</span>
                   </div>
               }
-            </div>
+
           </div>
       )}
 
@@ -400,6 +449,7 @@ const openUploadModal=()=>{
            goToHomePage={(i) => navigatePage(i)} 
            leadData={leadInfo}
            openUserConsentModal={()=>openUserConsentModal()}
+           token={token}
            />
         </div>
       )}
@@ -409,9 +459,20 @@ const openUploadModal=()=>{
           <DraftPage 
            openLeadForm={() => _openLeadForm()} 
            leadData={leadInfo}
+           token={token}
            />
         </div>
       )}
+
+    {screen === 3 && (
+        <div className="full-width">
+          <DownloadPage 
+           openLeadForm={() => _openLeadForm()} 
+           leadData={leadInfo}
+           token={token}
+           />
+        </div>
+      )}        
 
       {openPanel && (
         <SlidingPanel 
@@ -420,6 +481,7 @@ const openUploadModal=()=>{
           openDetailPage={(i) => navigatePage(i)}
           openUserConsentModal={()=>openUserConsentModal()}
           openUploadModal={()=>openUploadModal()}
+          token={token}
         />
       )}
       {openLeadForm && <LeadForm onBackPress={_closeLeadForm} instituteName={'Dummy Institute'} />}
@@ -428,6 +490,7 @@ const openUploadModal=()=>{
         <UserConsentModal
           closeUserConsentModal={() => closeUserConsentModal()}
           submitConsent={()=>getQuickViewData()}
+          token={token}
         />
       )}
 
@@ -435,6 +498,7 @@ const openUploadModal=()=>{
           uploadModal &&
           <UploadModal 
             closeUploadModal={()=>closeUploadModal()}
+            token={token}
           />
       }
     </div>

@@ -1,4 +1,4 @@
-.button-component{
+.plms-button-component{
     display: flex;;
     justify-content: center;
     align-items: center;
@@ -8,23 +8,23 @@
     line-height: 2.1rem;
     padding: 8px 15px;
 }
-.img{
+.plms-img{
     width: 2rem;
     height: 2rem;
     margin: 0 0.3rem;
 }
 
-.text{
+.plms-text{
     text-align: center;
     color: #ffffff;
     cursor: pointer;
 }
 
-.hideText{
+.plms-hideText{
     display: none;
 }
 
-.pressedBubble{
+.plms-pressedBubble{
     position: absolute;
     bottom: 0px;
     right: 0px;
@@ -38,7 +38,7 @@
 }
 
 
-.btn-primary{
+.plms-btn-primary{
     justify-content: center;
     padding: 1.2rem 1.6rem;
     border-radius: 1.2rem;
@@ -47,7 +47,7 @@
     transition: background 0.4s;
 }
 
-.btn-secondary{
+.plms-btn-secondary{
     justify-content: center;
     padding: 1.4rem;
     border-radius: 2.5rem;
@@ -55,7 +55,7 @@
     color: #C8CCD0;
 }
 
-.btn-tertiary{
+.plms-btn-tertiary{
     padding: 0.8rem 1.2rem;
     border-radius: 0.4rem;
     background: none;
@@ -66,14 +66,14 @@
     line-height: 2.1rem;
 }
 
-.btn-group-component{
+.plms-btn-group-component{
     display: flex;
     justify-content: flex-start;
     align-items: center;
     
     
 }
-.btn{
+.plms-btn{
     background: var(--defaultBackground);
     padding: 1rem 1.6rem;
     font-weight: 500;
@@ -83,13 +83,13 @@
     border: 1px solid var(--insignificantStrokeColor);
 }
 
-.selected{
+.plms-selected{
     background: var(--primaryColor);
     color: var(--defaultBackground);
     border-radius: 0.4rem;
 }
 
-.disable{
+.plms-disable{
     pointer-events: none;
     opacity: 0.5;
 }
