@@ -79,7 +79,7 @@ export default function Home({token}) {
   const [statusCount,setStatusCount] = useState(0)
   const [uploadModal,setUploadModal] = useState(false)
   const [noResult,setNoResult] = useState(false)
-
+  const [leadOverview,setLeadOverview] = useState({})
 
   const openSlidingPanel = () => {
     setOpenPanel(true);
@@ -113,13 +113,18 @@ export default function Home({token}) {
         },
     }).
     then(res => {
-        setTableData(res?.data?.data?.leads)
+        if(res?.data?.data?.leads.length > 0){
+            let detail = res?.data?.data?.leads;
+            setTableData([detail])
+        }
+        
     }).catch(err=>console.log(err));
   };
+  
 
   useEffect(() => {
     const delayDebounce = setTimeout(() => {
-        if(query.length > 0){
+        if(query?.length > 0){
             handleSearch(query);
         }
      }, 500);
@@ -252,7 +257,7 @@ export default function Home({token}) {
     let newStatusList = [...statusList];
 
     allData = await allData;
-    console.log(allData,"jhvgjk")
+
     if(allData?.leads && allData?.leads.length > 0){
         newTableData[statusIndices.ALL] = allData?.leads;
         newStatusList[statusIndices.ALL] = {...newStatusList[statusIndices.ALL], count: allData?.count}
@@ -307,6 +312,7 @@ export default function Home({token}) {
 
   useEffect(() => {
         updateScreen()
+        // getQuickViewData()
   }, [])
 
   const openUserConsentModal = () => {
@@ -314,14 +320,15 @@ export default function Home({token}) {
     setConsentModal(true);
   };
 
-  const getQuickViewData=async()=>{
-    await axios.get(`${API_URL}/api/loan/overview/${leadInfo?.leadId}/`,{
+  const getQuickViewData=async(leadData)=>{
+    await axios.get(`${API_URL}/api/loan/overview/${leadData?.leadId}/`,{
         headers: {
             token: `${token}`,
         },
     }).
     then(res => {
-        submitConsent(res.data.data)
+        submitConsent(res?.data?.data)
+        setLeadOverview(res?.data?.data?.data?.borrowerData)
     }).catch(err=>console.log(err));
   }
 
@@ -355,7 +362,7 @@ const goToDownloads=()=>{
 }
 
 const handleTableIconClick=(item,index)=>{
-    setLeadInfo(item)
+    getQuickViewData(item)
     navigatePage(1)
 }
 
@@ -424,6 +431,7 @@ const openUploadModal=()=>{
                   <Table
                         list={[...tableData[getSelectedStatusIndex()]]}
                         onIconClick={(item, index) => {
+                                setLeadInfo(item)
                                 handleTableIconClick(item,index)
                             }}
                         onRowClick={(item, index) => {
@@ -450,6 +458,7 @@ const openUploadModal=()=>{
            leadData={leadInfo}
            openUserConsentModal={()=>openUserConsentModal()}
            token={token}
+           leadOverview={leadOverview}
            />
         </div>
       )}

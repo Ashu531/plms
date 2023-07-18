@@ -98,6 +98,8 @@ export function EditableLeadForm ({
     handleSave
 }) {
 
+    console.log(formData,"new data")
+
     const newFormData = useRef();
 
     const [viewTypes, setViewTypes] = useState({

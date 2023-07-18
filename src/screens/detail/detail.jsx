@@ -13,32 +13,43 @@ import { EditableLeadForm } from '../../components/leadForm/leadform.jsx';
 import { formViewTypes } from '../../forms/leadDetails.jsx';
 import Lead from '../../entities/formDetails.js';
 
-export default function DetailPage(props) {
+export default function DetailPage({
+    leadOverview,
+    ...props
+}) {
 
  const [tab,setTab] = useState(0);
  const [activities,setActivities] = useState([])
  const [comments,setComments] = useState([])
  const [leadData,setLeadData] = useState({})
+ const [documentValue,setDocumentValue] = useState({
+     value: 1,
+ })
 
- const formData = useRef(new Lead(
-    '1234',
-    'John Doe',
-    'Dummy',
-    '7868667889',
-    'abc123@xyz.com',
-    'John Snow',
-    'Random',
-    '500',
-    '400',
-    -1,
-    -1
- ));
+ let formData = useRef();
 
  useEffect(()=>{
      getActivityData()
      getUserComment()
      getLeadOverview()
  },[])
+
+ useEffect(()=>{
+    formData.current = new Lead(
+        `${leadOverview?.leadId}`,
+        `${leadOverview?.firstName}${leadOverview?.lastName}`,
+        `${leadOverview?.collegeName}`,
+        `${leadOverview?.mobile}`,
+        `${leadOverview?.email}`,
+        `${leadOverview?.mobile}`,
+        `${leadOverview?.fullName}`,
+        `${leadOverview?.courseName}`,
+        `${leadOverview?.courseFee}`,
+        `${leadOverview?.loanRequired}`,
+        -1,
+        -1,
+    );
+ },[leadOverview])
 
  const getUserComment=async()=>{
     await axios.get(`${API_URL}/api/loan/lead/comments/${props?.leadData?.leadId}/`,{
@@ -81,6 +92,12 @@ export default function DetailPage(props) {
   const handleTabNavigation = (i) => {
     setTab(i);
  }
+
+ const handleDocumentsCard=(data)=>{
+        setDocumentValue({
+            value: data
+        })
+}
 
   return (
     <div className='lead-detail-page'>
@@ -130,28 +147,34 @@ export default function DetailPage(props) {
                 tab === 2 && 
                 <div className='document-container row full-width'>
                     <div className='column' style={{gap:20}}>
-                        <DocumentCard
-                          title={'PAN Card'}
-                          desc={'Upload a clear image of your PAN Card clearly stating your name and date of birth.'}
-                          instruction={'Format: PDF, PNG, JPEG, JPG.'}
-                        />
-                        <DocumentCard
-                          title={'Address Proof'}
-                          desc={'Upload a clear image of your PAN Card clearly stating your name and date of birth.'}
-                          instruction={'Format: PDF, PNG, JPEG, JPG.'}
-                        />
-                        <DocumentCard
-                          title={'Bank Statement'}
-                          desc={'Upload a clear image of your PAN Card clearly stating your name and date of birth.'}
-                          instruction={'Format: PDF, PNG, JPEG, JPG.'}
-                        />
-                        <div className='add-info-container row full-width'>
+                        <div style={documentValue.value === 1 ? {background: '#F7F0FF',borderRadius: 8} : null} onClick={()=>handleDocumentsCard(1)}>
+                            <DocumentCard
+                            title={'PAN Card'}
+                            desc={'Upload a clear image of your PAN Card clearly stating your name and date of birth.'}
+                            instruction={'Format: PDF, PNG, JPEG, JPG.'}
+                            />
+                        </div>
+                        <div onClick={()=>handleDocumentsCard(2)} style={documentValue.value === 2 ? {background: '#F7F0FF',borderRadius: 8} : null}>
+                            <DocumentCard
+                            title={'Address Proof'}
+                            desc={'Upload a clear image of your PAN Card clearly stating your name and date of birth.'}
+                            instruction={'Format: PDF, PNG, JPEG, JPG.'}
+                            />
+                        </div>
+                        <div onClick={()=>handleDocumentsCard(3)} style={documentValue.value === 3 ? {background: '#F7F0FF',borderRadius: 8} : null}>
+                            <DocumentCard
+                            title={'Bank Statement'}
+                            desc={'Upload a clear image of your PAN Card clearly stating your name and date of birth.'}
+                            instruction={'Format: PDF, PNG, JPEG, JPG.'}
+                            />
+                        </div>
+                        {/* <div className='add-info-container row full-width'>
                             <div className='row'>
                                 <img src={addIcon} height={20} width={20} style={{objectFit:'contain'}} />
                                 <span className='add-doc-text'>Additional Documents</span>
                             </div>
                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="#ffffff" viewBox="0 0 256 256"><path d="M210.83,98.83l-80,80a4,4,0,0,1-5.66,0l-80-80a4,4,0,0,1,5.66-5.66L128,170.34l77.17-77.17a4,4,0,1,1,5.66,5.66Z"></path></svg>
-                        </div>
+                        </div> */}
                     </div>
                     <div className='activity-container-divider' />
                     <div className='row'>
