@@ -108,6 +108,9 @@ export default function DetailPage({
                     <div className='column' style={{marginTop: 20,marginLeft: 12}}>
                         <span className='lead-page-heading'>{props?.leadData?.fullName}</span>
                         <span className='lead-page-subheading'> {props?.leadData?.mobile}</span>
+                        { props?.leadData?.utr &&
+                            <span className='lead-page-subheading'>UTR : {'props?.leadData?.utr'}</span>
+                        } 
                     </div>
                 </div>
                 <div className='column' style={{alignItems:'flex-end'}}>
@@ -178,7 +181,7 @@ export default function DetailPage({
                     </div>
                     <div className='activity-container-divider' />
                     <div className='row'>
-                        <Upload showBorder={true} />
+                        <Upload showBorder={true} token={props?.token} />
                     </div>
                 </div>    
             }
