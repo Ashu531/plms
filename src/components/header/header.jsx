@@ -1,5 +1,6 @@
 import React,{useEffect, useState} from 'react'
 import './header.css'
+import caretIcon from '../../assets/Icons/caretIcon.svg'
 import userIcon from '../../assets/Icons/userIcon.svg'
 import draftIcon from '../../assets/Icons/draftIcon.svg'
 import downloads from '../../assets/Icons/downloads.svg'
@@ -11,11 +12,17 @@ export default function Header({
     onSearchChange,
     goToDraftPage,
     screen,
-    goToDownloads
+    goToDownloads,
+    goToHomePage
 }) {
 
+    const handleBack=()=>{
+        let i = 0
+        goToHomePage(i)
+      }
+
   return (
-   <div className='plms-header'>
+   <div className='plms-navbar-header'>
        <div style={{width: '40%'}}>
            {
              screen === 0 && <Search
@@ -31,15 +38,23 @@ export default function Header({
            } */}
 
            {
-             screen === 2 && <div className='header-title'>
-                 Drafts
-                 </div>
+             screen === 2 && 
+             <div className='row' >
+                 <img src={caretIcon} onClick={()=>handleBack()} style={{cursor:'pointer'}}/>
+                <div className='header-title'>
+                    Drafts
+                </div>
+             </div>
            }
 
             {
-             screen === 3 && <div className='header-title'>
-                 Downloads
+             screen === 3 && 
+             <div className='row' >
+                <img src={caretIcon} onClick={()=>handleBack()} style={{cursor:'pointer'}}/>
+                <div className='header-title'>
+                    Downloads
                  </div>
+             </div>    
            }
         
        </div>

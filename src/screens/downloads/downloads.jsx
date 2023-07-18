@@ -9,7 +9,6 @@ import 'react-calendar/dist/Calendar.css';
 import Button from '../../components/button/button.jsx';
 import moment from 'moment'
 import DownloadTable from '../../components/downloadsTable/downloadsTable.jsx';
-import { CSVLink,CSVDownload } from "react-csv";
 // import { downloadCSV } from '../../helpers/downloadCSV.js';
 
 export default function DownloadPage(props) {
@@ -59,7 +58,6 @@ export default function DownloadPage(props) {
     }).
     then(res => {
       getDownloads()
-      // window.open("data:text/csv;charset=utf-8," + escape(res.data))
       downloadCSV(res.data)
       return res.data
     }).catch(err=>console.log(err));
@@ -73,6 +71,21 @@ export default function DownloadPage(props) {
     document.body.appendChild(link);
     link.click();
   }
+
+  const generateIndividualReport=async(item)=>{
+    let startDate = item?.from_date;
+    let endDate = item?.to_date;
+    await axios.get(`${API_URL}/api/loan/download/report/?start_date=${startDate}&end_date=${endDate}`,{
+      headers: {
+          token: `${props?.token}`,
+      },
+    }).
+    then(res => {
+      // getDownloads()
+      downloadCSV(res.data)
+      return res.data
+    }).catch(err=>console.log(err));
+  } 
 
   return (
     <>
@@ -106,9 +119,7 @@ export default function DownloadPage(props) {
               }}
               onClick={()=>generateReport()}
             //   onClick={_openLeadForm}
-            >
-               <CSVLink data={csvData} target="_blank" id='csvFile' />
-            </Button>   
+            /> 
           </div>
 
           <div className="download-table-container">
@@ -116,10 +127,11 @@ export default function DownloadPage(props) {
                   tableData?.length > 0 ? 
                   <DownloadTable
                         list={[...tableData]}
-                        onRowClick={(item, index) => {
-                            setLeadInfo(item)
-                            openLeadForm()
-                        }}
+                        generateReport={(item)=>generateIndividualReport(item)}
+                        // onRowClick={(item, index) => {
+                        //     setLeadInfo(item)
+                        //     openLeadForm()
+                        // }}
                   /> : 
                   <div className='no-result-content'>
                     <span>No Results</span>

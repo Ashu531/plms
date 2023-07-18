@@ -7,18 +7,8 @@ import Button from '../button/button.jsx'
 
 export default function DownloadTable({
     list,
-    onRowClick,
-    onIconClick
+    generateReport
 }){
-
-    const handleIconClick = (event, item, index) => {
-        event.stopPropagation();
-        onIconClick(item, index);
-    }
-
-    const generateReport=()=>{
-
-    }
 
     return (
         <div className='table'>
@@ -41,7 +31,7 @@ export default function DownloadTable({
             </div>
             <div className='table-row-container'>
                 { list.map((item, index) => (
-                    <div key={`${item}-${index}`} className='draft-table-row' onClick={() => onRowClick(item, index)}>
+                    <div key={`${item}-${index}`} className='draft-table-row'>
                         <div className='row-text'>{ item.report_name }</div>
                         <div className='row-text'>{ moment(item.created_at).format('MMMM Do YYYY, h:mm:ss a') }</div>
                         <div className='row-text'>{ '' }</div>
@@ -60,7 +50,7 @@ export default function DownloadTable({
                                 fontFamily: "Montserrat",
                                 fontWeight: 500,
                             }}
-                            onClick={()=>generateReport()}
+                            onClick={()=>generateReport(item)}
                             //   onClick={_openLeadForm}
                         />
                         </div>
