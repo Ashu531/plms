@@ -4,16 +4,13 @@ import consentIcon from '../../assets/Icons/consentIcon.svg'
 import DocumentCard from '../../components/documentCard/documentCard.jsx';
 import TabBar from '../../components/tabBar/tabBar.jsx';
 import Upload from '../../components/upload/upload.jsx';
-import addIcon from '../../assets/Icons/addIcon.svg'
 import axios from 'axios';
 import './/detail.css'
 import ActivityCard from '../../components/activityCard/activityCard.jsx';
 import FinancialForm from '../../components/financialForm/financialForm.jsx';
 import { EditableLeadForm } from '../../components/leadForm/leadform.jsx';
 import { formViewTypes } from '../../forms/leadDetails.jsx';
-import Lead from '../../entities/formDetails.js';
-import { saveForm } from '../../helpers/apis.js';
-import ChoiceBox, { Checklist, checklistTypes } from '../../components/checklist/checklist.jsx';
+import { leadState, requestData } from '../../entities/formDetails.js';
 
 
 const documentTypes = [
@@ -29,6 +26,9 @@ const documentTypes = [
 
 export default function DetailPage({
     leadOverview,
+    previousFormData,
+    formData, 
+    setFormData,
     ...props
 }) {
 
@@ -40,30 +40,11 @@ export default function DetailPage({
      value: 1,
  })
 
- let formData = useRef();
-
  useEffect(()=>{
      getActivityData()
      getUserComment()
      getLeadOverview()
  },[])
-
- useEffect(()=>{
-    formData.current = new Lead(
-        `${leadOverview?.leadId}`,
-        `${leadOverview?.firstName}${leadOverview?.lastName}`,
-        `${leadOverview?.collegeName}`,
-        `${leadOverview?.mobile}`,
-        `${leadOverview?.email}`,
-        `${leadOverview?.mobile}`,
-        `${leadOverview?.fullName}`,
-        `${leadOverview?.courseName}`,
-        `${leadOverview?.courseFee}`,
-        `${leadOverview?.loanRequired}`,
-        -1,
-        -1,
-    );
- },[leadOverview])
 
  const getUserComment=async()=>{
     await axios.get(`${API_URL}/api/loan/lead/comments/${props?.leadData?.leadId}/`,{
@@ -96,6 +77,21 @@ export default function DetailPage({
     then(res => {
         setLeadData(res.data.data.data)
     }).catch(err=>console.log(err));
+ }
+
+ const updateLead = async (data) => {
+
+    console.log(data, "edit payload")
+    // await axios.post(`${API_URL}/api/loan/overview/${props?.leadData?.leadId}/`,
+    // requestData(data),
+    // {
+    //     headers: {
+    //         token: `${props?.token}`,
+    //     },
+    // }).
+    // then(res => {
+    //     // setLeadData(res.data.data.data)
+    // }).catch(err=>console.log(err));
  }
 
   const handleBack=()=>{
@@ -143,11 +139,13 @@ export default function DetailPage({
             />
             {
                 tab === 0 && 
-                <EditableLeadForm
+                formData && <EditableLeadForm
                     viewType={formViewTypes.VIEW}
-                    formData={formData.current}
+                    previousFormData={previousFormData}
+                    formData={formData}
+                    setFormData={(data) => setFormData(data)}
                     showHeadings={true}
-                    handleSave={handleSave}
+                    handleSave={updateLead}
                 />
             }
             {

@@ -79,7 +79,9 @@ export default function Home({token}) {
   const [statusCount,setStatusCount] = useState(0)
   const [uploadModal,setUploadModal] = useState(false)
   const [noResult,setNoResult] = useState(false)
-  const [leadOverview,setLeadOverview] = useState({})
+  const [leadOverview,setLeadOverview] = useState()
+  let [formData, setFormData] = useState();
+  let [temporaryFormData, setTemporaryFormData] = useState();
 
   const openSlidingPanel = () => {
     setOpenPanel(true);
@@ -204,7 +206,6 @@ export default function Home({token}) {
         },
     }).
     then(res => {
-        console.log(res)
         if(res?.status === 200){
             if(endpoint === statusEndpoints.ALL){
                 setStatusCount(res?.data?.data?.count)
@@ -226,7 +227,20 @@ export default function Home({token}) {
   // Status End
   //////////////////////////////////////////////////////////////////
 
+
+  const resetDetailsPage = () => {
+    setLeadOverview(null);
+    setFormData(null);
+    setTemporaryFormData(null);
+  }
+
   const navigatePage = (i) => {
+
+
+    if(i == 0){
+      resetDetailsPage();
+    }
+
        closeSlidingPanel()
        setScreen(i);
   };
@@ -328,7 +342,23 @@ export default function Home({token}) {
     }).
     then(res => {
         submitConsent(res?.data?.data)
-        setLeadOverview(res?.data?.data?.data?.borrowerData)
+        const resData = res?.data?.data?.data?.borrowerData;
+        setLeadOverview(resData)
+        let data = {
+          leadId: `${resData?.leadId}`,
+          studentName: `${resData?.firstName} ${resData?.lastName}`,
+          institute: `${resData?.collegeName}`,
+          mobile: `${resData?.mobile}`,
+          email: `${resData?.email}`,
+          borrowerName: `${resData?.borrowerName}`,
+          course: `${resData?.courseName}`,
+          courseFee: `${resData?.courseFee}`,
+          loanAmount: `${resData?.loanRequired}`,
+          tenure: `${resData?.tenor}`,
+          advanceEmi: `${resData?.advanceEmi}`
+      }
+      setFormData({...data});
+      setTemporaryFormData({...data});
     }).catch(err=>console.log(err));
   }
 
@@ -361,8 +391,8 @@ const goToDownloads=()=>{
     setScreen(i)
 }
 
-const handleTableIconClick=(item,index)=>{
-    getQuickViewData(item)
+const handleTableIconClick= async (item,index)=>{
+    await getQuickViewData(item)
     navigatePage(1)
 }
 
@@ -459,6 +489,9 @@ const openUploadModal=()=>{
            openUserConsentModal={()=>openUserConsentModal()}
            token={token}
            leadOverview={leadOverview}
+           previousFormData={formData}
+           formData={temporaryFormData}
+           setFormData={setTemporaryFormData}
            />
         </div>
       )}

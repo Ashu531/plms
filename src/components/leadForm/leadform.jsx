@@ -6,7 +6,7 @@ import LoanDetailsForm, { loanFormInputTypes } from '../../forms/loanDetails.jsx
 import LeadDetailForm,{formViewTypes, studentFormInputTypes} from '../../forms/leadDetails.jsx';
 import Button from '../button/button.jsx';
 import { amountValidation, basicValidation, dropdownValidation, emailValidation, mobileValidation } from '../../helpers/validations.js';
-import Lead from '../../entities/formDetails.js';
+import Lead, { leadState, requestData } from '../../entities/formDetails.js';
 import { saveForm } from '../../helpers/apis';
 
 export default function LeadForm({
@@ -14,10 +14,16 @@ export default function LeadForm({
     instituteName
 }) {
 
-    const formData = useRef(new Lead('', '', '', '', '', '', '', '', '', '', '-1'));
+    const [formData, setFormData] = useState({...leadState});
 
-    const handleSave = async () => {
-        let res = await saveForm(formData.current.requestData());
+    const handleSave = async (addAnother) => {
+        let res = await saveForm(requestData(formData));
+
+        if(addAnother){
+            setFormData({...leadState});
+        } else {
+            onBackPress();
+        }
     }
 
   return (
@@ -36,7 +42,9 @@ export default function LeadForm({
                 <EditableLeadForm 
                     instituteName={instituteName}
                     viewType={formViewTypes.CREATE}
-                    formData={formData.current}
+                    previousFormData={formData}
+                    formData={formData}
+                    setFormData={(data) => setFormData(data)}
                 />
 
                 <div className='row' style={{gap: '1rem'}}>
@@ -68,7 +76,7 @@ export default function LeadForm({
                             fontFamily: 'Montserrat',
                             fontWeight: 600
                         }}
-                        onClick={()=>{}}
+                        onClick={()=>{handleSave(true)}}
                     />
                     <Button 
                         text='Save Lead'
@@ -93,15 +101,13 @@ export default function LeadForm({
 
 export function EditableLeadForm ({
     instituteName,
+    previousFormData,
     formData,
+    setFormData,
     viewType,
     showHeadings=false,
     handleSave
 }) {
-
-    console.log(formData,"new data")
-
-    const newFormData = useRef();
 
     const [viewTypes, setViewTypes] = useState({
         lead: viewType,
@@ -213,20 +219,20 @@ export function EditableLeadForm ({
     }
 
     const setInitialLeadFormStates = () => {
-        handleLeadIdChange(newFormData.current.leadId);
-        handleNameChange(newFormData.current.studentName);
-        handleInstituteChange(newFormData.current.institute);
-        handleMobileChange(newFormData.current.mobile);
-        handleEmailChange(newFormData.current.email);
+        handleLeadIdChange(previousFormData.leadId);
+        handleNameChange(previousFormData.studentName);
+        handleInstituteChange(previousFormData.institute);
+        handleMobileChange(previousFormData.mobile);
+        handleEmailChange(previousFormData.email);
     }
 
     const setInitialLoanFormStates = () => {
-        handleBorrowerNameChange(2, newFormData.current.borrowerName, newFormData.current.studentName == newFormData.current.borrowerName);
-        handleCourseChange(newFormData.current.course);
-        handleCourseFeeChange(newFormData.current.courseFee);
-        handleLoanAmountChange(newFormData.current.loanAmount);
-        handleTenureChange(newFormData.current.tenure);
-        handleAdvanceEmiChange(newFormData.current.advanceEmi);
+        handleBorrowerNameChange(2, previousFormData.borrowerName, previousFormData.studentName == previousFormData.borrowerName);
+        handleCourseChange(previousFormData.course);
+        handleCourseFeeChange(previousFormData.courseFee);
+        handleLoanAmountChange(previousFormData.loanAmount);
+        handleTenureChange(previousFormData.tenure);
+        handleAdvanceEmiChange(previousFormData.advanceEmi);
     }
 
     const setInitialFilledStates = () => {
@@ -274,7 +280,7 @@ export function EditableLeadForm ({
             }
 
             if(error == null){
-                formData.leadId = leadIdState.value;
+                setFormData({...formData, leadId: leadIdState.value});
             }
 
         }, 0)
@@ -294,7 +300,7 @@ export function EditableLeadForm ({
             }
 
             if(error == null){
-                formData.studentName = nameState.value;
+                setFormData({...formData, studentName: nameState.value});
             }
 
         }, 0)
@@ -310,7 +316,7 @@ export function EditableLeadForm ({
             }
 
             if(error == null){
-                formData.institute = instituteState.value;
+                setFormData({...formData, institute: instituteState.value});
             }
 
         }, 0)
@@ -326,7 +332,7 @@ export function EditableLeadForm ({
             }
 
             if(error == null){
-                formData.mobile = mobileState.value;
+                setFormData({...formData, mobile: mobileState.value});
             }
         }, 0)
     
@@ -341,7 +347,7 @@ export function EditableLeadForm ({
             }
 
             if(error == null){
-                formData.email = emailState.value;
+                setFormData({...formData, email: emailState.value});
             }
         }, 0)
     
@@ -356,7 +362,7 @@ export function EditableLeadForm ({
             }
 
             if(error == null){
-                formData.borrowerName = borrowerNameState.value;
+                setFormData({...formData, borrowerName: borrowerNameState.value});
             }
         }, 0)
     
@@ -377,7 +383,7 @@ export function EditableLeadForm ({
             }
 
             if(error == null){
-                formData.course = courseState.value;
+                setFormData({...formData, course: courseState.value});
             }
         }, 0)
     
@@ -392,7 +398,7 @@ export function EditableLeadForm ({
             }
 
             if(error == null){
-                formData.courseFee = courseFeeState.value;
+                setFormData({...formData, courseFee: courseFeeState.value});
             }
         }, 0)
     
@@ -407,7 +413,7 @@ export function EditableLeadForm ({
             }
 
             if(error == null){
-                formData.loanAmount = loanAmountState.value;
+                setFormData({...formData, loanAmount: loanAmountState.value});
             }
         }, 0)
     
@@ -422,7 +428,7 @@ export function EditableLeadForm ({
             }
 
             if(error == null){
-                formData.tenure = tenureState.value;
+                setFormData({...formData, tenure: tenureState.value});
             }
         }, 0)
     
@@ -432,12 +438,12 @@ export function EditableLeadForm ({
     useEffect(() => {
         const delayDebounce = setTimeout(() => {
             const error = dropdownValidation(advanceEmiState.value.toString());
-            if(error != 'cannot be empty'){
-                setAdvanceEmiState({...advanceEmiState, error: error})
-            }
+            // if(error != 'cannot be empty'){
+            //     setAdvanceEmiState({...advanceEmiState, error: error})
+            // }
 
             if(error == null){
-                formData.advanceEmi = advanceEmiState.value;
+                setFormData({...formData, advanceEmi: advanceEmiState.value});
             }
         }, 0)
     
@@ -464,41 +470,15 @@ export function EditableLeadForm ({
         if(viewType == formViewTypes.CREATE && instituteName != null){
             setInstituteState({...instituteState, value: instituteName, disabled: true});
         }
-
-        if(formData != null) {
-            console.log(
-                formData.leadId,
-                formData.studentName,
-                formData.institute,
-                formData.mobile,
-                formData.email,
-                formData.borrowerName,
-                formData.course,
-                formData.courseFee,
-                formData.loanAmount,
-                formData.tenure,
-                formData.advanceEmi
-            )
-            newFormData.current = new Lead(
-                formData.leadId,
-                formData.studentName,
-                formData.institute,
-                formData.mobile,
-                formData.email,
-                formData.borrowerName,
-                formData.course,
-                formData.courseFee,
-                formData.loanAmount,
-                formData.tenure,
-                formData.advanceEmi
-            );
-            setInitialFilledStates()
-        }
     }
 
     useEffect(() => {
         initForm();
     }, [])
+
+    useEffect(() => {
+        setInitialFilledStates()
+    }, [previousFormData])
 
     return (
         <div 
