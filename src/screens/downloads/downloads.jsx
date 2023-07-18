@@ -1,4 +1,4 @@
-import React,{useEffect, useState} from 'react';
+import React,{useEffect, useRef, useState} from 'react';
 import './/downloads.css'
 import axios from 'axios';
 import downloadIcon from '../../assets/Icons/downloadIcon.svg'
@@ -9,6 +9,8 @@ import 'react-calendar/dist/Calendar.css';
 import Button from '../../components/button/button.jsx';
 import moment from 'moment'
 import DownloadTable from '../../components/downloadsTable/downloadsTable.jsx';
+import { CSVLink,CSVDownload } from "react-csv";
+// import { downloadCSV } from '../../helpers/downloadCSV.js';
 
 export default function DownloadPage(props) {
 
@@ -16,6 +18,7 @@ export default function DownloadPage(props) {
   const [leadInfo,setLeadInfo] = useState({})
   const [startDate,setStartDate] = useState('');
   const [endDate,setEndDate] = useState('');
+  const [csvData,setCsvData] = useState('')
 
   useEffect(()=>{
     getDownloads()
@@ -28,7 +31,6 @@ export default function DownloadPage(props) {
         },
     }).
     then(res => {
-      console.log(res.data)
         setTableData(res.data.data)
     }).catch(err=>console.log(err));
   }
@@ -56,21 +58,24 @@ export default function DownloadPage(props) {
       },
     }).
     then(res => {
-      // downloadCsv(res.data)
       getDownloads()
+      // window.open("data:text/csv;charset=utf-8," + escape(res.data))
+      downloadCSV(res.data)
       return res.data
     }).catch(err=>console.log(err));
   }
 
-  const downloadCsv=(data)=>{
+  const downloadCSV=(data)=>{
+    const url = window.URL.createObjectURL(new Blob([data]));
     const link = document.createElement('a');
-    link.href = data;
-    link.target = '_blank';
-    link.download = 'file.csv';
+    link.href = url;
+    link.setAttribute('download', 'file.csv');
+    document.body.appendChild(link);
     link.click();
   }
 
   return (
+    <>
     <div className='download-page'>
           <div
             className="row"
@@ -101,7 +106,9 @@ export default function DownloadPage(props) {
               }}
               onClick={()=>generateReport()}
             //   onClick={_openLeadForm}
-            />
+            >
+               <CSVLink data={csvData} target="_blank" id='csvFile' />
+            </Button>   
           </div>
 
           <div className="download-table-container">
@@ -121,5 +128,6 @@ export default function DownloadPage(props) {
             
           </div>
     </div>
+    </>
   )
 }

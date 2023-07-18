@@ -4,6 +4,7 @@ import addIcon from "../../assets/Icons/addIcon.svg";
 import Status from "../../components/status/status.jsx";
 import "./home.css";
 import Table from "../../components/table/table.jsx";
+import SearchTable from "../../components/searchTable/table.jsx";
 import Header from "../../components/header/header.jsx";
 import SlidingPanel from "../../components/sliding-panel/sliding_panel.jsx";
 import LeadForm from "../../components/leadForm/leadform.jsx";
@@ -73,6 +74,7 @@ export default function Home({token}) {
   const [openPanel, setOpenPanel] = useState(false);
   const [openLeadForm, setOpenLeadForm] = useState(false);
   const [screen, setScreen] = useState(0);
+  const [searchData,setSearchData] = useState([])
   const [consentModal, setConsentModal] = useState(false);
   const [tableData,setTableData] = useState(Array(6).fill([]))
   const [statusList, setStatusList] = useState([...statuses]);
@@ -115,12 +117,11 @@ export default function Home({token}) {
     then(res => {
         if(res?.data?.data?.leads.length > 0){
             let detail = res?.data?.data?.leads;
-            setTableData([detail])
+            setSearchData(detail)
         }
         
     }).catch(err=>console.log(err));
   };
-  
 
   useEffect(() => {
     const delayDebounce = setTimeout(() => {
@@ -140,7 +141,6 @@ export default function Home({token}) {
 
   const getSelectedStatusIndex = () => {
     let index = statusList.findIndex(status => status.selected == true)
-
     if(index == -1){
       throw 'Some error occurred';
     }
@@ -149,9 +149,9 @@ export default function Home({token}) {
   }
 
   const handleStatusChange = (status, index) => {
-
+    
     let newStatusList = [...statusList];
-
+    
     newStatusList.forEach((status, i) => {
       if (i == index) {
         newStatusList[i]["selected"] = true;
@@ -159,7 +159,7 @@ export default function Home({token}) {
         newStatusList[i]["selected"] = false;
       }
     });
-
+    console.log([...newStatusList],'list')
     setStatusList([...newStatusList]);
     setStatusCount(status?.count)
   };
@@ -389,18 +389,22 @@ const openUploadModal=()=>{
          } 
         {screen === 0 && (
           <div className='full-width column'>
-          <div className="row" style={{ gap: "1rem", minHeight: '80px' }}>
-            {statusList.map((status, index) => (
-              <Status
-                key={`${status.name}-${index}`}
-                lightText={status.lightText}
-                boldText={status.boldText}
-                selected={status.selected}
-                onClick={() => handleStatusChange(status, index)}
-                count={status?.count}
-              />
-            ))}
-          </div>
+            {
+              query.length === 0 && 
+              <div className="row" style={{ gap: "1rem", minHeight: '80px' }}>
+                {statusList.map((status, index) => (
+                  <Status
+                    key={`${status.name}-${index}`}
+                    lightText={status.lightText}
+                    boldText={status.boldText}
+                    selected={status.selected}
+                    onClick={() => handleStatusChange(status, index)}
+                    count={status?.count}
+                  />
+                ))}
+              </div>
+            }
+          
 
           <div
             className="row"
@@ -427,7 +431,7 @@ const openUploadModal=()=>{
 
           <div className="table-container">
               {
-                tableData &&  tableData?.length > 0 &&
+               query.length === 0 && tableData &&  tableData?.length > 0 &&
                   <Table
                         list={[...tableData[getSelectedStatusIndex()]]}
                         onIconClick={(item, index) => {
@@ -439,6 +443,20 @@ const openUploadModal=()=>{
                             openSlidingPanel()
                         }}
                   /> 
+              }
+              {
+               query.length > 0 && searchData && searchData?.length > 0 && 
+                <SearchTable
+                        list={searchData}
+                        onIconClick={(item, index) => {
+                                setLeadInfo(item)
+                                handleTableIconClick(item,index)
+                            }}
+                        onRowClick={(item, index) => {
+                            setLeadInfo(item)
+                            openSlidingPanel()
+                        }}
+                  />
               }
             </div>
 
