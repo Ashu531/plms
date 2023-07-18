@@ -27,8 +27,8 @@ export default function DraftPage(props) {
     }).catch(err=>console.log(err));
   }
 
-  const openLeadForm=()=>{
-      props?.openLeadForm()
+  const openLeadForm=(item)=>{
+      props?.openLeadForm(item)
   }
 
   return (
@@ -47,7 +47,7 @@ export default function DraftPage(props) {
                         list={[...tableData]}
                         onRowClick={(item, index) => {
                             setLeadInfo(item)
-                            openLeadForm()
+                            openLeadForm(item)
                         }}
                   /> : 
                   <div className='no-result-content'>

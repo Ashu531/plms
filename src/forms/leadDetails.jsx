@@ -39,7 +39,7 @@ export default function LeadDetailForm({
     }
 
 
-    const leadIdRequired = () => viewType == formViewTypes.CREATE;
+    const leadIdRequired = () => false;
     const nameRequired = () => viewType == formViewTypes.CREATE;
     const instituteRequired = () => viewType == formViewTypes.CREATE;
     const mobileRequired = () => viewType == formViewTypes.CREATE;

@@ -71,7 +71,6 @@ export default function FinancialForm({
 
 
     const handleFinancialData=()=>{
-
         if(leadData?.borrowerData?.netMonthlyIncome?.length > 0){
             setMonthySalary({
                 ...monthySalary,

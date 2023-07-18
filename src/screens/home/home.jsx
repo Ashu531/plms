@@ -94,7 +94,26 @@ export default function Home({token}) {
     setOpenPanel(false);
   };
 
-  const _openLeadForm = () => {
+  const _openLeadForm = (data) => {
+
+    if(data){
+      const formData = {
+        leadId: `${data?.lead_id}`,
+        studentName: `${data?.student_name}`,
+        institute: `${data?.college_name}`,
+        mobile: `${data?.applicant_phone}`,
+        email: `${data?.applicant_email}`,
+        borrowerName: `${data?.borrower_name}`,
+        course: `${data?.course}`,
+        courseFee: `${data?.course_fee}`,
+        loanAmount: `${data?.loan_amount}`,
+        tenure: `${data?.tenure}`,
+        advanceEmi: `${data?.advance_emi}`
+      }
+      setFormData({...formData});
+      setTemporaryFormData({...formData});
+    }
+
     setOpenLeadForm(true);
   };
 
@@ -117,9 +136,12 @@ export default function Home({token}) {
         },
     }).
     then(res => {
-        if(res?.data?.data?.leads.length > 0){
-            let detail = res?.data?.data?.leads;
+        if(res?.data?.data){
+            let detail = res?.data?.data?.leads ? res?.data?.data?.leads : [];
             setSearchData(detail)
+            setStatusCount(detail.length)
+        }else{
+          setNoResult(true)
         }
         
     }).catch(err=>console.log(err));
@@ -517,7 +539,7 @@ const openUploadModal=()=>{
     {screen === 2 && (
         <div className="full-width">
           <DraftPage 
-           openLeadForm={() => _openLeadForm()} 
+           openLeadForm={(data) => _openLeadForm(data)} 
            leadData={leadInfo}
            token={token}
            />
@@ -538,13 +560,23 @@ const openUploadModal=()=>{
         <SlidingPanel 
           closeSlidingPanel={() => closeSlidingPanel()} 
           leadData={leadInfo}
-          openDetailPage={(i) => navigatePage(i)}
+          openDetailPage={(i) => {
+            handleTableIconClick(tableData[getSelectedStatusIndex()][i])
+          }}
           openUserConsentModal={()=>openUserConsentModal()}
           openUploadModal={()=>openUploadModal()}
           token={token}
         />
       )}
-      {openLeadForm && <LeadForm onBackPress={_closeLeadForm} instituteName={'Dummy Institute'} />}
+      {openLeadForm && 
+        <LeadForm 
+          onBackPress={_closeLeadForm} 
+          instituteName={''} 
+          token={token} 
+          formData={formData} 
+          setFormData={setFormData} 
+        />
+      }
 
       {consentModal && (
         <UserConsentModal

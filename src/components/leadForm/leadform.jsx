@@ -7,23 +7,31 @@ import LeadDetailForm,{formViewTypes, studentFormInputTypes} from '../../forms/l
 import Button from '../button/button.jsx';
 import { amountValidation, basicValidation, dropdownValidation, emailValidation, mobileValidation } from '../../helpers/validations.js';
 import Lead, { leadState, requestData } from '../../entities/formDetails.js';
-import { saveForm } from '../../helpers/apis';
+import { saveDraft, saveForm } from '../../helpers/apis';
 
 export default function LeadForm({
+    token,
     onBackPress,
-    instituteName
+    instituteName,
+    formData,
+    setFormData
 }) {
 
-    const [formData, setFormData] = useState({...leadState});
+    
 
     const handleSave = async (addAnother) => {
-        let res = await saveForm(requestData(formData));
+        let res = await saveForm(requestData(formData), token);
 
         if(addAnother){
             setFormData({...leadState});
         } else {
             onBackPress();
         }
+    }
+
+    const handleSaveDraft = async () => {
+        let res = await saveDraft(requestData(formData), token);
+        onBackPress();
     }
 
   return (
@@ -61,7 +69,7 @@ export default function LeadForm({
                             fontFamily: 'Montserrat',
                             fontWeight: 600
                         }}
-                        onClick={()=>{}}
+                        onClick={handleSaveDraft}
                     />
                     <Button 
                         text='Save & Add Another Lead'
@@ -137,7 +145,7 @@ export function EditableLeadForm ({
 
     const [leadIdState, setLeadIdState] = useState({...defaultState});
     const [nameState, setNameState] = useState({...defaultState});
-    const [instituteState, setInstituteState] = useState({...defaultState});
+    const [instituteState, setInstituteState] = useState({...defaultState, value: instituteName});
     const [mobileState, setMobileState] = useState({...defaultState});
     const [emailState, setEmailState] = useState({...defaultState});
     const [borrowerNameState, setBorrowerNameState] = useState({...defaultNameState});
