@@ -14,6 +14,7 @@ import UserConsentModal from "../../components/userConsentModal/userConsentModal
 import DraftPage from "../draft/draft.jsx";
 import UploadModal from "../../components/uploadModal/uploadModal.jsx";
 import DownloadPage from "../downloads/downloads.jsx";
+import { getProfileData } from "../../helpers/apis.js";
 
 const statuses = [
   {
@@ -69,6 +70,22 @@ const statusEndpoints = {
 
 
 export default function Home({token}) {
+
+
+  const initialFormState = {
+      leadId: '',
+      studentName: '',
+      institute: '',
+      mobile: '',
+      email: '',
+      borrowerName: '',
+      course: '',
+      courseFee: '',
+      loanAmount: '',
+      tenure: '',
+      advanceEmi: '-1'
+  }
+
   const [query, setQuery] = useState("");
   const [leadInfo,setLeadInfo] = useState({})
   const [openPanel, setOpenPanel] = useState(false);
@@ -82,8 +99,15 @@ export default function Home({token}) {
   const [uploadModal,setUploadModal] = useState(false)
   const [noResult,setNoResult] = useState(false)
   const [leadOverview,setLeadOverview] = useState()
-  let [formData, setFormData] = useState();
-  let [temporaryFormData, setTemporaryFormData] = useState();
+  const [formData, setFormData] = useState({...initialFormState});
+  const [temporaryFormData, setTemporaryFormData] = useState();
+  const [profile, setProfile] = useState({});
+
+
+  const getProfileInfo = async () => {
+    const data = await getProfileData(token);
+    setProfile(data);
+  }
 
   const openSlidingPanel = () => {
     setOpenPanel(true);
@@ -252,8 +276,8 @@ export default function Home({token}) {
 
   const resetDetailsPage = () => {
     setLeadOverview(null);
-    setFormData(null);
-    setTemporaryFormData(null);
+    setFormData({...initialFormState});
+    setTemporaryFormData({...initialFormState});
   }
 
   const navigatePage = (i) => {
@@ -369,7 +393,7 @@ export default function Home({token}) {
         let data = {
           leadId: `${resData?.leadId}`,
           studentName: `${resData?.firstName} ${resData?.lastName}`,
-          institute: `${resData?.collegeName}`,
+          institute: profile.college,
           mobile: `${resData?.mobile}`,
           email: `${resData?.email}`,
           borrowerName: `${resData?.borrowerName}`,
@@ -426,6 +450,10 @@ const openUploadModal=()=>{
     // closeSlidingPanel()
     setUploadModal(true)
 }
+
+useEffect(() => {
+  getProfileInfo();
+}, []);
 
   return (
     <div className="home-container">
@@ -529,6 +557,7 @@ const openUploadModal=()=>{
            openUserConsentModal={()=>openUserConsentModal()}
            token={token}
            leadOverview={leadOverview}
+           instituteName={profile.college}
            previousFormData={formData}
            formData={temporaryFormData}
            setFormData={setTemporaryFormData}
@@ -571,8 +600,8 @@ const openUploadModal=()=>{
       {openLeadForm && 
         <LeadForm 
           onBackPress={_closeLeadForm} 
-          instituteName={''} 
-          token={token} 
+          instituteName={profile.college} 
+          token={token}
           formData={formData} 
           setFormData={setFormData} 
         />

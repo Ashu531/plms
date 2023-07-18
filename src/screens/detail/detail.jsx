@@ -25,6 +25,7 @@ const documentTypes = [
 ]
 
 export default function DetailPage({
+    instituteName,
     leadOverview,
     previousFormData,
     formData, 
@@ -36,9 +37,32 @@ export default function DetailPage({
  const [activities,setActivities] = useState([])
  const [comments,setComments] = useState([])
  const [leadData,setLeadData] = useState({})
- const [documentValue,setDocumentValue] = useState({
-     value: 1,
- })
+ const [documentValue,setDocumentValue] = useState(1)
+
+const [selectedFiles, setSelectedFiles] = useState([]);
+const [deletedFiles, setDeletedFiles] = useState([]);
+const [verified, setVerified] = useState(false);
+const [verifiedFiles, setVerifiedFiles] = useState([]);
+
+const removeFile = (i) => {
+    let selected = [...deletedFiles];
+    
+    selected.forEach((file, idx) => {
+      if(idx == i)
+        selected[idx] = -1;
+    });
+
+    setDeletedFiles([...selected]);
+    setVerifiedFiles([]);
+}
+
+const getDocumentType = () => {
+    switch(documentValue){
+        case 1: return 'PAN_CARD'
+        case 2: return 'AADHAR_CARD'
+        case 3: return 'BANK_STATEMENT'
+    }
+}
 
  useEffect(()=>{
      getActivityData()
@@ -104,9 +128,11 @@ export default function DetailPage({
  }
 
  const handleDocumentsCard=(data)=>{
-        setDocumentValue({
-            value: data
-        })
+    setDocumentValue(data)
+     if(documentValue != data){
+         removeFile(0)
+     }
+        
 }
 
   return (
@@ -143,6 +169,7 @@ export default function DetailPage({
             {
                 tab === 0 && 
                 formData && <EditableLeadForm
+                    instituteName={instituteName}
                     viewType={formViewTypes.VIEW}
                     previousFormData={previousFormData}
                     formData={formData}
@@ -194,7 +221,20 @@ export default function DetailPage({
                     </div>
                     <div className='activity-container-divider' />
                     <div className='row'>
-                        <Upload showBorder={true} token={props?.token} />
+                        <Upload 
+                            showBorder={true} 
+                            token={props?.token} 
+                            selectedFiles={selectedFiles}
+                            setSelectedFiles={setSelectedFiles}
+                            deletedFiles={deletedFiles}
+                            setDeletedFiles={setDeletedFiles}
+                            verifiedFiles={verifiedFiles}
+                            setVerifiedFiles={setVerifiedFiles}
+                            removeFile={removeFile}
+                            getReferenceId={() => leadOverview.borrowerUuid}
+                            getLeadId={() => `LEAD-${leadOverview.leadId}`}
+                            getDocumentType={getDocumentType}
+                        />
                     </div>
                 </div>    
             }

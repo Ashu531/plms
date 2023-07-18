@@ -17,8 +17,6 @@ export default function LeadForm({
     setFormData
 }) {
 
-    
-
     const handleSave = async (addAnother) => {
         let res = await saveForm(requestData(formData), token);
 
@@ -145,7 +143,7 @@ export function EditableLeadForm ({
 
     const [leadIdState, setLeadIdState] = useState({...defaultState});
     const [nameState, setNameState] = useState({...defaultState});
-    const [instituteState, setInstituteState] = useState({...defaultState, value: instituteName});
+    const [instituteState, setInstituteState] = useState({...defaultState, value: instituteName, disabled: true});
     const [mobileState, setMobileState] = useState({...defaultState});
     const [emailState, setEmailState] = useState({...defaultState});
     const [borrowerNameState, setBorrowerNameState] = useState({...defaultNameState});
@@ -229,7 +227,7 @@ export function EditableLeadForm ({
     const setInitialLeadFormStates = () => {
         handleLeadIdChange(previousFormData.leadId);
         handleNameChange(previousFormData.studentName);
-        handleInstituteChange(previousFormData.institute);
+        handleInstituteChange(instituteName ? instituteName : '');
         handleMobileChange(previousFormData.mobile);
         handleEmailChange(previousFormData.email);
     }
@@ -406,6 +404,7 @@ export function EditableLeadForm ({
             }
 
             if(error == null){
+                handleLoanAmountChange(courseFeeState.value);
                 setFormData({...formData, courseFee: courseFeeState.value});
             }
         }, 0)
@@ -486,7 +485,7 @@ export function EditableLeadForm ({
 
     useEffect(() => {
         setInitialFilledStates()
-    }, [previousFormData])
+    }, [])
 
     return (
         <div 

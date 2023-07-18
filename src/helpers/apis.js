@@ -39,3 +39,17 @@ export const saveDraft = async (payload, token) => {
     return response;
 
 }
+
+
+export const getProfileData = async (token) => {
+
+    const response = await axios.get(`${API_URL}/api/loan/lead/profile/`, {
+        headers: {
+            token: `${token}`,
+        },
+    }).then(res => res.data.data)
+    .catch(err => console.log(err))
+
+    return response;
+
+}

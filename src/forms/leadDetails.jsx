@@ -20,7 +20,7 @@ export default function LeadDetailForm({
     onChange,
 }) {
 
-    const leadIdLabel = () => 'Lead ID';
+    const leadIdLabel = () => `${instituteState.value} Lead ID`;
     const nameLabel = () => 'Student Name';
     const instituteLabel = () => 'Institute';
     const mobileLabel = () => 'Mobile';

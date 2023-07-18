@@ -23,13 +23,16 @@ export default function Upload({
     uplaodType,
     showBorder,
     templateText=['Student', 'students'],
+    selectedFiles, setSelectedFiles,
+    deletedFiles, setDeletedFiles,
+    verifiedFiles, setVerifiedFiles,
+    removeFile,
+    getReferenceId,
+    getLeadId,
+    getDocumentType
   }) {
 
   const fileInputField = useRef(null);
-  const [selectedFiles, setSelectedFiles] = useState([]);
-  const [deletedFiles, setDeletedFiles] = useState([]);
-  const [verified, setVerified] = useState(false);
-  const [verifiedFiles, setVerifiedFiles] = useState([]);
   const [progress, setProgress] = useState([]);
   const [error, setError] = useState({
     status: false,
@@ -59,19 +62,6 @@ export default function Upload({
       return `${(size / mb).toFixed(1)} MB`;
   } 
 
-  const removeFile = (i) => {
-      let selected = [...deletedFiles];
-      
-      selected.forEach((file, idx) => {
-        if(idx == i)
-          selected[idx] = -1;
-      });
-
-      setDeletedFiles([...selected]);
-      setVerifiedFiles([]);
-  }
-
-  
   const handleDrop = (e) => {
       e.stopPropagation();
       e.preventDefault();
@@ -93,9 +83,12 @@ export default function Upload({
     setError({status: false, message: ''})
     selectedFiles.forEach(async (file, index) => {
       let data = new FormData();
-      if (uplaodType === 'bulk_optional_students') {
-        data.append(`${'attach_students'}`, file);
-      } else data.append(`${uplaodType}`, file);
+      data.append('document_file', file);
+      data.append('referenceId', getReferenceId())
+      data.append('leadId', getLeadId())
+      data.append('documentType', getDocumentType())
+      data.append('fileName', getDocumentType())
+      console.log("upload data", data)
       const res = await axios.post(`${API_URL}/api/loan/upload/documents/`, data, {
         headers: {
           token: `${token}`,
@@ -108,7 +101,7 @@ export default function Upload({
       }).then(res => {
           setVerifiedFiles([...verifiedFiles, res.data.id]);
         })
-      .catch(err => setError({status: true, message: err.response.data.errors[0]}));
+      .catch(err => {});
     })
   }
 
