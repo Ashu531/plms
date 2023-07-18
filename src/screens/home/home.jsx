@@ -382,6 +382,7 @@ const openUploadModal=()=>{
             screen !== 1 &&  
             <Header 
                 onSearchChange={onSearch} 
+                goToHomePage={(i) => navigatePage(i)} 
                 goToDraftPage={()=>goToDraftPage()}
                 goToDownloads={()=>goToDownloads()}
                 screen={screen}
