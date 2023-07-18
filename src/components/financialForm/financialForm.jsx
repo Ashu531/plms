@@ -46,7 +46,8 @@ const employmentStatusList = [
 export default function FinancialForm({
     viewType,
     prefilledFields=[],
-    leadData
+    leadData,
+    token
 }) {
 
     const [employmentStatus, setEmploymentStatus] = useState({...defaultDropdownState});
@@ -230,7 +231,7 @@ export default function FinancialForm({
 
         await axios.post(`${API_URL}/api/loan/financial/details/LEAD-${leadData?.borrowerData.leadId}/`,data,{
             headers: {
-                token: `082daf7e87044f5a49b39d53e0ae794faa6e119d`,
+                token: `${token}`,
             },
         }).
         then(res => {

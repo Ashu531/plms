@@ -1,0 +1,60 @@
+.download-page{
+    width: 100%;
+    height: 100%;
+}
+
+.download-header{
+    color: #0B090D;
+    font-size: 18px;
+    font-family: 'Montserrat';
+    font-weight: 600;
+    text-transform: capitalize;
+}
+
+.download-table-container{
+    width: 100%;
+}
+
+.no-result-content{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    margin-top: 10rem;
+    color: #000;
+}
+
+.conjuction-text{
+    color: #000;
+    font-size: 16px;
+    font-family: 'Montserrat';
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+    padding: 0px 12px
+}
+
+.react-date-picker__wrapper{
+    border-radius: 8px;
+    border: 1px solid #EAEAEA;
+}
+
+.react-date-picker__inputGroup__input{
+    color: #444 !important;
+    text-align: center !important;
+    font-size: 16px !important;
+    font-family: 'Montserrat' !important;
+    font-style: normal !important;
+    font-weight: 500 !important;
+    line-height: normal !important;
+}
+
+.react-date-picker__inputGroup__divider{
+    color: #444 !important;
+    text-align: center !important;
+    font-size: 16px !important;
+    font-family: 'Montserrat' !important;
+    font-style: normal !important;
+    font-weight: 500 !important;
+    line-height: normal !important;
+}

@@ -28,10 +28,10 @@ export default function Button({
   }
 
   return (
-    <div className={`button-component ${disabled ? 'disable' : ''}`} style={classes} onClick={()=>_handleButtonClick()}> 
+    <div className={`plms-button-component ${disabled ? 'plms-disable' : ''}`} style={classes} onClick={()=>_handleButtonClick()}> 
         {leadingIcon && <img src={leadingIcon}/>}
-        {!!count && <div className={'text'}>{count}</div>}
-        {text && <div className={showTextOnHover ? 'hideText text' : 'text'} style={type == 'Show' ? {color : '#FFFFFF',...textClass} : textClass }>{text}</div>}
+        {!!count && <div className={'plms-text'}>{count}</div>}
+        {text && <div className={showTextOnHover ? 'plms-hideText plms-text' : 'plms-text'} style={type == 'Show' ? {color : '#FFFFFF',...textClass} : textClass }>{text}</div>}
     </div>
   )
 }

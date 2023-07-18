@@ -18,7 +18,7 @@ export default function DraftPage(props) {
   const getDrafts=async()=>{
     await axios.get(`${API_URL}/api/loan/drafts/`,{
         headers: {
-            token: `082daf7e87044f5a49b39d53e0ae794faa6e119d`,
+            token: `${props?.token}`,
         },
     }).
     then(res => {

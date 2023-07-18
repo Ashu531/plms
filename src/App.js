@@ -2,10 +2,10 @@ import React from 'react';
 import './App.css';
 import Home from './screens/home/home.jsx';
 
-export default function App() {
+export default function App({token}) {
   return (
     <div className="App">
-      <Home />
+      <Home token={token} />
     </div>
   );
 }

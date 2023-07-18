@@ -33,21 +33,22 @@ export default function Table({
                 <div className='header-text'>
                     Last Update
                 </div>
-                <div className='header-text' style={{flex: '3 1 0px'}}>
+                {/* <div className='header-text' style={{flex: '3 1 0px'}}>
                     Time of Update
-                    {/* <img src={sortIcon} style={{marginLeft: 5}}/> */}
-                </div>
+                    <img src={sortIcon} style={{marginLeft: 5}}/>
+                </div> */}
                 <div className='header-text' style={{flex: '1 1 0px'}}></div>
             </div>
             <div className='table-row-container'>
                 { list.map((item, index) => (
+                    
                     <div key={`${item}-${index}`} className='table-row' onClick={() => onRowClick(item, index)}>
                         <div className='row-text'>{ item.leadId }</div>
                         <div className='row-text'>{ item.fullName }</div>
                         <div className='row-text'>{ item.mobile }</div>
                         <div className='row-text'>{ item.loanRequired }</div>
                         <div className='row-text'>{ item.status }</div>
-                        <div className='row-text' style={{flex: '3 1 0px'}}>{ item.updateTime }</div>
+                        {/* <div className='row-text' style={{flex: '3 1 0px'}}>{ item.updateTime }</div> */}
                         <div className='row-text icon-container' style={{flex: '1 1 0px'}} onClick={(e) => handleIconClick(e, item, index)}>
                             <div className='caret-icon'></div>
                         </div>

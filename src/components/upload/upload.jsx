@@ -99,7 +99,7 @@ export default function Upload({
       } else data.append(`${uplaodType}`, file);
       const res = await axios.post(`${API_URL}/api/loan/upload/documents/`, data, {
         headers: {
-          token: `082daf7e87044f5a49b39d53e0ae794faa6e119d`,
+          token: `${token}`,
         },
         onUploadProgress: data => {
           let prog = [...progress];
@@ -131,12 +131,12 @@ export default function Upload({
 
   return (
     <div 
-      className="bulk-upload-container" 
+      className="plms-bulk-upload-container" 
       // onClick={() => closeUpload(false)} 
       // style={showBorder ? { border: '1px solid #8F14CC'} : null}
       >
       <div
-        className="content-box"
+        className="plms-content-box"
         style={{ width: `${width}`, height: `${height}` }}
         onClick={(e) => e.stopPropagation()}
       >
@@ -151,7 +151,7 @@ export default function Upload({
             ></img>
           </div>
         </div> */}
-        <div className="dialog-body">
+        <div className="plms-dialog-body">
             {/* <div className="template">
                 <img src={csvIconBlack}/>
                 <div style={{textAlign: 'start', flexGrow: '1', marginLeft: '1.6rem'}}>
@@ -163,7 +163,7 @@ export default function Upload({
                 uplaodType === 'bulk_courses' ? <a href='https://credenc-fms-school.s3.ap-south-1.amazonaws.com/Bulk%2BCourse(Sample).csv' download="Sample.csv" ><img src={downloadIcon}/></a> :
                 <a href='https://credenc-fms-school.s3.ap-south-1.amazonaws.com/Bulk%2BBatch(Sample).csv' download="Sample.csv" ><img src={downloadIcon}/></a>}
             </div> */}
-            <div className="dropzone" onClick={() => fileInputField.current.click()} onDrop={handleDrop} onDragOver={handleDragOver}>
+            <div className="plms-dropzone" onClick={() => fileInputField.current.click()} onDrop={handleDrop} onDragOver={handleDragOver}>
                 <input type='file' ref={fileInputField} onChange={handleSelected} style={{visibility: 'hidden'}} />
                 <img src={cloudIcon} onDragOver={handleDragOver} height={60} width={60} style={{objectFit: 'contain'}}/>
                 <div className="title" style={{color: '#6699ff', margin: '1rem 0px 0px'}} onDragOver={handleDragOver}>Drag & Drop files</div>
@@ -182,28 +182,28 @@ export default function Upload({
                     }}
                 /> */}
             </div>
-            {selectedFiles.length > 0 && <div className="file-container">
+            {selectedFiles.length > 0 && <div className="plms-file-container">
                 {selectedFiles.map((file, i) => (
-                    <div key={i} className={`file ${i === selectedFiles.length - 1 ? 'curved-bottom': ''} ${deletedFiles[i] === -1 ? 'deleted' : ''}`} style={showBorder ? {position:'relative',padding: 16}:{position:'relative',padding: '16px 8px'}}>
-                        <div className="icon-container" style={{background: 'none'}}>
+                    <div key={i} className={`plms-file ${i === selectedFiles.length - 1 ? 'plms-curved-bottom': ''} ${deletedFiles[i] === -1 ? 'plms-deleted' : ''}`} style={showBorder ? {position:'relative',padding: 16}:{position:'relative',padding: '16px 8px'}}>
+                        <div className="plms-icon-container" style={{background: 'none'}}>
                             {/* <img src={fileIconGrey} /> */}
                         </div>
                         <div style={{textAlign: 'start', flexGrow: '1', marginLeft: '1.2rem'}}>
-                            <div className="title" style={{fontSize: '2rem', color: '#3377ff', textTransform: 'capitalize'}}>{file.name}</div>
-                            <div className="subtitle">{getFileSize(file.size)}</div>
-                            <div className="status-bar" style={{marginTop: 8}}>
-                              <div className={`status ${error.status ? 'error': ''}`} style={{width: `${progress[i]}%`}}></div>
+                            <div className="plms-title" style={{fontSize: '2rem', color: '#3377ff', textTransform: 'capitalize'}}>{file.name}</div>
+                            <div className="plms-subtitle">{getFileSize(file.size)}</div>
+                            <div className="plms-status-bar" style={{marginTop: 8}}>
+                              <div className={`plms-status ${error.status ? 'plms-error': ''}`} style={{width: `${progress[i]}%`}}></div>
                             </div>
-                            <div className="error-text">{error.message}</div>
+                            <div className="plms-error-text">{error.message}</div>
                         </div>
-                        <div className="cross-icon-container">
+                        <div className="plms-cross-icon-container">
                             <img src={crossIcon} onClick={() => removeFile(i)} height={24} width={24} style={{objectFit:'contain'}} />
                         </div>
                     </div>
                 ))}
             </div>}
         </div>
-        <div className="footer">
+        <div className="plms-footer">
           {/* <Button
             type="primary"
             buttonText={primaryButtonText}
