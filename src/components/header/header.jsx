@@ -46,7 +46,7 @@ export default function Header({
         <div className='header-content'>
             {/* <img src={userIcon} style={{width: '36px', height: '36px'}} /> */}
             <img src={draftIcon} style={{width: '36px', height: '36px',cursor: 'pointer'}} onClick={()=>goToDraftPage()} />
-            {/* <img src={downloads} style={{width: '36px', height: '36px',cursor: 'pointer'}} onClick={()=>goToDownloads()} /> */}
+            <img src={downloads} style={{width: '36px', height: '36px',cursor: 'pointer'}} onClick={()=>goToDownloads()} />
             {/* <img src={bellIcon} style={{width: '36px', height: '36px'}} /> */}
             {/* <div className='logout-container'>
                 <img src={logoutIcon} />
