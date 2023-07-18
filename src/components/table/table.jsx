@@ -31,7 +31,7 @@ export default function Table({
                     {/* <img src={sortIcon} style={{marginLeft: 5}}/> */}
                 </div>
                 <div className='header-text'>
-                    Last Update
+                    UTR
                 </div>
                 {/* <div className='header-text' style={{flex: '3 1 0px'}}>
                     Time of Update
@@ -47,7 +47,7 @@ export default function Table({
                         <div className='row-text'>{ item.fullName }</div>
                         <div className='row-text'>{ item.mobile }</div>
                         <div className='row-text'>{ item.loanRequired }</div>
-                        <div className='row-text'>{ item.status }</div>
+                        <div className='row-text'>{ item.utr }</div>
                         {/* <div className='row-text' style={{flex: '3 1 0px'}}>{ item.updateTime }</div> */}
                         <div className='row-text icon-container' style={{flex: '1 1 0px'}} onClick={(e) => handleIconClick(e, item, index)}>
                             <div className='caret-icon'></div>
