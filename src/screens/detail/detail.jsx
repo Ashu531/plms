@@ -149,7 +149,7 @@ const getDocumentType = () => {
                         <span className='lead-page-heading'>{props?.leadData?.fullName}</span>
                         <span className='lead-page-subheading'> {props?.leadData?.mobile}</span>
                         { props?.leadData?.utr &&
-                            <span className='lead-page-subheading'>UTR : {'props?.leadData?.utr'}</span>
+                            <span className='lead-page-subheading'>UTR : {props?.leadData?.utr}</span>
                         } 
                     </div>
                 </div>

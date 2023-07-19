@@ -62,7 +62,7 @@
 }
 
 .draft-icon-container{
-    background: #FFF;
+    /* background: #FFF; */
     cursor: pointer;
     border-radius: 8px !important;
     padding: 16px 0 !important;

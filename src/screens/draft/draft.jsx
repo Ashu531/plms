@@ -27,6 +27,17 @@ export default function DraftPage(props) {
     }).catch(err=>console.log(err));
   }
 
+  const deleteDraft=async(item,index)=>{
+    await axios.delete(`${API_URL}/api/loan/lead/draft/${item?.leadId}`,{
+      headers: {
+          token: `${props?.token}`,
+      },
+  }).
+  then(res => {
+    getDrafts()
+  }).catch(err=>console.log(err));
+  }
+
   const openLeadForm=(item)=>{
       props?.openLeadForm(item)
   }
@@ -49,6 +60,7 @@ export default function DraftPage(props) {
                             setLeadInfo(item)
                             openLeadForm(item)
                         }}
+                        onDeleteDraft={(item,index)=>deleteDraft(item,index)}
                   /> : 
                   <div className='no-result-content'>
                     <span>No Results</span>
