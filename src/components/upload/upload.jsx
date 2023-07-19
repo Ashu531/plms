@@ -23,13 +23,16 @@ export default function Upload({
     uplaodType,
     showBorder,
     templateText=['Student', 'students'],
+    selectedFiles, setSelectedFiles,
+    deletedFiles, setDeletedFiles,
+    verifiedFiles, setVerifiedFiles,
+    removeFile,
+    getReferenceId,
+    getLeadId,
+    getDocumentType
   }) {
 
   const fileInputField = useRef(null);
-  const [selectedFiles, setSelectedFiles] = useState([]);
-  const [deletedFiles, setDeletedFiles] = useState([]);
-  const [verified, setVerified] = useState(false);
-  const [verifiedFiles, setVerifiedFiles] = useState([]);
   const [progress, setProgress] = useState([]);
   const [error, setError] = useState({
     status: false,
@@ -59,19 +62,6 @@ export default function Upload({
       return `${(size / mb).toFixed(1)} MB`;
   } 
 
-  const removeFile = (i) => {
-      let selected = [...deletedFiles];
-      
-      selected.forEach((file, idx) => {
-        if(idx == i)
-          selected[idx] = -1;
-      });
-
-      setDeletedFiles([...selected]);
-      setVerifiedFiles([]);
-  }
-
-  
   const handleDrop = (e) => {
       e.stopPropagation();
       e.preventDefault();
@@ -93,9 +83,12 @@ export default function Upload({
     setError({status: false, message: ''})
     selectedFiles.forEach(async (file, index) => {
       let data = new FormData();
-      if (uplaodType === 'bulk_optional_students') {
-        data.append(`${'attach_students'}`, file);
-      } else data.append(`${uplaodType}`, file);
+      data.append('document_file', file);
+      data.append('referenceId', getReferenceId())
+      data.append('leadId', getLeadId())
+      data.append('documentType', getDocumentType())
+      data.append('fileName', getDocumentType())
+      console.log("upload data", data)
       const res = await axios.post(`${API_URL}/api/loan/upload/documents/`, data, {
         headers: {
           token: `${token}`,
@@ -108,7 +101,7 @@ export default function Upload({
       }).then(res => {
           setVerifiedFiles([...verifiedFiles, res.data.id]);
         })
-      .catch(err => setError({status: true, message: err.response.data.errors[0]}));
+      .catch(err => {});
     })
   }
 
@@ -130,56 +123,20 @@ export default function Upload({
 
   return (
     <div 
-      className="plms-bulk-upload-container" 
-      // onClick={() => closeUpload(false)} 
-      // style={showBorder ? { border: '1px solid #8F14CC'} : null}
+      className="plms-bulk-upload-container"
       >
       <div
         className="plms-content-box"
         style={{ width: `${width}`, height: `${height}` }}
         onClick={(e) => e.stopPropagation()}
       >
-        {/* <div className="header">
-          <span className="heading">{headingText}</span>
-          <div className="cross-icon-wrapper">
-            <img
-              onClick={() => closeUpload(false)}
-              style={{ height: "2.4rem" }}
-              alt="cross icon"
-              src={crossIcon}
-            ></img>
-          </div>
-        </div> */}
         <div className="plms-dialog-body">
-            {/* <div className="template">
-                <img src={csvIconBlack}/>
-                <div style={{textAlign: 'start', flexGrow: '1', marginLeft: '1.6rem'}}>
-                    <div className="title">{templateText[0]} File Template</div>
-                    <div className="subtitle">Use this format to upload {templateText[1]} in bulk</div>
-                </div>
-                {uplaodType === 'bulk_students_two' ? <a href='https://credenc-fms-school.s3.ap-south-1.amazonaws.com/Upload%2BCSV%2B(Sample).csv' download="Sample.csv" ><img src={downloadIcon}/></a> :
-                uplaodType === 'bulk_optional_students' ? <a href='https://credenc-fms-school.s3.ap-south-1.amazonaws.com/Optional%2BStudents(Sample).csv' download="Sample.csv" ><img src={downloadIcon}/></a> :
-                uplaodType === 'bulk_courses' ? <a href='https://credenc-fms-school.s3.ap-south-1.amazonaws.com/Bulk%2BCourse(Sample).csv' download="Sample.csv" ><img src={downloadIcon}/></a> :
-                <a href='https://credenc-fms-school.s3.ap-south-1.amazonaws.com/Bulk%2BBatch(Sample).csv' download="Sample.csv" ><img src={downloadIcon}/></a>}
-            </div> */}
             <div className="plms-dropzone" onClick={() => fileInputField.current.click()} onDrop={handleDrop} onDragOver={handleDragOver}>
                 <input type='file' ref={fileInputField} onChange={handleSelected} style={{visibility: 'hidden'}} />
                 <img src={cloudIcon} onDragOver={handleDragOver} height={60} width={60} style={{objectFit: 'contain'}}/>
                 <div className="title" style={{color: '#6699ff', margin: '1rem 0px 0px'}} onDragOver={handleDragOver}>Drag & Drop files</div>
                 <span className='or-text'>or</span>
                 <div className="subtitle" style={{fontSize: '16px', margin: '0px 0px 1rem'}} onDragOver={handleDragOver}>Browse Files</div>
-                {/* <Button 
-                    type="primary"
-                    buttonText="Upload"
-                    onClick={() => {}}
-                    disabledButton={false}
-                    classes={{
-                        background: '#8F14CC',
-                        borderRadius: '8px',
-                        height: '44px',
-                        width: '150px',
-                    }}
-                /> */}
             </div>
             {selectedFiles.length > 0 && <div className="plms-file-container">
                 {selectedFiles.map((file, i) => (
@@ -203,18 +160,6 @@ export default function Upload({
             </div>}
         </div>
         <div className="plms-footer">
-          {/* <Button
-            type="primary"
-            buttonText={primaryButtonText}
-            disabledButton={verifiedFiles.length === 0}
-            onClick={handleSave}
-            classes={{
-                background: '#8F14CC',
-                borderRadius: '8px',
-                height: '44px',
-                width: '150px',
-            }}
-          /> */}
         </div>
       </div>
     </div>

@@ -13,6 +13,7 @@ export default function SlidingPanel(props)
             </div> 
             <div className='confirm-modal-content'>
                 <DetailModal 
+                  token={props.token}
                   leadData={props?.leadData} 
                   openDetailPage={(i)=>props?.openDetailPage(i)} 
                   openUserConsentModal={()=>props?.openUserConsentModal()}

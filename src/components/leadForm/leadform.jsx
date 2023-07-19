@@ -5,18 +5,31 @@ import editIcon from '../../assets/Icons/editIcon.svg';
 import LoanDetailsForm, { loanFormInputTypes } from '../../forms/loanDetails.jsx';
 import LeadDetailForm,{formViewTypes, studentFormInputTypes} from '../../forms/leadDetails.jsx';
 import Button from '../button/button.jsx';
-import { amountValidation, basicValidation, emailValidation, mobileValidation } from '../../helpers/validations.js';
-import Lead from '../../entities/formDetails.js';
+import { amountValidation, basicValidation, dropdownValidation, emailValidation, mobileValidation } from '../../helpers/validations.js';
+import Lead, { leadState, requestData } from '../../entities/formDetails.js';
+import { saveDraft, saveForm } from '../../helpers/apis';
 
 export default function LeadForm({
+    token,
     onBackPress,
-    instituteName
+    instituteName,
+    formData,
+    setFormData
 }) {
 
-    const formData = useRef(new Lead('', '', '', '', '', '', '', '', '', '-1', '-1'));
+    const handleSave = async (addAnother) => {
+        let res = await saveForm(requestData(formData), token);
 
-    const handleSave = () => {
-        console.log('form data', formData.current.toJson());
+        if(addAnother){
+            setFormData({...leadState});
+        } else {
+            onBackPress();
+        }
+    }
+
+    const handleSaveDraft = async () => {
+        let res = await saveDraft(requestData(formData), token);
+        onBackPress();
     }
 
   return (
@@ -35,7 +48,9 @@ export default function LeadForm({
                 <EditableLeadForm 
                     instituteName={instituteName}
                     viewType={formViewTypes.CREATE}
-                    formData={formData.current}
+                    previousFormData={formData}
+                    formData={formData}
+                    setFormData={(data) => setFormData(data)}
                 />
 
                 <div className='row' style={{gap: '1rem'}}>
@@ -52,7 +67,7 @@ export default function LeadForm({
                             fontFamily: 'Montserrat',
                             fontWeight: 600
                         }}
-                        onClick={()=>{}}
+                        onClick={handleSaveDraft}
                     />
                     <Button 
                         text='Save & Add Another Lead'
@@ -67,7 +82,7 @@ export default function LeadForm({
                             fontFamily: 'Montserrat',
                             fontWeight: 600
                         }}
-                        onClick={()=>{}}
+                        onClick={()=>{handleSave(true)}}
                     />
                     <Button 
                         text='Save Lead'
@@ -92,15 +107,13 @@ export default function LeadForm({
 
 export function EditableLeadForm ({
     instituteName,
+    previousFormData,
     formData,
+    setFormData,
     viewType,
     showHeadings=false,
     handleSave
 }) {
-
-    console.log(formData,"new data")
-
-    const newFormData = useRef();
 
     const [viewTypes, setViewTypes] = useState({
         lead: viewType,
@@ -130,14 +143,14 @@ export function EditableLeadForm ({
 
     const [leadIdState, setLeadIdState] = useState({...defaultState});
     const [nameState, setNameState] = useState({...defaultState});
-    const [instituteState, setInstituteState] = useState({...defaultState});
+    const [instituteState, setInstituteState] = useState({...defaultState, value: instituteName, disabled: true});
     const [mobileState, setMobileState] = useState({...defaultState});
     const [emailState, setEmailState] = useState({...defaultState});
     const [borrowerNameState, setBorrowerNameState] = useState({...defaultNameState});
     const [courseState, setCourseState] = useState({...defaultState});
     const [courseFeeState, setCourseFeeState] = useState({...defaultState});
     const [loanAmountState, setLoanAmountState] = useState({...defaultState});
-    const [tenureState, setTenureState] = useState({...defaultDropdownState});
+    const [tenureState, setTenureState] = useState({...defaultState});
     const [advanceEmiState, setAdvanceEmiState] = useState({...defaultDropdownState});
 
 
@@ -212,25 +225,41 @@ export function EditableLeadForm ({
     }
 
     const setInitialLeadFormStates = () => {
-        handleLeadIdChange(newFormData.current.leadId);
-        handleNameChange(newFormData.current.studentName);
-        handleInstituteChange(newFormData.current.institute);
-        handleMobileChange(newFormData.current.mobile);
-        handleEmailChange(newFormData.current.email);
+        handleLeadIdChange(previousFormData.leadId);
+        handleNameChange(previousFormData.studentName);
+        handleInstituteChange(instituteName ? instituteName : '');
+        handleMobileChange(previousFormData.mobile);
+        handleEmailChange(previousFormData.email);
     }
 
     const setInitialLoanFormStates = () => {
-        handleBorrowerNameChange(2, newFormData.current.borrowerName, newFormData.current.studentName == newFormData.current.borrowerName);
-        handleCourseChange(newFormData.current.course);
-        handleCourseFeeChange(newFormData.current.courseFee);
-        handleLoanAmountChange(newFormData.current.loanAmount);
-        handleTenureChange(newFormData.current.tenure);
-        handleAdvanceEmiChange(newFormData.current.advanceEmi);
+        handleBorrowerNameChange(2, previousFormData.borrowerName, previousFormData.studentName == previousFormData.borrowerName);
+        handleCourseChange(previousFormData.course);
+        handleCourseFeeChange(previousFormData.courseFee);
+        handleLoanAmountChange(previousFormData.loanAmount);
+        handleTenureChange(previousFormData.tenure);
+        handleAdvanceEmiChange(previousFormData.advanceEmi);
     }
 
     const setInitialFilledStates = () => {
         setInitialLeadFormStates();
         setInitialLoanFormStates();
+    }
+
+    const saveChanges = (formType) => {
+        if(formType == 0){
+            handleSave();
+            setEditingStates({...editingStates, lead: false});
+        }
+
+        else if(formType == 1){
+            handleSave();
+            setEditingStates({...editingStates, loan: false});
+        }
+
+        else {
+            throw `incorrect form type, available options are 0, 1 but ${formType} was passed`;
+        }
     }
 
     const discardChanges = (formType) => {
@@ -257,7 +286,7 @@ export function EditableLeadForm ({
             }
 
             if(error == null){
-                formData.leadId = leadIdState.value;
+                setFormData({...formData, leadId: leadIdState.value});
             }
 
         }, 0)
@@ -277,7 +306,7 @@ export function EditableLeadForm ({
             }
 
             if(error == null){
-                formData.studentName = nameState.value;
+                setFormData({...formData, studentName: nameState.value});
             }
 
         }, 0)
@@ -293,7 +322,7 @@ export function EditableLeadForm ({
             }
 
             if(error == null){
-                formData.institute = instituteState.value;
+                setFormData({...formData, institute: instituteState.value});
             }
 
         }, 0)
@@ -309,7 +338,7 @@ export function EditableLeadForm ({
             }
 
             if(error == null){
-                formData.mobile = mobileState.value;
+                setFormData({...formData, mobile: mobileState.value});
             }
         }, 0)
     
@@ -324,7 +353,7 @@ export function EditableLeadForm ({
             }
 
             if(error == null){
-                formData.email = emailState.value;
+                setFormData({...formData, email: emailState.value});
             }
         }, 0)
     
@@ -339,7 +368,7 @@ export function EditableLeadForm ({
             }
 
             if(error == null){
-                formData.borrowerName = borrowerNameState.value;
+                setFormData({...formData, borrowerName: borrowerNameState.value});
             }
         }, 0)
     
@@ -360,7 +389,7 @@ export function EditableLeadForm ({
             }
 
             if(error == null){
-                formData.course = courseState.value;
+                setFormData({...formData, course: courseState.value});
             }
         }, 0)
     
@@ -375,7 +404,8 @@ export function EditableLeadForm ({
             }
 
             if(error == null){
-                formData.courseFee = courseFeeState.value;
+                handleLoanAmountChange(courseFeeState.value);
+                setFormData({...formData, courseFee: courseFeeState.value});
             }
         }, 0)
     
@@ -390,34 +420,42 @@ export function EditableLeadForm ({
             }
 
             if(error == null){
-                formData.loanAmount = loanAmountState.value;
+                setFormData({...formData, loanAmount: loanAmountState.value});
             }
         }, 0)
     
         return () => clearTimeout(delayDebounce)
     }, [loanAmountState.value]);
 
-    // useEffect(() => {
-    //     const delayDebounce = setTimeout(() => {
-    //         const error = amountValidation(tenureState.value);
-    //         if(error != 'cannot be empty'){
-    //             setTenureState({...tenureState, error: error})
-    //         }
-    //     }, 0)
-    
-    //     return () => clearTimeout(delayDebounce)
-    // }, [tenureState.value]);
+    useEffect(() => {
+        const delayDebounce = setTimeout(() => {
+            const error = amountValidation(tenureState.value);
+            if(error != 'cannot be empty'){
+                setTenureState({...tenureState, error: error})
+            }
 
-    // useEffect(() => {
-    //     const delayDebounce = setTimeout(() => {
-    //         const error = amountValidation(advanceEmiState.value);
-    //         if(error != 'cannot be empty'){
-    //             setAdvanceEmiState({...advanceEmiState, error: error})
-    //         }
-    //     }, 0)
+            if(error == null){
+                setFormData({...formData, tenure: tenureState.value});
+            }
+        }, 0)
     
-    //     return () => clearTimeout(delayDebounce)
-    // }, [advanceEmiState.value]);
+        return () => clearTimeout(delayDebounce)
+    }, [tenureState.value]);
+
+    useEffect(() => {
+        const delayDebounce = setTimeout(() => {
+            const error = dropdownValidation(advanceEmiState.value.toString());
+            // if(error != 'cannot be empty'){
+            //     setAdvanceEmiState({...advanceEmiState, error: error})
+            // }
+
+            if(error == null){
+                setFormData({...formData, advanceEmi: advanceEmiState.value});
+            }
+        }, 0)
+    
+        return () => clearTimeout(delayDebounce)
+    }, [advanceEmiState.value]);
 
     useEffect(() => {
         if(editingStates.lead == true){
@@ -439,40 +477,14 @@ export function EditableLeadForm ({
         if(viewType == formViewTypes.CREATE && instituteName != null){
             setInstituteState({...instituteState, value: instituteName, disabled: true});
         }
-
-        if(formData != null) {
-            console.log(
-                formData.leadId,
-                formData.studentName,
-                formData.institute,
-                formData.mobile,
-                formData.email,
-                formData.borrowerName,
-                formData.course,
-                formData.courseFee,
-                formData.loanAmount,
-                formData.tenure,
-                formData.advanceEmi
-            )
-            newFormData.current = new Lead(
-                formData.leadId,
-                formData.studentName,
-                formData.institute,
-                formData.mobile,
-                formData.email,
-                formData.borrowerName,
-                formData.course,
-                formData.courseFee,
-                formData.loanAmount,
-                formData.tenure,
-                formData.advanceEmi
-            );
-            setInitialFilledStates()
-        }
     }
 
     useEffect(() => {
         initForm();
+    }, [])
+
+    useEffect(() => {
+        setInitialFilledStates()
     }, [])
 
     return (
@@ -494,7 +506,7 @@ export function EditableLeadForm ({
                         {editingStates.lead && 
                             <div className='row clickable-heading' style={{justifyContent: 'flex-end', gap: '25px', alignItems: 'baseline'}}>
                                 <div className='clickable-text text-montserrat text-weight-6 text-16' onClick={() => discardChanges(0)}>Discard Changes</div>
-                                <div className='clickable-text text-montserrat text-weight-6 text-16'>Save</div>
+                                <div className='clickable-text text-montserrat text-weight-6 text-16' onClick={() => saveChanges(0)}>Save</div>
                             </div>
                         }
                     </div>
@@ -517,7 +529,7 @@ export function EditableLeadForm ({
                         {editingStates.loan && 
                             <div className='row clickable-heading' style={{justifyContent: 'flex-end', gap: '25px', alignItems: 'baseline'}}>
                                 <div className='clickable-text text-montserrat text-weight-6 text-16' onClick={() => discardChanges(1)}>Discard Changes</div>
-                                <div className='clickable-text text-montserrat text-weight-6 text-16'>Save</div>
+                                <div className='clickable-text text-montserrat text-weight-6 text-16' onClick={() => saveChanges(1)}>Save</div>
                             </div>
                         }
                     </div>

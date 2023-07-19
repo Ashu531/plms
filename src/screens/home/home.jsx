@@ -14,6 +14,7 @@ import UserConsentModal from "../../components/userConsentModal/userConsentModal
 import DraftPage from "../draft/draft.jsx";
 import UploadModal from "../../components/uploadModal/uploadModal.jsx";
 import DownloadPage from "../downloads/downloads.jsx";
+import { getProfileData } from "../../helpers/apis.js";
 
 const statuses = [
   {
@@ -69,6 +70,22 @@ const statusEndpoints = {
 
 
 export default function Home({token}) {
+
+
+  const initialFormState = {
+      leadId: '',
+      studentName: '',
+      institute: '',
+      mobile: '',
+      email: '',
+      borrowerName: '',
+      course: '',
+      courseFee: '',
+      loanAmount: '',
+      tenure: '',
+      advanceEmi: '-1'
+  }
+
   const [query, setQuery] = useState("");
   const [leadInfo,setLeadInfo] = useState({})
   const [openPanel, setOpenPanel] = useState(false);
@@ -82,7 +99,16 @@ export default function Home({token}) {
   const [statusCount,setStatusCount] = useState(0)
   const [uploadModal,setUploadModal] = useState(false)
   const [noResult,setNoResult] = useState(false)
-  const [leadOverview,setLeadOverview] = useState({})
+  const [leadOverview,setLeadOverview] = useState()
+  const [formData, setFormData] = useState({...initialFormState});
+  const [temporaryFormData, setTemporaryFormData] = useState();
+  const [profile, setProfile] = useState({});
+
+
+  const getProfileInfo = async () => {
+    const data = await getProfileData(token);
+    setProfile(data);
+  }
 
   const openSlidingPanel = () => {
     setOpenPanel(true);
@@ -93,7 +119,26 @@ export default function Home({token}) {
     setOpenPanel(false);
   };
 
-  const _openLeadForm = () => {
+  const _openLeadForm = (data) => {
+
+    if(data){
+      const formData = {
+        leadId: `${data?.lead_id}`,
+        studentName: `${data?.student_name}`,
+        institute: `${data?.college_name}`,
+        mobile: `${data?.applicant_phone}`,
+        email: `${data?.applicant_email}`,
+        borrowerName: `${data?.borrower_name}`,
+        course: `${data?.course}`,
+        courseFee: `${data?.course_fee}`,
+        loanAmount: `${data?.loan_amount}`,
+        tenure: `${data?.tenure}`,
+        advanceEmi: `${data?.advance_emi}`
+      }
+      setFormData({...formData});
+      setTemporaryFormData({...formData});
+    }
+
     setOpenLeadForm(true);
   };
 
@@ -211,7 +256,6 @@ export default function Home({token}) {
         },
     }).
     then(res => {
-        console.log(res)
         if(res?.status === 200){
             if(endpoint === statusEndpoints.ALL){
                 setStatusCount(res?.data?.data?.count)
@@ -233,7 +277,20 @@ export default function Home({token}) {
   // Status End
   //////////////////////////////////////////////////////////////////
 
+
+  const resetDetailsPage = () => {
+    setLeadOverview(null);
+    setFormData({...initialFormState});
+    setTemporaryFormData({...initialFormState});
+  }
+
   const navigatePage = (i) => {
+
+
+    if(i == 0){
+      resetDetailsPage();
+    }
+
        closeSlidingPanel()
        setScreen(i);
   };
@@ -335,7 +392,23 @@ export default function Home({token}) {
     }).
     then(res => {
         submitConsent(res?.data?.data)
-        setLeadOverview(res?.data?.data?.data?.borrowerData)
+        const resData = res?.data?.data?.data?.borrowerData;
+        setLeadOverview(resData)
+        let data = {
+          leadId: `${resData?.leadId}`,
+          studentName: `${resData?.firstName} ${resData?.lastName}`,
+          institute: profile.college,
+          mobile: `${resData?.mobile}`,
+          email: `${resData?.email}`,
+          borrowerName: `${resData?.borrowerName}`,
+          course: `${resData?.courseName}`,
+          courseFee: `${resData?.courseFee}`,
+          loanAmount: `${resData?.loanRequired}`,
+          tenure: `${resData?.tenor}`,
+          advanceEmi: `${resData?.advanceEmi}`
+      }
+      setFormData({...data});
+      setTemporaryFormData({...data});
     }).catch(err=>console.log(err));
   }
 
@@ -368,8 +441,8 @@ const goToDownloads=()=>{
     setScreen(i)
 }
 
-const handleTableIconClick=(item,index)=>{
-    getQuickViewData(item)
+const handleTableIconClick= async (item,index)=>{
+    await getQuickViewData(item)
     navigatePage(1)
 }
 
@@ -381,6 +454,10 @@ const openUploadModal=()=>{
     // closeSlidingPanel()
     setUploadModal(true)
 }
+
+useEffect(() => {
+  getProfileInfo();
+}, []);
 
   return (
     <div className="home-container">
@@ -489,6 +566,10 @@ const openUploadModal=()=>{
            openUserConsentModal={()=>openUserConsentModal()}
            token={token}
            leadOverview={leadOverview}
+           instituteName={profile.college}
+           previousFormData={formData}
+           formData={temporaryFormData}
+           setFormData={setTemporaryFormData}
            />
         </div>
       )}
@@ -496,7 +577,7 @@ const openUploadModal=()=>{
     {screen === 2 && (
         <div className="full-width">
           <DraftPage 
-           openLeadForm={() => _openLeadForm()} 
+           openLeadForm={(data) => _openLeadForm(data)} 
            leadData={leadInfo}
            token={token}
            />
@@ -517,13 +598,23 @@ const openUploadModal=()=>{
         <SlidingPanel 
           closeSlidingPanel={() => closeSlidingPanel()} 
           leadData={leadInfo}
-          openDetailPage={(i) => navigatePage(i)}
+          openDetailPage={(i) => {
+            handleTableIconClick(tableData[getSelectedStatusIndex()][i])
+          }}
           openUserConsentModal={()=>openUserConsentModal()}
           openUploadModal={()=>openUploadModal()}
           token={token}
         />
       )}
-      {openLeadForm && <LeadForm onBackPress={_closeLeadForm} instituteName={'Dummy Institute'} />}
+      {openLeadForm && 
+        <LeadForm 
+          onBackPress={_closeLeadForm} 
+          instituteName={profile.college} 
+          token={token}
+          formData={formData} 
+          setFormData={setFormData} 
+        />
+      }
 
       {consentModal && (
         <UserConsentModal

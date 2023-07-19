@@ -126,21 +126,38 @@ export default class Lead {
     }
 
 
-    requestData() {
-        return {
-            "leadId": this.leadId,
-            "student_name": this.studentName,
-            "college": this.institute,
-            "number": this.mobile,
-            "email": this.email,
-            "nameSameAsBorrower": this.studentName == this.borrowerName,
-            "name": this.borrowerName,
-            "course_name": this.course,
-            "course_fee": this.courseFee,
-            "loan_amount": this.loanAmount,
-            "tenure": this.tenure,
-            "emi": this.advanceEmi,
-        }
-    }
+    
 
+}
+
+export const leadState = {
+    leadId: '',
+    studentName: '',
+    institute: '',
+    mobile: '',
+    email: '',
+    borrowerName: '',
+    course: '',
+    courseFee: '',
+    loanAmount: '',
+    tenure: '',
+    advanceEmi: '-1'
+}
+
+export const requestData = (formData) => {
+    return {
+        "leadId": formData.leadId,
+        "student_name": formData.studentName,
+        "college": formData.institute,
+        "number": formData.mobile,
+        "email": formData.email,
+        "nameSameAsBorrower": formData.studentName == formData.borrowerName,
+        "name": formData.borrowerName,
+        "course_name": formData.course,
+        "course_fee": formData.courseFee,
+        "loan_amount": formData.loanAmount,
+        "tenure": formData.tenure,
+        "emi": formData.advanceEmi,
+        "borrowerUuid": formData.borrowerUuid
+    }
 }

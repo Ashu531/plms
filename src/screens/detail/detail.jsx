@@ -4,17 +4,33 @@ import consentIcon from '../../assets/Icons/consentIcon.svg'
 import DocumentCard from '../../components/documentCard/documentCard.jsx';
 import TabBar from '../../components/tabBar/tabBar.jsx';
 import Upload from '../../components/upload/upload.jsx';
-import addIcon from '../../assets/Icons/addIcon.svg'
 import axios from 'axios';
 import './/detail.css'
 import ActivityCard from '../../components/activityCard/activityCard.jsx';
 import FinancialForm from '../../components/financialForm/financialForm.jsx';
 import { EditableLeadForm } from '../../components/leadForm/leadform.jsx';
 import { formViewTypes } from '../../forms/leadDetails.jsx';
-import Lead from '../../entities/formDetails.js';
+import { leadState, requestData } from '../../entities/formDetails.js';
+import ChoiceBox, { Checklist } from '../../components/checklist/checklist.jsx';
+
+
+const documentTypes = [
+    'Aadhaar Card', 
+    'Passport', 
+    'Driving License', 
+    'Voter ID', 
+    'Landline Bill', 
+    'Electricity Bill', 
+    'Gas Bill', 
+    'Water Bill'
+]
 
 export default function DetailPage({
+    instituteName,
     leadOverview,
+    previousFormData,
+    formData, 
+    setFormData,
     ...props
 }) {
 
@@ -22,34 +38,40 @@ export default function DetailPage({
  const [activities,setActivities] = useState([])
  const [comments,setComments] = useState([])
  const [leadData,setLeadData] = useState({})
- const [documentValue,setDocumentValue] = useState({
-     value: 1,
- })
+ const [documentValue,setDocumentValue] = useState(1)
 
- let formData = useRef();
+ const [selectedDocTypes, setSelectedDocTypes] = useState([]);
+
+const [selectedFiles, setSelectedFiles] = useState([]);
+const [deletedFiles, setDeletedFiles] = useState([]);
+const [verified, setVerified] = useState(false);
+const [verifiedFiles, setVerifiedFiles] = useState([]);
+
+const removeFile = (i) => {
+    let selected = [...deletedFiles];
+    
+    selected.forEach((file, idx) => {
+      if(idx == i)
+        selected[idx] = -1;
+    });
+
+    setDeletedFiles([...selected]);
+    setVerifiedFiles([]);
+}
+
+const getDocumentType = () => {
+    switch(documentValue){
+        case 1: return 'PAN_CARD'
+        case 2: return 'AADHAR_CARD'
+        case 3: return 'BANK_STATEMENT'
+    }
+}
 
  useEffect(()=>{
      getActivityData()
      getUserComment()
      getLeadOverview()
  },[])
-
- useEffect(()=>{
-    formData.current = new Lead(
-        `${leadOverview?.leadId}`,
-        `${leadOverview?.firstName}${leadOverview?.lastName}`,
-        `${leadOverview?.collegeName}`,
-        `${leadOverview?.mobile}`,
-        `${leadOverview?.email}`,
-        `${leadOverview?.mobile}`,
-        `${leadOverview?.fullName}`,
-        `${leadOverview?.courseName}`,
-        `${leadOverview?.courseFee}`,
-        `${leadOverview?.loanRequired}`,
-        -1,
-        -1,
-    );
- },[leadOverview])
 
  const getUserComment=async()=>{
     await axios.get(`${API_URL}/api/loan/lead/comments/${props?.leadData?.leadId}/`,{
@@ -84,6 +106,22 @@ export default function DetailPage({
     }).catch(err=>console.log(err));
  }
 
+ const updateLead = async () => {
+
+    // console.log(data, "edit payload")
+
+    await axios.post(`${API_URL}/api/loan/overview/${props?.leadData?.leadId}/`,
+    requestData({...formData, borrowerUuid: leadOverview.borrowerUuid}),
+    {
+        headers: {
+            token: `${props?.token}`,
+        },
+    }).
+    then(res => {
+        // setLeadData(res.data.data.data)
+    }).catch(err=>console.log(err));
+ }
+
   const handleBack=()=>{
     let i = 0
     props?.goToHomePage(i)
@@ -94,9 +132,11 @@ export default function DetailPage({
  }
 
  const handleDocumentsCard=(data)=>{
-        setDocumentValue({
-            value: data
-        })
+    setDocumentValue(data)
+     if(documentValue != data){
+         removeFile(0)
+     }
+        
 }
 
   return (
@@ -132,10 +172,14 @@ export default function DetailPage({
             />
             {
                 tab === 0 && 
-                <EditableLeadForm
+                formData && <EditableLeadForm
+                    instituteName={instituteName}
                     viewType={formViewTypes.VIEW}
-                    formData={formData.current}
+                    previousFormData={previousFormData}
+                    formData={formData}
+                    setFormData={(data) => setFormData(data)}
                     showHeadings={true}
+                    handleSave={updateLead}
                 />
             }
             {
@@ -153,23 +197,23 @@ export default function DetailPage({
                     <div className='column' style={{gap:20}}>
                         <div style={documentValue.value === 1 ? {background: '#F7F0FF',borderRadius: 8} : null} onClick={()=>handleDocumentsCard(1)}>
                             <DocumentCard
-                            title={'PAN Card'}
-                            desc={'Upload a clear image of your PAN Card clearly stating your name and date of birth.'}
-                            instruction={'Format: PDF, PNG, JPEG, JPG.'}
+                                title={'PAN Card'}
+                                desc={'Upload a clear image of your PAN Card clearly stating your name and date of birth.'}
+                                instruction={'Format: PDF, PNG, JPEG, JPG.'}
                             />
                         </div>
                         <div onClick={()=>handleDocumentsCard(2)} style={documentValue.value === 2 ? {background: '#F7F0FF',borderRadius: 8} : null}>
                             <DocumentCard
-                            title={'Address Proof'}
-                            desc={'Upload a clear image of your PAN Card clearly stating your name and date of birth.'}
-                            instruction={'Format: PDF, PNG, JPEG, JPG.'}
+                                title={'Address Proof'}
+                                desc={'Upload a clear image of your PAN Card clearly stating your name and date of birth.'}
+                                instruction={'Format: PDF, PNG, JPEG, JPG.'}
                             />
                         </div>
                         <div onClick={()=>handleDocumentsCard(3)} style={documentValue.value === 3 ? {background: '#F7F0FF',borderRadius: 8} : null}>
                             <DocumentCard
-                            title={'Bank Statement'}
-                            desc={'Upload a clear image of your PAN Card clearly stating your name and date of birth.'}
-                            instruction={'Format: PDF, PNG, JPEG, JPG.'}
+                                title={'Bank Statement'}
+                                desc={'Upload a clear image of your PAN Card clearly stating your name and date of birth.'}
+                                instruction={'Format: PDF, PNG, JPEG, JPG.'}
                             />
                         </div>
                         {/* <div className='add-info-container row full-width'>
@@ -179,10 +223,28 @@ export default function DetailPage({
                             </div>
                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="#ffffff" viewBox="0 0 256 256"><path d="M210.83,98.83l-80,80a4,4,0,0,1-5.66,0l-80-80a4,4,0,0,1,5.66-5.66L128,170.34l77.17-77.17a4,4,0,1,1,5.66,5.66Z"></path></svg>
                         </div> */}
+                        {/* <ChoiceBox 
+                            list={documentTypes}
+                            onSelect={(selectedTypes) => setSelectedDocTypes(selectedTypes)}
+                            title={'Additional Documents'}
+                        /> */}
                     </div>
                     <div className='activity-container-divider' />
                     <div className='row'>
-                        <Upload showBorder={true} token={props?.token} />
+                        <Upload 
+                            showBorder={true} 
+                            token={props?.token} 
+                            selectedFiles={selectedFiles}
+                            setSelectedFiles={setSelectedFiles}
+                            deletedFiles={deletedFiles}
+                            setDeletedFiles={setDeletedFiles}
+                            verifiedFiles={verifiedFiles}
+                            setVerifiedFiles={setVerifiedFiles}
+                            removeFile={removeFile}
+                            getReferenceId={() => leadOverview.borrowerUuid}
+                            getLeadId={() => `LEAD-${leadOverview.leadId}`}
+                            getDocumentType={getDocumentType}
+                        />
                     </div>
                 </div>    
             }

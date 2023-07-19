@@ -4,43 +4,70 @@ import './checklist.css';
 import plusIcon from '../../assets/Icons/plusIcon.svg';
 import caretDown from '../../assets/Icons/caretDown.svg';
 
+
+export default function ChoiceBox({
+    list,
+    onSelect,
+    title
+}) {
+
+    const [ expanded, setExpanded ] = useState(false);
+
+  return (
+    <div style={{position: 'relative', width: '100%'}}>
+        <Checklist 
+            list={[...list]}
+            onSelect={onSelect}
+            expanded={expanded}
+        />
+        <DropTitle 
+            expanded={expanded}
+            title={title}
+            leadingIcon={plusIcon}
+            trailingIcon={caretDown}
+            onClick={() => setExpanded(!expanded)}
+        />
+    </div>
+  )
+}
+
 export function Checklist({
     list=[],
     type,
-    selected=new Array(list.length).fill(null),
+    selected=[],
     onSelect,
     expanded
 }) {
 
-    const [selectedChoices, setSelectedChoices] = useState([...selected]);
+    const [selectedChoices, setSelectedChoices] = useState(new Set([...selected]));
 
 
     const handleClick = (item, index) => {
-        let choices = [...selectedChoices];
-        if(choices[index] == null){
-            choices[index] = item;
+        if(selectedChoices.has(item)){
+            setSelectedChoices(prev => {prev.delete(item); return new Set(prev);})
         } else {
-            choices[index] = null;
+            setSelectedChoices(prev => new Set(prev.add(item)));
         }
 
-        setSelectedChoices(choices);
-
-        if(onSelect != null){
-            onSelect(choices);
-        }
     }
+
+    useEffect(() => {
+        if(onSelect != null){
+            onSelect(selectedChoices.values());
+        }
+    }, [selectedChoices])
 
   return (
     <div className={`column checklist-container ${expanded ? 'checklist-expanded' : ''}`}>
         {list.map((item, index) => (
             <div 
-                key={`${item['label']}-${index}`} 
+                key={`${item}-${index}`} 
                 className='row list-item'
                 style={{gap: '10px'}}
                 onClick={() => handleClick(item, index)}
             >
-                <input type={'checkbox'} className='checkbox' checked={selectedChoices[index] != null} /> 
-                <div className='label text-montserrat text-16'>{item['label']}</div>
+                <input type={'checkbox'} className='checkbox' checked={selectedChoices.has(item)} /> 
+                <div className='label text-montserrat text-16'>{item}</div>
             </div>
         ))}
     </div>
@@ -82,31 +109,6 @@ export function DropTitle({
 }
 
 
-export default function ChoiceBox({
-    list,
-    onSelect,
-    title
-}) {
 
-    const [ expanded, setExpanded ] = useState(false);
-
-  return (
-    <div>
-        <DropTitle 
-            expanded={expanded}
-            title={title}
-            leadingIcon={plusIcon}
-            trailingIcon={caretDown}
-            onClick={() => setExpanded(!expanded)}
-        />
-
-        <Checklist 
-            list={[...list]}
-            onSelect={onSelect}
-            expanded={expanded}
-        />
-    </div>
-  )
-}
 
 
