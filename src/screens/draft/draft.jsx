@@ -28,7 +28,7 @@ export default function DraftPage(props) {
   }
 
   const deleteDraft=async(item,index)=>{
-    await axios.delete(`${API_URL}/api/loan/lead/draft/${item?.leadId}`,{
+    await axios.delete(`${API_URL}/api/loan/lead/draft/${item?.id}/`,{
       headers: {
           token: `${props?.token}`,
       },
