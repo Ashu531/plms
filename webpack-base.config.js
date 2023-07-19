@@ -3,7 +3,7 @@ const _ = require("lodash");
 const sharedConfigs = {
   context: __dirname,
   entry: {
-    app: ["@babel/polyfill", "./src/entrypoint.js"],
+    app: ["@babel/polyfill", "./src/index.js"],
   },
   module: {
     rules: [

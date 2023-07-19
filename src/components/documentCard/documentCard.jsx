@@ -2,13 +2,20 @@ import React, { useEffect, useState } from 'react';
 import pendingIcon from '../../assets/Icons/pendingIcon.svg'
 import './documentCard.css';
 
-export default function DocumentCard(props) {
+export default function DocumentCard({
+    title,
+    desc,
+    instruction,
+    isMandatory=true,
+    onRemove
+}) {
 
   return (
     <div className='document-card-container'> 
+        {!isMandatory && <div className='close-button' onClick={onRemove}>X</div>}
         <div className='row'>
             <div className='document-card-header'>
-                {props?.title}
+                {title}
             </div>
             <div className='pending-icon-content'>
                 <img src={pendingIcon}/>
@@ -16,10 +23,10 @@ export default function DocumentCard(props) {
         </div>
         <div className='column'>
             <div className='document-card-desc'>
-                {props?.desc}
+                {desc}
             </div>
             <div className='document-card-desc'>
-                {props?.instruction}
+                {instruction}
             </div>
         </div>
         

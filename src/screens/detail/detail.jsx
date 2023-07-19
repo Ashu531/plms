@@ -3,7 +3,7 @@ import caretIcon from '../../assets/Icons/caretIcon.svg'
 import consentIcon from '../../assets/Icons/consentIcon.svg'
 import DocumentCard from '../../components/documentCard/documentCard.jsx';
 import TabBar from '../../components/tabBar/tabBar.jsx';
-import Upload from '../../components/upload/upload.jsx';
+import Upload, { uploadtStates } from '../../components/upload/upload.jsx';
 import axios from 'axios';
 import './/detail.css'
 import ActivityCard from '../../components/activityCard/activityCard.jsx';
@@ -40,12 +40,26 @@ export default function DetailPage({
  const [leadData,setLeadData] = useState({})
  const [documentValue,setDocumentValue] = useState(1)
 
- const [selectedDocTypes, setSelectedDocTypes] = useState([]);
+ const [selectedDocTypes, setSelectedDocTypes] = useState(new Set([]));
+ const [currentUploadState, setCurrentUploadState] = useState(uploadtStates.drop);
+
 
 const [selectedFiles, setSelectedFiles] = useState([]);
 const [deletedFiles, setDeletedFiles] = useState([]);
 const [verified, setVerified] = useState(false);
 const [verifiedFiles, setVerifiedFiles] = useState([]);
+
+const switchToDropState = () => {
+    setCurrentUploadState(uploadtStates.drop)
+}
+
+const switchToPreviewState = () => {
+    setCurrentUploadState(uploadtStates.preview)
+}
+
+const switchToUploadedState = () => {
+    setCurrentUploadState(uploadtStates.uploaded)
+}
 
 const removeFile = (i) => {
     let selected = [...deletedFiles];
@@ -57,6 +71,7 @@ const removeFile = (i) => {
 
     setDeletedFiles([...selected]);
     setVerifiedFiles([]);
+    switchToDropState();
 }
 
 const getDocumentType = () => {
@@ -139,6 +154,14 @@ const getDocumentType = () => {
         
 }
 
+const handleDocTypeSelection = (docType) => {
+        if(selectedDocTypes.has(docType)){
+            setSelectedDocTypes(prev => {prev.delete(docType); return new Set(prev);})
+        } else {
+            setSelectedDocTypes(prev => new Set(prev.add(docType)));
+        }
+}
+
   return (
     <div className='lead-detail-page'>
         <div className='lead-page-header full-width'>
@@ -149,7 +172,7 @@ const getDocumentType = () => {
                         <span className='lead-page-heading'>{props?.leadData?.fullName}</span>
                         <span className='lead-page-subheading'> {props?.leadData?.mobile}</span>
                         { props?.leadData?.utr &&
-                            <span className='lead-page-subheading'>UTR : {'props?.leadData?.utr'}</span>
+                            <span className='lead-page-subheading'>UTR : {`${props?.leadData?.utr}`}</span>
                         } 
                     </div>
                 </div>
@@ -194,21 +217,21 @@ const getDocumentType = () => {
                 tab === 2 && 
                 <div className='document-container row full-width'>
                     <div className='column' style={{gap:20}}>
-                        <div style={documentValue.value === 1 ? {background: '#F7F0FF',borderRadius: 8} : null} onClick={()=>handleDocumentsCard(1)}>
+                        <div style={{...(documentValue === 1 ? {background: '#F7F0FF',borderRadius: 8} : null), width: '100%'}} onClick={()=>handleDocumentsCard(1)}>
                             <DocumentCard
                                 title={'PAN Card'}
                                 desc={'Upload a clear image of your PAN Card clearly stating your name and date of birth.'}
                                 instruction={'Format: PDF, PNG, JPEG, JPG.'}
                             />
                         </div>
-                        <div onClick={()=>handleDocumentsCard(2)} style={documentValue.value === 2 ? {background: '#F7F0FF',borderRadius: 8} : null}>
+                        <div onClick={()=>handleDocumentsCard(2)} style={{...(documentValue === 2 ? {background: '#F7F0FF',borderRadius: 8} : null), width: '100%'}}>
                             <DocumentCard
                                 title={'Address Proof'}
                                 desc={'Upload a clear image of your PAN Card clearly stating your name and date of birth.'}
                                 instruction={'Format: PDF, PNG, JPEG, JPG.'}
                             />
                         </div>
-                        <div onClick={()=>handleDocumentsCard(3)} style={documentValue.value === 3 ? {background: '#F7F0FF',borderRadius: 8} : null}>
+                        <div onClick={()=>handleDocumentsCard(3)} style={{...(documentValue === 3 ? {background: '#F7F0FF',borderRadius: 8} : null), width: '100%'}}>
                             <DocumentCard
                                 title={'Bank Statement'}
                                 desc={'Upload a clear image of your PAN Card clearly stating your name and date of birth.'}
@@ -222,14 +245,29 @@ const getDocumentType = () => {
                             </div>
                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="#ffffff" viewBox="0 0 256 256"><path d="M210.83,98.83l-80,80a4,4,0,0,1-5.66,0l-80-80a4,4,0,0,1,5.66-5.66L128,170.34l77.17-77.17a4,4,0,1,1,5.66,5.66Z"></path></svg>
                         </div> */}
-                        {/* <ChoiceBox 
-                            list={documentTypes}
-                            onSelect={(selectedTypes) => setSelectedDocTypes(selectedTypes)}
-                            title={'Additional Documents'}
-                        /> */}
+                        <div style={{width: '100%'}}>
+                            <ChoiceBox 
+                                list={documentTypes}
+                                onSelect={(docType) => handleDocTypeSelection(docType)}
+                                title={'Additional Documents'}
+                                selected={selectedDocTypes}
+                            />
+                        </div>
+
+                        {Array.from(selectedDocTypes).map((docType, index) => (
+                            <DocumentCard
+                                id={`${docType}-${index}`}
+                                title={docType}
+                                desc={'Upload a clear image of your PAN Card clearly stating your name and date of birth.'}
+                                instruction={'Format: PDF, PNG, JPEG, JPG.'}
+                                isMandatory={false}
+                                onRemove={() => {
+                                    handleDocTypeSelection(docType)
+                                }}
+                            />
+                        ))}
                     </div>
-                    <div className='activity-container-divider' />
-                    <div className='row'>
+                    <div className='row' style={{border: '1px solid #8F14CC', borderRadius: '8px', height: '560px', justifyContent: 'center'}}>
                         <Upload 
                             showBorder={true} 
                             token={props?.token} 
@@ -243,6 +281,13 @@ const getDocumentType = () => {
                             getReferenceId={() => leadOverview.borrowerUuid}
                             getLeadId={() => `LEAD-${leadOverview.leadId}`}
                             getDocumentType={getDocumentType}
+                            currentUploadState={currentUploadState}
+                            onDrop={switchToPreviewState}
+                            onCancel={() => removeFile(0)}
+                            onUpload={() => {
+                                switchToUploadedState();
+                                setTimeout(() => switchToDropState(), 3000)
+                            }}
                         />
                     </div>
                 </div>    

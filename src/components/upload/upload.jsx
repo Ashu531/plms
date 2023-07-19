@@ -5,31 +5,33 @@ import cloudIcon from "../../assets/Icons/cloudDropIcon.svg";
 import csvIconBlue from "../../assets/Icons/csv-icon-blue.png";
 import downloadIcon from "../../assets/Icons/download-icon-blue.svg";
 import fileIconGrey from "../../assets/Icons/file-icon-grey.svg";
+import { Document, Page, pdfjs } from 'react-pdf';
 import axios from "axios";
-import './upload.css'
+import './upload.css';
+
+export const uploadtStates = {
+  drop: 0,
+  preview: 1,
+  uploaded: 2
+}
 
 export default function Upload({
-    closeUpload,
-    headingText='',
     width='',
     height='',
-    primaryButtonText='',
-    primaryButtonClick,
-    secondaryButtonText='',
-    secondaryButtonClick,
-    disabledButton=false,
-    updateFiles,
     token,
-    uplaodType,
     showBorder,
-    templateText=['Student', 'students'],
     selectedFiles, setSelectedFiles,
     deletedFiles, setDeletedFiles,
     verifiedFiles, setVerifiedFiles,
     removeFile,
     getReferenceId,
     getLeadId,
-    getDocumentType
+    getDocumentType,
+    currentUploadState,
+    onDrop,
+    onCancel,
+    onSave,
+    onUpload
   }) {
 
   const fileInputField = useRef(null);
@@ -40,17 +42,12 @@ export default function Upload({
   });
 
   const handleSelected = (e) => {
-      let tempFiles = [];
+    console.log("on manual click")
       setSelectedFiles([e.target.files[0]]);
       setDeletedFiles([e.target.files[0]]);
-      setVerifiedFiles([]);
 
       e.target.value = null;
   }
-
-  // const downloadFile = () => {
-  //   window.open
-  // }
 
   const getFileSize = (size) => {
       const kb = 1024;
@@ -68,7 +65,7 @@ export default function Upload({
 
       setSelectedFiles([e.dataTransfer.files[0]]);
       setDeletedFiles([e.dataTransfer.files[0]]);
-      setVerifiedFiles([]);
+
       e.dataTransfer.value = null;
   }
 
@@ -78,9 +75,7 @@ export default function Upload({
     e.dataTransfer.dropEffect = 'copy';
   }
 
-  const verifyFiles = () => {
-    setProgress([...selectedFiles.map(e => 0)]);
-    setError({status: false, message: ''})
+  const uploadFiles = () => {
     selectedFiles.forEach(async (file, index) => {
       let data = new FormData();
       data.append('document_file', file);
@@ -105,12 +100,18 @@ export default function Upload({
     })
   }
 
-  const handleSave = () => {
-    primaryButtonClick(verifiedFiles);
-  }
+  useEffect(() => {
+    if(progress.length == 1 && progress[0] == 100){
+      onUpload()
+    }
+  }, [progress])
 
   useEffect(() => {
-      verifyFiles();
+    if(selectedFiles.length > 0){
+        setProgress([...selectedFiles.map(e => 0)]);
+        setError({status: false, message: ''})
+        onDrop()
+    }
   }, [selectedFiles]);
 
   useEffect(() => {
@@ -121,47 +122,74 @@ export default function Upload({
     }
   }, [deletedFiles]);
 
+  useEffect(() => {
+    pdfjs.GlobalWorkerOptions.workerSrc = new URL('pdfjs-dist/build/pdf.worker.min.js', import.meta.url).toString();
+  }, [])
+
   return (
-    <div 
-      className="plms-bulk-upload-container"
-      >
       <div
         className="plms-content-box"
         style={{ width: `${width}`, height: `${height}` }}
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="plms-dialog-body">
-            <div className="plms-dropzone" onClick={() => fileInputField.current.click()} onDrop={handleDrop} onDragOver={handleDragOver}>
-                <input type='file' ref={fileInputField} onChange={handleSelected} style={{visibility: 'hidden'}} />
+            {currentUploadState == uploadtStates.drop && <div className="plms-dropzone" onClick={() => fileInputField.current.click()} onDrop={handleDrop} onDragOver={handleDragOver}>
+                <input type='file' accept="image/jpeg,image/jpg,image/png,application/pdf" ref={fileInputField} onChange={handleSelected} style={{visibility: 'hidden'}} />
                 <img src={cloudIcon} onDragOver={handleDragOver} height={60} width={60} style={{objectFit: 'contain'}}/>
                 <div className="title" style={{color: '#6699ff', margin: '1rem 0px 0px'}} onDragOver={handleDragOver}>Drag & Drop files</div>
                 <span className='or-text'>or</span>
                 <div className="subtitle" style={{fontSize: '16px', margin: '0px 0px 1rem'}} onDragOver={handleDragOver}>Browse Files</div>
-            </div>
-            {selectedFiles.length > 0 && <div className="plms-file-container">
+            </div>}
+            {currentUploadState != uploadtStates.drop && selectedFiles.length > 0 && <div className="plms-file-container">
                 {selectedFiles.map((file, i) => (
-                    <div key={i} className={`plms-file ${i === selectedFiles.length - 1 ? 'plms-curved-bottom': ''} ${deletedFiles[i] === -1 ? 'plms-deleted' : ''}`} style={showBorder ? {position:'relative',padding: 16}:{position:'relative',padding: '16px 8px'}}>
-                        <div className="plms-icon-container" style={{background: 'none'}}>
-                            {/* <img src={fileIconGrey} /> */}
-                        </div>
-                        <div style={{textAlign: 'start', flexGrow: '1', marginLeft: '1.2rem'}}>
-                            <div className="plms-title" style={{fontSize: '2rem', color: '#3377ff', textTransform: 'capitalize'}}>{file.name}</div>
-                            <div className="plms-subtitle">{getFileSize(file.size)}</div>
-                            <div className="plms-status-bar" style={{marginTop: 8}}>
-                              <div className={`plms-status ${error.status ? 'plms-error': ''}`} style={{width: `${progress[i]}%`}}></div>
-                            </div>
-                            <div className="plms-error-text">{error.message}</div>
-                        </div>
-                        <div className="plms-cross-icon-container">
-                            <img src={crossIcon} onClick={() => removeFile(i)} height={24} width={24} style={{objectFit:'contain'}} />
-                        </div>
+                    <div>
+                        {file.name.split('.').pop() != 'pdf' && <img className="file-preview" src={URL.createObjectURL(file)}/>}
+                          {file.name.split('.').pop() == 'pdf' && <Document file={file} onLoadSuccess={() => {}}>
+                              <Page pageNumber={1} />
+                          </Document>}
+                        {progress[i] > 0 && <div className="plms-subtitle">{currentUploadState == uploadtStates.uploaded ? 'Uploaded': 'Uploading'} file: {file.name}</div>}
+                        {progress[i] > 0 && <div className="plms-status-bar">
+                          <div className={`plms-status ${error.status ? 'plms-error': ''}`} style={{width: `${progress[i]}%`}}></div>
+                          <div className={`plms-status-text`}>{`${progress[i]}%`}</div>
+                        </div>}
+                        <div className="plms-error-text">{error.message}</div>
+                        {currentUploadState == uploadtStates.preview && <div className="row" style={{justifyContent: 'center', margin: '25px 0 0 0', gap: '10px'}}>
+                            <Button
+                                text='Cancel'
+                                classes={{
+                                    borderRadius: 8,
+                                    border: '1px solid #8F14CC',
+                                    height: '44px',
+                                    width: '150px',
+                                }}
+                                textClass={{
+                                    color: '#8F14CC',
+                                    fontSize: '14px',
+                                    fontFamily: 'Montserrat',
+                                    fontWeight: 600
+                                }}
+                                onClick={onCancel}
+                            />
+                            <Button 
+                                text='Save'
+                                classes={{
+                                    background: '#8F14CC',
+                                    borderRadius: '8px',
+                                    height: '44px',
+                                    width: '150px',
+                                }}
+                                textClass={{
+                                    color: '#FFF',
+                                    fontSize: '14px',
+                                    fontFamily: 'Montserrat',
+                                    fontWeight: 600
+                                }}
+                                onClick={uploadFiles}
+                                disabled={progress[i] > 0}
+                            />
+                        </div>}
                     </div>
                 ))}
             </div>}
-        </div>
-        <div className="plms-footer">
-        </div>
       </div>
-    </div>
   );
 }

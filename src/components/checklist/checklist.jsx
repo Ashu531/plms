@@ -8,7 +8,8 @@ import caretDown from '../../assets/Icons/caretDown.svg';
 export default function ChoiceBox({
     list,
     onSelect,
-    title
+    title,
+    selected,
 }) {
 
     const [ expanded, setExpanded ] = useState(false);
@@ -19,6 +20,7 @@ export default function ChoiceBox({
             list={[...list]}
             onSelect={onSelect}
             expanded={expanded}
+            selected={selected}
         />
         <DropTitle 
             expanded={expanded}
@@ -34,28 +36,10 @@ export default function ChoiceBox({
 export function Checklist({
     list=[],
     type,
-    selected=[],
+    selected,
     onSelect,
     expanded
 }) {
-
-    const [selectedChoices, setSelectedChoices] = useState(new Set([...selected]));
-
-
-    const handleClick = (item, index) => {
-        if(selectedChoices.has(item)){
-            setSelectedChoices(prev => {prev.delete(item); return new Set(prev);})
-        } else {
-            setSelectedChoices(prev => new Set(prev.add(item)));
-        }
-
-    }
-
-    useEffect(() => {
-        if(onSelect != null){
-            onSelect(selectedChoices.values());
-        }
-    }, [selectedChoices])
 
   return (
     <div className={`column checklist-container ${expanded ? 'checklist-expanded' : ''}`}>
@@ -64,9 +48,9 @@ export function Checklist({
                 key={`${item}-${index}`} 
                 className='row list-item'
                 style={{gap: '10px'}}
-                onClick={() => handleClick(item, index)}
+                onClick={() => onSelect(item, index)}
             >
-                <input type={'checkbox'} className='checkbox' checked={selectedChoices.has(item)} /> 
+                <input type={'checkbox'} className='checkbox' checked={selected.has(item)} /> 
                 <div className='label text-montserrat text-16'>{item}</div>
             </div>
         ))}
