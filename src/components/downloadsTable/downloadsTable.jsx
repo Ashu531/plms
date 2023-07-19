@@ -38,7 +38,7 @@ export default function DownloadTable({
                         <div className='row-text' style={{flex: '1 1 0px'}}>
                         <Button
                             leadingIcon={downloadIcon}
-                            text="Generate Report"
+                            text="Download Again"
                             classes={{
                                 background: "#0DB78F",
                                 borderRadius: "8px",

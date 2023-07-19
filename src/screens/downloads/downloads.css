@@ -58,3 +58,14 @@
     font-weight: 500 !important;
     line-height: normal !important;
 }
+
+.downloads-header{
+    color: #0B090D;
+    font-family: 'Montserrat';
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+    text-align: start;
+    margin-top: 24px;
+}

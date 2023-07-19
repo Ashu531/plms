@@ -19,7 +19,7 @@
 }
 
 .header-text{
-    flex: 2 1 0px;
+    flex: 3 1 0px;
     color: #0B090D;
     font-size: 16px;
     font-family: 'Montserrat';
@@ -62,7 +62,7 @@
 }
 
 .draft-icon-container{
-    background: #FFF;
+    /* background: #FFF; */
     cursor: pointer;
     border-radius: 8px !important;
     padding: 16px 0 !important;

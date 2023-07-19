@@ -2,6 +2,7 @@ import React,{useEffect, useRef, useState} from 'react';
 import './/downloads.css'
 import axios from 'axios';
 import downloadIcon from '../../assets/Icons/downloadIcon.svg'
+import disabledDownload from '../../assets/Icons/disabledDownload.svg'
 import DraftTable from '../../components/draftTable/draftTable.jsx';
 import 'react-date-picker/dist/DatePicker.css';
 import DatePicker from 'react-date-picker';
@@ -104,24 +105,34 @@ export default function DownloadPage(props) {
           </div>
           <div className='column' style={{marginTop: 24}}>
           <Button
-              leadingIcon={downloadIcon}
+              leadingIcon={startDate && endDate ? downloadIcon : disabledDownload}
               text="Generate Report"
-              classes={{
+              classes={startDate && endDate ? {
                 background: "#8F14CC",
                 borderRadius: "8px",
                 height: "44px",
+              }: {
+                background: "#F4F4F4",
+                borderRadius: "8px",
+                height: "44px",
               }}
-              textClass={{
+              textClass={startDate && endDate ? {
                 color: "#FFF",
-                fontSize: "16px",
+                fontSize: "14px",
                 fontFamily: "Montserrat",
                 fontWeight: 500,
+              }:{
+                color: "#B9B9B9",
+                fontSize: "14px",
+                fontFamily: "Montserrat",
+                fontWeight: 500,
+                opacity: 0.5
               }}
-              onClick={()=>generateReport()}
+              onClick={()=>startDate && endDate ? generateReport() : {}}
             //   onClick={_openLeadForm}
             /> 
           </div>
-
+          <div className='downloads-header'>Previous Downloads</div>
           <div className="download-table-container">
               {
                   tableData?.length > 0 ? 
