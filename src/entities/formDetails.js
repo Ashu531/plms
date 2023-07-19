@@ -158,5 +158,6 @@ export const requestData = (formData) => {
         "loan_amount": formData.loanAmount,
         "tenure": formData.tenure,
         "emi": formData.advanceEmi,
+        "borrowerUuid": formData.borrowerUuid
     }
 }

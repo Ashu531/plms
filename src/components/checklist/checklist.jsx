@@ -4,6 +4,33 @@ import './checklist.css';
 import plusIcon from '../../assets/Icons/plusIcon.svg';
 import caretDown from '../../assets/Icons/caretDown.svg';
 
+
+export default function ChoiceBox({
+    list,
+    onSelect,
+    title
+}) {
+
+    const [ expanded, setExpanded ] = useState(false);
+
+  return (
+    <div style={{position: 'relative', width: '100%'}}>
+        <Checklist 
+            list={[...list]}
+            onSelect={onSelect}
+            expanded={expanded}
+        />
+        <DropTitle 
+            expanded={expanded}
+            title={title}
+            leadingIcon={plusIcon}
+            trailingIcon={caretDown}
+            onClick={() => setExpanded(!expanded)}
+        />
+    </div>
+  )
+}
+
 export function Checklist({
     list=[],
     type,
@@ -22,11 +49,13 @@ export function Checklist({
             setSelectedChoices(prev => new Set(prev.add(item)));
         }
 
-
-        if(onSelect != null){
-            onSelect(choices);
-        }
     }
+
+    useEffect(() => {
+        if(onSelect != null){
+            onSelect(selectedChoices.values());
+        }
+    }, [selectedChoices])
 
   return (
     <div className={`column checklist-container ${expanded ? 'checklist-expanded' : ''}`}>
@@ -80,30 +109,6 @@ export function DropTitle({
 }
 
 
-export default function ChoiceBox({
-    list,
-    onSelect,
-    title
-}) {
 
-    const [ expanded, setExpanded ] = useState(false);
-
-  return (
-    <div style={{position: 'relative'}}>
-        <DropTitle 
-            expanded={expanded}
-            title={title}
-            leadingIcon={plusIcon}
-            trailingIcon={caretDown}
-            onClick={() => setExpanded(!expanded)}
-        />
-        <Checklist 
-            list={[...list]}
-            onSelect={onSelect}
-            expanded={expanded}
-        />
-    </div>
-  )
-}
 
 

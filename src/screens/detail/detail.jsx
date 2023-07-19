@@ -11,6 +11,7 @@ import FinancialForm from '../../components/financialForm/financialForm.jsx';
 import { EditableLeadForm } from '../../components/leadForm/leadform.jsx';
 import { formViewTypes } from '../../forms/leadDetails.jsx';
 import { leadState, requestData } from '../../entities/formDetails.js';
+import ChoiceBox, { Checklist } from '../../components/checklist/checklist.jsx';
 
 
 const documentTypes = [
@@ -38,6 +39,8 @@ export default function DetailPage({
  const [comments,setComments] = useState([])
  const [leadData,setLeadData] = useState({})
  const [documentValue,setDocumentValue] = useState(1)
+
+ const [selectedDocTypes, setSelectedDocTypes] = useState([]);
 
 const [selectedFiles, setSelectedFiles] = useState([]);
 const [deletedFiles, setDeletedFiles] = useState([]);
@@ -103,19 +106,20 @@ const getDocumentType = () => {
     }).catch(err=>console.log(err));
  }
 
- const updateLead = async (data) => {
+ const updateLead = async () => {
 
-    console.log(data, "edit payload")
-    // await axios.post(`${API_URL}/api/loan/overview/${props?.leadData?.leadId}/`,
-    // requestData(data),
-    // {
-    //     headers: {
-    //         token: `${props?.token}`,
-    //     },
-    // }).
-    // then(res => {
-    //     // setLeadData(res.data.data.data)
-    // }).catch(err=>console.log(err));
+    // console.log(data, "edit payload")
+
+    await axios.post(`${API_URL}/api/loan/overview/${props?.leadData?.leadId}/`,
+    requestData({...formData, borrowerUuid: leadOverview.borrowerUuid}),
+    {
+        headers: {
+            token: `${props?.token}`,
+        },
+    }).
+    then(res => {
+        // setLeadData(res.data.data.data)
+    }).catch(err=>console.log(err));
  }
 
   const handleBack=()=>{
@@ -192,23 +196,23 @@ const getDocumentType = () => {
                     <div className='column' style={{gap:20}}>
                         <div style={documentValue.value === 1 ? {background: '#F7F0FF',borderRadius: 8} : null} onClick={()=>handleDocumentsCard(1)}>
                             <DocumentCard
-                            title={'PAN Card'}
-                            desc={'Upload a clear image of your PAN Card clearly stating your name and date of birth.'}
-                            instruction={'Format: PDF, PNG, JPEG, JPG.'}
+                                title={'PAN Card'}
+                                desc={'Upload a clear image of your PAN Card clearly stating your name and date of birth.'}
+                                instruction={'Format: PDF, PNG, JPEG, JPG.'}
                             />
                         </div>
                         <div onClick={()=>handleDocumentsCard(2)} style={documentValue.value === 2 ? {background: '#F7F0FF',borderRadius: 8} : null}>
                             <DocumentCard
-                            title={'Address Proof'}
-                            desc={'Upload a clear image of your PAN Card clearly stating your name and date of birth.'}
-                            instruction={'Format: PDF, PNG, JPEG, JPG.'}
+                                title={'Address Proof'}
+                                desc={'Upload a clear image of your PAN Card clearly stating your name and date of birth.'}
+                                instruction={'Format: PDF, PNG, JPEG, JPG.'}
                             />
                         </div>
                         <div onClick={()=>handleDocumentsCard(3)} style={documentValue.value === 3 ? {background: '#F7F0FF',borderRadius: 8} : null}>
                             <DocumentCard
-                            title={'Bank Statement'}
-                            desc={'Upload a clear image of your PAN Card clearly stating your name and date of birth.'}
-                            instruction={'Format: PDF, PNG, JPEG, JPG.'}
+                                title={'Bank Statement'}
+                                desc={'Upload a clear image of your PAN Card clearly stating your name and date of birth.'}
+                                instruction={'Format: PDF, PNG, JPEG, JPG.'}
                             />
                         </div>
                         {/* <div className='add-info-container row full-width'>
@@ -218,6 +222,11 @@ const getDocumentType = () => {
                             </div>
                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="#ffffff" viewBox="0 0 256 256"><path d="M210.83,98.83l-80,80a4,4,0,0,1-5.66,0l-80-80a4,4,0,0,1,5.66-5.66L128,170.34l77.17-77.17a4,4,0,1,1,5.66,5.66Z"></path></svg>
                         </div> */}
+                        {/* <ChoiceBox 
+                            list={documentTypes}
+                            onSelect={(selectedTypes) => setSelectedDocTypes(selectedTypes)}
+                            title={'Additional Documents'}
+                        /> */}
                     </div>
                     <div className='activity-container-divider' />
                     <div className='row'>
