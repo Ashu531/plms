@@ -75,6 +75,7 @@ export default function Home({token}) {
   const [openLeadForm, setOpenLeadForm] = useState(false);
   const [screen, setScreen] = useState(0);
   const [searchData,setSearchData] = useState([])
+  const [searchCount,setSearchCount] = useState(0);
   const [consentModal, setConsentModal] = useState(false);
   const [tableData,setTableData] = useState(Array(6).fill([]))
   const [statusList, setStatusList] = useState([...statuses]);
@@ -115,9 +116,15 @@ export default function Home({token}) {
         },
     }).
     then(res => {
-        if(res?.data?.data?.leads.length > 0){
+        if(res?.data?.data?.leads?.length > 0){
             let detail = res?.data?.data?.leads;
             setSearchData(detail)
+            setSearchCount(res?.data?.data?.count)
+            setNoResult(false)
+        }else{
+            setNoResult(true)
+            setSearchCount(0)
+            setSearchData([])
         }
         
     }).catch(err=>console.log(err));
@@ -411,7 +418,11 @@ const openUploadModal=()=>{
             className="row"
             style={{ justifyContent: "space-between", margin: "24px 0 0 0" }}
           >
-            <div className="lead-count">Showing {statusCount} leads</div>
+            {
+              query?.length === 0 ?  <div className="lead-count">Showing {statusCount} leads</div>
+              : <div className="lead-count">Showing {searchCount} leads</div>
+            }
+            
             <Button
               leadingIcon={addIcon}
               text="Create"

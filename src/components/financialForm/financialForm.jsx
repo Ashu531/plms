@@ -72,11 +72,14 @@ export default function FinancialForm({
 
     const handleFinancialData=()=>{
 
-        if(leadData?.borrowerData?.netMonthlyIncome?.length > 0){
+        
+
+        if(leadData?.borrowerData?.netMonthlyIncome > 0){
             setMonthySalary({
                 ...monthySalary,
                 value: leadData?.borrowerData?.netMonthlyIncome,
             })
+            console.log("coming+++")
         }else{
             setMonthySalary({
                 ...monthySalary,
@@ -100,7 +103,7 @@ export default function FinancialForm({
 
     }
 
- 
+    console.log(monthySalary.value,"data++++++")
 
     const employmentStatusLabel = () => 'Employment Status ';
     const monthySalaryLabel = () => 'Current Monthly Salary';

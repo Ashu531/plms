@@ -143,6 +143,7 @@ export default function DetailPage({
                 <div className='financials-container row full-width'>
                     <FinancialForm 
                         leadData={leadData}
+                        token={props?.token}
                     />
                 </div>
             }
