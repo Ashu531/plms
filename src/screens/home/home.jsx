@@ -396,7 +396,7 @@ export default function Home({token}) {
         setLeadOverview(resData)
         let data = {
           leadId: `${resData?.leadId}`,
-          studentName: `${resData?.firstName} ${resData?.lastName}`,
+          studentName: `${resData?.studentFirstName} ${resData?.studentMiddleName + ' '}${resData?.studentLastName}`,
           institute: profile.college,
           mobile: `${resData?.mobile}`,
           email: `${resData?.email}`,
