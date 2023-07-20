@@ -83,28 +83,50 @@ export default function Upload({
       data.append('leadId', getLeadId())
       data.append('documentType', getDocumentType())
       data.append('fileName', getDocumentType())
-      console.log("upload data", data)
+
       const res = await axios.post(`${API_URL}/api/loan/upload/documents/`, data, {
         headers: {
           token: `${token}`,
         },
         onUploadProgress: data => {
           let prog = [...progress];
-          prog[index] = Math.round((100 * data.loaded) / data.total);
+          let uploadProgress = Math.round((100 * data.loaded) / data.total);
+          prog[index] = uploadProgress / 10;
           setProgress([...prog]);
+
+          if(uploadProgress == 100){
+              const progressInterval = setInterval(() => {
+                  prog[index] = prog[index] + 1;
+                  if(prog[index] > 99){
+                    clearInterval(progressInterval);
+                  } else {
+                    setProgress([...prog]);
+                  }
+              }, 600)
+          }
         }
       }).then(res => {
+          let prog = [...progress];
+          prog[index] = 100;
+          setProgress([...prog]);
           setVerifiedFiles([...verifiedFiles, res.data.id]);
           onUpload()
         })
       .catch(err => {
-        setError({
-          status: true,
-          message: err.response.data.error
-        })
-        let prog = [...progress];
-        prog[index] = 0;
-        setProgress([...prog]);
+        if(err.response){
+          setError({
+            status: true,
+            message: err.response.data.error
+          })
+          let prog = [...progress];
+          prog[index] = 0;
+          setProgress([...prog]);
+        } else {
+          setError({
+            status: true,
+            message: "Upload failed! Try again."
+          })
+        }
       });
     })
   }
