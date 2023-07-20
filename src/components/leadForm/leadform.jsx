@@ -249,12 +249,12 @@ export function EditableLeadForm ({
     const saveChanges = (formType) => {
         if(formType == 0){
             handleSave();
-            setEditingStates({...editingStates, lead: false});
+            setEditingStates({...editingStates, lead: false, loan: false});
         }
 
         else if(formType == 1){
             handleSave();
-            setEditingStates({...editingStates, loan: false});
+            setEditingStates({...editingStates, lead: false, loan: false});
         }
 
         else {
