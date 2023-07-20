@@ -12,7 +12,7 @@ import { EditableLeadForm } from '../../components/leadForm/leadform.jsx';
 import { formViewTypes } from '../../forms/leadDetails.jsx';
 import { leadState, requestData } from '../../entities/formDetails.js';
 import ChoiceBox, { Checklist } from '../../components/checklist/checklist.jsx';
-
+import { Bars, TailSpin } from "react-loader-spinner";
 
 const documentTypes = [
     'Aadhaar Card', 
@@ -48,6 +48,11 @@ const [selectedFiles, setSelectedFiles] = useState([]);
 const [deletedFiles, setDeletedFiles] = useState([]);
 const [verified, setVerified] = useState(false);
 const [verifiedFiles, setVerifiedFiles] = useState([]);
+
+const [activityLoader,setActivityLoader] = useState(false)
+const [activityNoResult,setActivityNoResult] = useState(false)
+const [commentLoader,setCommentLoader] = useState(false)
+const [commentNoResult,setCommentNoResult] = useState(false)
 
 const switchToDropState = () => {
     setCurrentUploadState(uploadtStates.drop)
@@ -89,25 +94,44 @@ const getDocumentType = () => {
  },[])
 
  const getUserComment=async()=>{
+     setCommentLoader(true)
     await axios.get(`${API_URL}/api/loan/lead/comments/${props?.leadData?.leadId}/`,{
         headers: {
             token: `${props?.token}`,
         },
     }).
     then(res => {
-        setComments(res.data.data.data)
-    }).catch(err=>console.log(err));
+        setCommentLoader(false)
+        console.log(res)
+        if(res.data.data.length > 0){
+            setComments(res.data.data)
+        }else{
+            setCommentNoResult(true)
+        }
+        
+    }).catch(err=>{
+        setCommentLoader(false)
+    });
  }
 
  const getActivityData=async()=>{
+    setActivityLoader(true)
     await axios.get(`${API_URL}/api/loan/update/history/${props?.leadData?.leadId}/`,{
         headers: {
             token: `${props?.token}`,
         },
     }).
     then(res => {
-        setActivities(res.data.data.data)
-    }).catch(err=>console.log(err));
+        setActivityLoader(false)
+        if(res.data.data.data.length > 0){
+            setActivities(res.data.data.data)
+        }else{
+            setActivityNoResult(true)
+        }
+        
+    }).catch(err=>{
+        setActivityLoader(false)
+    });
  }
 
  const getLeadOverview=async()=>{
@@ -300,7 +324,7 @@ const handleDocTypeSelection = (docType) => {
                         <span className='activity-container-heading'>Comments</span>
                         <div className='column' style={{gap: 10,marginTop: 16}}>
                             {
-                              comments ? comments.map((item,index)=>{
+                              comments?.length > 0 && comments.map((item,index)=>{
                                     return(
                                          <ActivityCard 
                                                 title={item.log}
@@ -309,9 +333,17 @@ const handleDocTypeSelection = (docType) => {
                                         />
                                     )
                                 })
-                                : <div style={{color: '#000'}}>No Results</div>
                             }
-                            
+                            {
+                                commentNoResult &&
+                                <div style={{color: '#000'}}>No Results</div>
+                            }
+                            {
+                                commentLoader && 
+                                <div className="credenc-loader-white">
+                                    <TailSpin color="#00BFFF" height={100} width={100}/>
+                                </div>
+                            }
                         </div>
                     </div>
                     <div className='activity-container-divider' />
@@ -319,7 +351,7 @@ const handleDocTypeSelection = (docType) => {
                         <span className='activity-container-heading'>Activity Log</span>
                         <div className='column' style={{gap: 10,marginTop: 16}}>
                         {
-                              activities ? activities.map((item,index)=>{
+                              activities.length > 0 && activities.map((item,index)=>{
                                     return(
                                          <ActivityCard 
                                                 title={item.template}
@@ -327,9 +359,19 @@ const handleDocTypeSelection = (docType) => {
                                                 time={'2022-04-12 18:34:49'}
                                         />
                                     )
-                                })  : <div style={{color: '#000'}}>No Results</div>
+                                }) 
+                            }
+                            {
+                                activityNoResult &&
+                                <div style={{color: '#000'}}>No Results</div>
                             }
                         </div>
+                        {
+                            activityLoader && 
+                            <div className="credenc-loader-white">
+                                <TailSpin color="#00BFFF" height={100} width={100}/>
+                            </div>
+                        }
                     </div>
                 </div>
             }

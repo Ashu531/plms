@@ -18,6 +18,8 @@ export default function SlidingPanel(props)
                   openDetailPage={(i)=>props?.openDetailPage(i)} 
                   openUserConsentModal={()=>props?.openUserConsentModal()}
                   openUploadModal={()=>props?.openUploadModal()}
+                  pendecyData={props?.pendecyData}
+                  consent={props?.consent}
                 />
             </div>
         </div>

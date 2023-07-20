@@ -10,6 +10,7 @@ import 'react-calendar/dist/Calendar.css';
 import Button from '../../components/button/button.jsx';
 import moment from 'moment'
 import DownloadTable from '../../components/downloadsTable/downloadsTable.jsx';
+import { Bars, TailSpin } from "react-loader-spinner";
 // import { downloadCSV } from '../../helpers/downloadCSV.js';
 
 export default function DownloadPage(props) {
@@ -19,20 +20,30 @@ export default function DownloadPage(props) {
   const [startDate,setStartDate] = useState('');
   const [endDate,setEndDate] = useState('');
   const [csvData,setCsvData] = useState('')
+  const [loader,setLoader] = useState(false)
+  const [noResult,setNoResult] = useState(false)
 
   useEffect(()=>{
     getDownloads()
   },[])
 
   const getDownloads=async()=>{
+    setLoader(true)
     await axios.get(`${API_URL}/api/loan/download/logs/`,{
         headers: {
             token: `${props?.token}`,
         },
     }).
     then(res => {
-        setTableData(res.data.data)
-    }).catch(err=>console.log(err));
+        setLoader(false)
+        if(res?.data?.data?.length > 0){
+          setTableData(res.data.data)
+        }else{
+          setNoResult(true)
+        }
+    }).catch(err=>{
+      setLoader(false)
+    });
   }
 
   const openLeadForm=()=>{
@@ -135,7 +146,7 @@ export default function DownloadPage(props) {
           <div className='downloads-header'>Previous Downloads</div>
           <div className="download-table-container">
               {
-                  tableData?.length > 0 ? 
+                  tableData?.length > 0 &&
                   <DownloadTable
                         list={[...tableData]}
                         generateReport={(item)=>generateIndividualReport(item)}
@@ -143,13 +154,24 @@ export default function DownloadPage(props) {
                         //     setLeadInfo(item)
                         //     openLeadForm()
                         // }}
-                  /> : 
-                  <div className='no-result-content'>
-                    <span>No Results</span>
-                  </div>
-               }
+                  /> 
+              }
+
+              { noResult && 
+               <div className='no-result-content'>
+                  <span>No Results</span>
+               </div>
+              }  
+                 
+               
             
           </div>
+          {
+            loader && 
+              <div className="credenc-loader-white fullscreen-loader">
+                <TailSpin color="#00BFFF" height={100} width={100}/>
+              </div>
+          }
     </div>
     </>
   )

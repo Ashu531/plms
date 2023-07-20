@@ -8,12 +8,8 @@ import axios from 'axios';
 
 export default function DetailModal(props) {
 
-  const [pendecyData,setPendecyData] = useState([])
-  const [consent,setUserConsent] = useState(false)
-
    useEffect(()=>{
         getQuickViewData()
-        getPendencyData()
    },[])
 
    const getQuickViewData=async()=>{
@@ -25,33 +21,6 @@ export default function DetailModal(props) {
         then(res => {
             console.log(res.data.data)
         }).catch(err=>console.log(err));
-   }
-
-   const getPendencyData=async()=>{
-        await axios.get(`${API_URL}/api/loan/pendencies/${props?.leadData?.leadId}/`,{
-            headers: {
-                token: `${props?.token}`,
-            },
-        }).
-        then(res => {
-            handlePendencyData(res.data.data)
-            console.log(res.data)
-            if(res.data.consent === 'Y'){
-                setUserConsent(true)
-            }
-            // setPendecyData(res.data.data)
-        }).catch(err=>console.log(err));
-   }
-   
-
-   const handlePendencyData=(item)=>{
-        let pendencyArr = Object.entries(item);
-        let pendencyOriginals = []
-        pendencyArr.map((item,index)=>{
-            if(item[1] === false)
-            pendencyOriginals.push(item[0])
-            setPendecyData(pendencyOriginals)
-        })
    }
 
    const goToDetailPage=()=>{
@@ -66,16 +35,16 @@ export default function DetailModal(props) {
                     <div className='modal-header-name row' >
                         <span className='modal-header-name'>{props?.leadData?.fullName}</span>
                         {
-                            consent && <img src={consentIcon} style={{marginLeft: 10,objectFit:'contain'}} />
+                            props?.consent && <img src={consentIcon} style={{marginLeft: 10,objectFit:'contain'}} />
                         }
                     </div>
                     <div className='modal-header-lead'>
                     {props?.leadData?.leadId}
                     </div>
                 </div>
-                <div className='upload-icon-content'>
+                {/* <div className='upload-icon-content'>
                     <img src={uploadIcon} />
-                </div>
+                </div> */}
             </div>
            
             <div className='modal-content'>
@@ -96,26 +65,16 @@ export default function DetailModal(props) {
                     </div>
                 </div>
                 <div className='modal-divider' style={{margin: '24px 0px'}}/>
-                <div className='column full-width'>
+                {
+                    props?.pendecyData.length > 0 && 
+                    <div className='column full-width'>
                     <div className='modal-header'>
                     Pendencies
                     </div>
                    
                         <div className='column full-width' style={{marginTop: 12}} >
-                            {
-                                !consent && 
-                                <div className='row full-width'>
-                                        <div className='row' style={{width: 'auto'}}>
-                                                            <div className='pending-icon-content'>
-                                                                <img src={pendingIcon} />
-                                                            </div>
-                                                            <div className='table-label'>Consent</div>
-                                        </div>
-                                        <div className='table-link' onClick={()=>props?.openUserConsentModal()}>Ask for Consent</div>
-                                </div>
-                            }
                                     {
-                                       pendecyData.length > 0 &&  pendecyData.map((item,index)=>{
+                                       props?.pendecyData.map((item,index)=>{
                                             return(
                                                 <div className='row full-width' key={index}>
                                                         <div className='row' style={{width: 'auto'}}>
@@ -124,7 +83,7 @@ export default function DetailModal(props) {
                                                             </div>
                                                             <div className='table-label'>{item}</div>
                                                         </div>
-                                                        <div className='table-link' onClick={()=>props?.openUploadModal()}>Upload Now</div>
+                                                        <div className='table-link' onClick={()=>props?.openUploadModal()}> { item === 'Consent' ? 'Ask For Consent' : 'Upload Now' } </div>
                                                 </div>
                                              )
                                         })
@@ -132,6 +91,8 @@ export default function DetailModal(props) {
                                     
                         </div>
                 </div>
+                }
+                
                 <div className='modal-divider' style={{margin: '24px 0px'}}/>
                 <div className='column full-width'>
                     <div className='modal-header'>

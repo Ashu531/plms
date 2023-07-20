@@ -15,6 +15,7 @@ import DraftPage from "../draft/draft.jsx";
 import UploadModal from "../../components/uploadModal/uploadModal.jsx";
 import DownloadPage from "../downloads/downloads.jsx";
 import { getProfileData } from "../../helpers/apis.js";
+import { Bars, TailSpin } from "react-loader-spinner";
 
 const statuses = [
   {
@@ -103,7 +104,9 @@ export default function Home({token}) {
   const [formData, setFormData] = useState({...initialFormState});
   const [temporaryFormData, setTemporaryFormData] = useState();
   const [profile, setProfile] = useState({});
-
+  const [pendecyData,setPendecyData] = useState([])
+  const [consent,setUserConsent] = useState(false)
+  const [loader,setLoader] = useState(false)
 
   const getProfileInfo = async () => {
     const data = await getProfileData(token);
@@ -150,7 +153,10 @@ export default function Home({token}) {
   // Search Start
 
   const onSearch = async (query) => {
+    setLoader(true)
     setQuery(query);
+    setSearchCount(0)
+    setSearchData([])
   };
 
   const handleSearch = async(query) => {
@@ -163,10 +169,12 @@ export default function Home({token}) {
     then(res => {
         if(res?.data?.data?.leads?.length > 0){
             let detail = res?.data?.data?.leads;
+            setLoader(false)
             setSearchData(detail)
             setSearchCount(res?.data?.data?.count)
             setNoResult(false)
         }else{
+            setLoader(false)
             setNoResult(true)
             setSearchCount(0)
             setSearchData([])
@@ -232,7 +240,7 @@ export default function Home({token}) {
   }
 
   const getTableData = async (index) => {
-
+    setLoader(true)
     let endpoint;
 
     switch(index){
@@ -260,6 +268,7 @@ export default function Home({token}) {
             if(endpoint === statusEndpoints.ALL){
                 setStatusCount(res?.data?.data?.count)
             }
+            setLoader(false)
             return res.data.data;
         }else{
             setNoResult(true)
@@ -285,7 +294,7 @@ export default function Home({token}) {
   }
 
   const navigatePage = (i) => {
-
+    setLoader(false)
 
     if(i == 0){
       resetDetailsPage();
@@ -310,6 +319,7 @@ export default function Home({token}) {
   }
 
   const updateScreen = async () => {
+    setLoader(false)
     let allData = getTableData(statusIndices.ALL);
     let incompleteData = getTableData(statusIndices.INCOMPLETE);
     let inProcessData = getTableData(statusIndices.IN_PROCESS);
@@ -432,11 +442,13 @@ export default function Home({token}) {
 }
 
 const goToDraftPage=()=>{
+    setLoader(false)
     let i = 2
     setScreen(i)
 }
 
 const goToDownloads=()=>{
+    setLoader(false)
     let i = 3
     setScreen(i)
 }
@@ -444,6 +456,39 @@ const goToDownloads=()=>{
 const handleTableIconClick= async (item,index)=>{
     await getQuickViewData(item)
     navigatePage(1)
+}
+
+const handleTableRowClick=(item,index)=>{
+  getPendencyData(item)
+}
+
+const getPendencyData=async(item)=>{
+  await axios.get(`${API_URL}/api/loan/pendencies/${item?.leadId}/`,{
+      headers: {
+          token: `${token}`,
+      },
+  }).
+  then(res => {
+      handlePendencyData(res.data.data)
+      if(res.data.consent === 'Y'){
+          setUserConsent(true)
+      }
+      // setPendecyData(res.data.data)
+  }).catch(err=>console.log(err));
+}
+
+const handlePendencyData=(item)=>{
+  let pendencyArr = Object.entries(item);
+  let pendencyOriginals = []
+  if(!consent){
+    pendencyOriginals.push('Consent')
+  }
+  pendencyArr.map((item,index)=>{
+      if(item[1] === false)
+      pendencyOriginals.push(item[0])
+      setPendecyData(pendencyOriginals)
+  })
+  openSlidingPanel()
 }
 
 const closeUploadModal=()=>{
@@ -529,7 +574,7 @@ useEffect(() => {
                             }}
                         onRowClick={(item, index) => {
                             setLeadInfo(item)
-                            openSlidingPanel()
+                            handleTableRowClick(item,index)
                         }}
                   /> 
               }
@@ -604,6 +649,8 @@ useEffect(() => {
           openUserConsentModal={()=>openUserConsentModal()}
           openUploadModal={()=>openUploadModal()}
           token={token}
+          pendecyData={pendecyData}
+          consent={consent}
         />
       )}
       {openLeadForm && 
@@ -631,6 +678,14 @@ useEffect(() => {
             token={token}
           />
       }
+
+      {
+        loader && 
+          <div className="credenc-loader-white fullscreen-loader">
+            <TailSpin color="#00BFFF" height={100} width={100}/>
+          </div>
+      }
+        
     </div>
   );
 }

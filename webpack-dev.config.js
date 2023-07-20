@@ -46,7 +46,7 @@ const configs = addBaseConfig({
     }),
     new ModuleFederationPlugin({
       name: "PLMS",
-      filename: "index.js",
+      filename: "remoteEntry.js",
       exposes: {
         "./app": "./src/App",
       },

@@ -34,7 +34,7 @@ export default function DownloadTable({
                     <div key={`${item}-${index}`} className='draft-table-row'>
                         <div className='row-text'>{ item.report_name }</div>
                         <div className='row-text'>{ moment(item.created_at).format('MMMM Do YYYY, h:mm:ss a') }</div>
-                        <div className='row-text'>{ '' }</div>
+                        <div className='row-text'>{ item.credenc_username }</div>
                         <div className='row-text' style={{flex: '1 1 0px'}}>
                         <Button
                             leadingIcon={downloadIcon}
