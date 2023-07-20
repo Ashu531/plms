@@ -18,7 +18,7 @@
     height: 44px;
 }
 
-.header-text{
+.draft-header-text{
     flex: 3 1 0px;
     color: #0B090D;
     font-size: 16px;
@@ -43,7 +43,7 @@
     cursor: pointer;
 }
 
-.row-text{
+.draft-row-text{
     flex: 2 1 0px;
     color: #0B090D;
     font-size: 12px;

@@ -38,7 +38,7 @@ export default function DetailPage({
  const [activities,setActivities] = useState([])
  const [comments,setComments] = useState([])
  const [leadData,setLeadData] = useState({})
- const [documentValue,setDocumentValue] = useState(1)
+ const [documentValue,setDocumentValue] = useState('PAN Card')
 
  const [selectedDocTypes, setSelectedDocTypes] = useState(new Set([]));
  const [currentUploadState, setCurrentUploadState] = useState(uploadtStates.drop);
@@ -76,9 +76,16 @@ const removeFile = (i) => {
 
 const getDocumentType = () => {
     switch(documentValue){
-        case 1: return 'PAN_CARD'
-        case 2: return 'AADHAR_CARD'
-        case 3: return 'BANK_STATEMENT'
+        case 'PAN Card': return 'PAN_CARD'
+        case 'Aadhaar Card': return 'AADHAR_CARD'
+        case 'Bank Statement': return 'BANK_STATEMENT'
+        case 'Passport': return 'PHOTO' 
+        case 'Driving License': return 'PHOTO' 
+        case 'Voter ID': return 'PHOTO' 
+        case 'Landline Bill': return 'PHOTO' 
+        case 'Electricity Bill': return 'PHOTO' 
+        case 'Gas Bill': return 'PHOTO' 
+        case 'Water Bill': return 'PHOTO'
     }
 }
 
@@ -146,12 +153,12 @@ const getDocumentType = () => {
     setTab(i);
  }
 
- const handleDocumentsCard=(data)=>{
-    setDocumentValue(data)
-     if(documentValue != data){
-         removeFile(0)
-     }
-        
+const handleDocumentsCard=(data)=>{
+setDocumentValue(data)
+    if(documentValue != data){
+        removeFile(0)
+    }
+    
 }
 
 const handleDocTypeSelection = (docType) => {
@@ -218,22 +225,25 @@ const handleDocTypeSelection = (docType) => {
                 tab === 2 && 
                 <div className='document-container row full-width'>
                     <div className='column' style={{gap:20}}>
-                        <div style={{...(documentValue === 1 ? {background: '#F7F0FF',borderRadius: 8} : null), width: '100%'}} onClick={()=>handleDocumentsCard(1)}>
+                        <div style={{...(documentValue === 'PAN Card' ? {background: '#F7F0FF',borderRadius: 8} : null), width: '100%'}}>
                             <DocumentCard
+                                onClick={()=>handleDocumentsCard('PAN Card')}
                                 title={'PAN Card'}
                                 desc={'Upload a clear image of your PAN Card clearly stating your name and date of birth.'}
                                 instruction={'Format: PDF, PNG, JPEG, JPG.'}
                             />
                         </div>
-                        <div onClick={()=>handleDocumentsCard(2)} style={{...(documentValue === 2 ? {background: '#F7F0FF',borderRadius: 8} : null), width: '100%'}}>
+                        <div style={{...(documentValue === 'Aadhaar Card' ? {background: '#F7F0FF',borderRadius: 8} : null), width: '100%'}}>
                             <DocumentCard
-                                title={'Address Proof'}
+                                onClick={()=>handleDocumentsCard('Aadhaar Card')}
+                                title={'Aadhaar Card'}
                                 desc={'Upload a clear image of your PAN Card clearly stating your name and date of birth.'}
                                 instruction={'Format: PDF, PNG, JPEG, JPG.'}
                             />
                         </div>
-                        <div onClick={()=>handleDocumentsCard(3)} style={{...(documentValue === 3 ? {background: '#F7F0FF',borderRadius: 8} : null), width: '100%'}}>
+                        <div style={{...(documentValue === 'Bank Statement' ? {background: '#F7F0FF',borderRadius: 8} : null), width: '100%'}}>
                             <DocumentCard
+                                onClick={()=>handleDocumentsCard('Bank Statement')}
                                 title={'Bank Statement'}
                                 desc={'Upload a clear image of your PAN Card clearly stating your name and date of birth.'}
                                 instruction={'Format: PDF, PNG, JPEG, JPG.'}
@@ -256,16 +266,19 @@ const handleDocTypeSelection = (docType) => {
                         </div>
 
                         {Array.from(selectedDocTypes).map((docType, index) => (
-                            <DocumentCard
-                                id={`${docType}-${index}`}
-                                title={docType}
-                                desc={'Upload a clear image of your PAN Card clearly stating your name and date of birth.'}
-                                instruction={'Format: PDF, PNG, JPEG, JPG.'}
-                                isMandatory={false}
-                                onRemove={() => {
-                                    handleDocTypeSelection(docType)
-                                }}
-                            />
+                            <div style={{...(documentValue === docType ? {background: '#F7F0FF',borderRadius: 8} : null), width: '100%'}}>
+                                <DocumentCard
+                                    onClick={()=>handleDocumentsCard(docType)}
+                                    id={`${docType}-${index}`}
+                                    title={docType}
+                                    desc={'Upload a clear image of your PAN Card clearly stating your name and date of birth.'}
+                                    instruction={'Format: PDF, PNG, JPEG, JPG.'}
+                                    isMandatory={false}
+                                    onRemove={() => {
+                                        handleDocTypeSelection(docType)
+                                    }}
+                                />
+                            </div>
                         ))}
                     </div>
                     <div className='row' style={{border: '1px solid #8F14CC', borderRadius: '8px', height: '560px', justifyContent: 'center'}}>

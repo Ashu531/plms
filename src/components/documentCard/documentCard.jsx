@@ -7,11 +7,12 @@ export default function DocumentCard({
     desc,
     instruction,
     isMandatory=true,
-    onRemove
+    onRemove,
+    onClick
 }) {
 
   return (
-    <div className='document-card-container'> 
+    <div className='document-card-container' onClick={onClick}> 
         {!isMandatory && <div className='close-button' onClick={onRemove}>X</div>}
         <div className='row'>
             <div className='document-card-header'>
