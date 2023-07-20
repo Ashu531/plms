@@ -95,16 +95,19 @@ export default function Upload({
         }
       }).then(res => {
           setVerifiedFiles([...verifiedFiles, res.data.id]);
+          onUpload()
         })
-      .catch(err => {});
+      .catch(err => {
+        setError({
+          status: true,
+          message: err.response.data.error
+        })
+        let prog = [...progress];
+        prog[index] = 0;
+        setProgress([...prog]);
+      });
     })
   }
-
-  useEffect(() => {
-    if(progress.length == 1 && progress[0] == 100){
-      onUpload()
-    }
-  }, [progress])
 
   useEffect(() => {
     if(selectedFiles.length > 0){
@@ -125,6 +128,12 @@ export default function Upload({
   useEffect(() => {
     pdfjs.GlobalWorkerOptions.workerSrc = new URL('pdfjs-dist/build/pdf.worker.min.js', import.meta.url).toString();
   }, [])
+
+  useEffect(() => {
+    if(currentUploadState == uploadtStates.drop){
+      setSelectedFiles([]);
+    }
+  }, [currentUploadState])
 
   return (
       <div
@@ -152,7 +161,7 @@ export default function Upload({
                           <div className={`plms-status-text`}>{`${progress[i]}%`}</div>
                         </div>}
                         <div className="plms-error-text">{error.message}</div>
-                        {currentUploadState == uploadtStates.preview && <div className="row" style={{justifyContent: 'center', margin: '25px 0 0 0', gap: '10px'}}>
+                        {(currentUploadState == uploadtStates.preview || error.status) && <div className="row" style={{justifyContent: 'center', margin: '25px 0 0 0', gap: '10px'}}>
                             <Button
                                 text='Cancel'
                                 classes={{

@@ -141,7 +141,7 @@ export function EditableLeadForm ({
         error: null
     }
 
-    const [leadIdState, setLeadIdState] = useState({...defaultState});
+    const [leadIdState, setLeadIdState] = useState({...defaultState, disabled: viewType != formViewTypes.CREATE});
     const [nameState, setNameState] = useState({...defaultState});
     const [instituteState, setInstituteState] = useState({...defaultState, value: instituteName, disabled: true});
     const [mobileState, setMobileState] = useState({...defaultState});

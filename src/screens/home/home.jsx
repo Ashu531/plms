@@ -676,6 +676,9 @@ useEffect(() => {
           <UploadModal 
             closeUploadModal={()=>closeUploadModal()}
             token={token}
+            docType={''}
+            borrowerUuid={leadInfo.borrowerUuid}
+            leadId={leadInfo.leadId}
           />
       }
 

@@ -7,7 +7,9 @@
     font-size: 1.4rem;
     line-height: 2.1rem;
     padding: 8px 15px;
+    cursor: pointer;
 }
+
 .plms-img{
     width: 2rem;
     height: 2rem;
@@ -17,7 +19,6 @@
 .plms-text{
     text-align: center;
     color: #ffffff;
-    cursor: pointer;
 }
 
 .plms-hideText{
