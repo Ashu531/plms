@@ -153,7 +153,12 @@ export default function Home({token}) {
   // Search Start
 
   const onSearch = async (query) => {
-    setLoader(true)
+    if(query.length > 0){
+      setLoader(true)
+    }else{
+      setLoader(false)
+    }
+    
     setQuery(query);
     setSearchCount(0)
     setSearchData([])
