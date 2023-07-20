@@ -25,7 +25,7 @@ export default function DetailModal(props) {
 
    const goToDetailPage=()=>{
         let i = 1;
-        props?.openDetailPage(i);
+        props?.openDetailPage(props?.leadData,i);
    }
 
     return (
@@ -64,7 +64,7 @@ export default function DetailModal(props) {
                         </div>
                     </div>
                 </div>
-                <div className='modal-divider' style={{margin: '24px 0px'}}/>
+                <div className='modal-divider' style={{margin: '8px 0px'}}/>
                 {
                     props?.pendecyData.length > 0 && 
                     <div className='column full-width'>
@@ -83,7 +83,7 @@ export default function DetailModal(props) {
                                                             </div>
                                                             <div className='table-label'>{item}</div>
                                                         </div>
-                                                        <div className='table-link' onClick={()=>props?.openUploadModal()}> { item === 'Consent' ? 'Ask For Consent' : 'Upload Now' } </div>
+                                                        <div className='table-link' onClick={()=> item === 'Consent' ? props?.openUserConsentModal() : props?.openUploadModal()}> { item === 'Consent' ? 'Ask For Consent' : 'Upload Now' } </div>
                                                 </div>
                                              )
                                         })
@@ -93,7 +93,7 @@ export default function DetailModal(props) {
                 </div>
                 }
                 
-                <div className='modal-divider' style={{margin: '24px 0px'}}/>
+                <div className='modal-divider' style={{margin: '8px 0px'}}/>
                 <div className='column full-width'>
                     <div className='modal-header'>
                     Last Update

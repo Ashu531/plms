@@ -71,7 +71,7 @@ const removeFile = (i) => {
                             }}
                         />
                     </div>
-                    <div className='closeIcon' onClick={()=>closeUploadModal()}>
+                    <div className='upploadModalCloseIcon' onClick={()=>closeUploadModal()}>
                         <img src={closeIcon} height={24} width={24} style={{objectFit:'contain'}} />
                     </div>
        </div>

@@ -15,7 +15,7 @@ export default function SlidingPanel(props)
                 <DetailModal 
                   token={props.token}
                   leadData={props?.leadData} 
-                  openDetailPage={(i)=>props?.openDetailPage(i)} 
+                  openDetailPage={(item,i)=>props?.openDetailPage(item,i)} 
                   openUserConsentModal={()=>props?.openUserConsentModal()}
                   openUploadModal={()=>props?.openUploadModal()}
                   pendecyData={props?.pendecyData}

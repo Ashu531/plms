@@ -103,8 +103,6 @@ export default function FinancialForm({
 
     }
 
-    console.log(monthySalary.value,"data++++++")
-
     const employmentStatusLabel = () => 'Employment Status ';
     const monthySalaryLabel = () => 'Current Monthly Salary';
     const companyNameLabel = () => 'Company Name';
@@ -238,6 +236,7 @@ export default function FinancialForm({
             },
         }).
         then(res => {
+            location.reload()
             console.log(res)
         }).catch(err=>console.log(err));
     }

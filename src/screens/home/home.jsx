@@ -157,6 +157,7 @@ export default function Home({token}) {
       setLoader(true)
     }else{
       setLoader(false)
+      setNoResult(false)
     }
     
     setQuery(query);
@@ -224,7 +225,7 @@ export default function Home({token}) {
         newStatusList[i]["selected"] = false;
       }
     });
-    console.log([...newStatusList],'list')
+
     setStatusList([...newStatusList]);
     setStatusCount(status?.count)
   };
@@ -400,6 +401,7 @@ export default function Home({token}) {
   };
 
   const getQuickViewData=async(leadData)=>{
+    console.log(leadData,"leadData+++++")
     await axios.get(`${API_URL}/api/loan/overview/${leadData?.leadId}/`,{
         headers: {
             token: `${token}`,
@@ -491,8 +493,8 @@ const handlePendencyData=(item)=>{
   pendencyArr.map((item,index)=>{
       if(item[1] === false)
       pendencyOriginals.push(item[0])
-      setPendecyData(pendencyOriginals)
   })
+  setPendecyData(pendencyOriginals)
   openSlidingPanel()
 }
 
@@ -648,8 +650,8 @@ useEffect(() => {
         <SlidingPanel 
           closeSlidingPanel={() => closeSlidingPanel()} 
           leadData={leadInfo}
-          openDetailPage={(i) => {
-            handleTableIconClick(tableData[getSelectedStatusIndex()][i])
+          openDetailPage={(item,index) => {
+            handleTableIconClick(item,index)
           }}
           openUserConsentModal={()=>openUserConsentModal()}
           openUploadModal={()=>openUploadModal()}
