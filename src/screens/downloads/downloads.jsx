@@ -4,14 +4,28 @@ import axios from 'axios';
 import downloadIcon from '../../assets/Icons/downloadIcon.svg'
 import disabledDownload from '../../assets/Icons/disabledDownload.svg'
 import DraftTable from '../../components/draftTable/draftTable.jsx';
-import 'react-date-picker/dist/DatePicker.css';
 import DatePicker from 'react-date-picker';
-import 'react-calendar/dist/Calendar.css';
 import Button from '../../components/button/button.jsx';
 import moment from 'moment'
 import DownloadTable from '../../components/downloadsTable/downloadsTable.jsx';
 import { Bars, TailSpin } from "react-loader-spinner";
 // import { downloadCSV } from '../../helpers/downloadCSV.js';
+
+const filter = [
+  {
+    id: 1,
+    value: 'Today'
+  },
+  {
+    id: 2,
+    value: 'This Week'
+  },
+  {
+    id: 3,
+    value: 'This Month'
+  }
+
+]
 
 export default function DownloadPage(props) {
 
@@ -22,6 +36,7 @@ export default function DownloadPage(props) {
   const [csvData,setCsvData] = useState('')
   const [loader,setLoader] = useState(false)
   const [noResult,setNoResult] = useState(false)
+  const [filterType,setFilterType] = useState(0)
 
   useEffect(()=>{
     getDownloads()
@@ -39,6 +54,7 @@ export default function DownloadPage(props) {
         if(res?.data?.data?.length > 0){
           setTableData(res.data.data)
         }else{
+          setTableData([])
           setNoResult(true)
         }
     }).catch(err=>{
@@ -71,6 +87,8 @@ export default function DownloadPage(props) {
     then(res => {
       getDownloads()
       downloadCSV(res.data)
+      setStartDate('')
+      setEndDate('')
       return res.data
     }).catch(err=>console.log(err));
   }
@@ -99,13 +117,59 @@ export default function DownloadPage(props) {
     }).catch(err=>console.log(err));
   } 
 
+  const getFilteredDownload=async(id)=>{
+    if(filterType === id ){
+      setFilterType(0)
+      getDownloads()
+    }else{
+      setFilterType(id)
+      setLoader(true)
+      await axios.get(`${API_URL}/api/loan/download/logs/?date_type=${id}`,{
+          headers: {
+              token: `${props?.token}`,
+          },
+      }).
+      then(res => {
+          setLoader(false)
+          console.log(res.data)
+          if(res?.data?.data?.length > 0){
+            setTableData(res.data.data)
+          }else{
+            setTableData([])
+            setNoResult(true)
+          }
+      }).catch(err=>{
+        setLoader(false)
+      });
+    }
+
+    
+  }
+
   return (
     <>
     <div className='download-page'>
+         <div className='row' style={{gap: '12px'}}>
+               
+               {
+                 filter.map((item,index)=>{
+                   return(
+                     <div className='date-filter-container' style={filterType === item.id ? {background: '#F5EBFF',cursor: 'pointer'} : {background: '#FFFFFF',cursor: 'pointer'}}>
+                       <div className='date-filter-text' onClick={()=>getFilteredDownload(item.id)}>
+                         {item.value}
+                       </div>
+                   </div>
+                   )
+                 })
+               }
+                 
+             
+         </div>
           <div
             className="row"
             style={{ margin: "24px 0 0 0" }}
           >
+           
             <div>
               <DatePicker onChange={handleStartDate} value={startDate} />
             </div>

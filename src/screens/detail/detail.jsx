@@ -342,7 +342,7 @@ const handleDocTypeSelection = (docType) => {
                                          <ActivityCard 
                                                 title={item.log}
                                                 name={item.category}
-                                                time={'2022-04-12 18:34:49'}
+                                                time={item.created.date}
                                         />
                                     )
                                 })
@@ -369,7 +369,7 @@ const handleDocTypeSelection = (docType) => {
                                          <ActivityCard 
                                                 title={item.template}
                                                 name={item.category}
-                                                time={'2022-04-12 18:34:49'}
+                                                time={item.created.date}
                                         />
                                     )
                                 }) 

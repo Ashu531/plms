@@ -69,3 +69,22 @@
     text-align: start;
     margin-top: 24px;
 }
+
+.date-filter-container{
+    display: flex;
+    padding: 8px 12px;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    border-radius: 8px;
+    border: 1px solid #F5EBFF;
+}
+
+.date-filter-text{
+    color: #000;
+    font-family: 'Montserrat';
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+}

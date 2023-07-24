@@ -27,7 +27,7 @@
 
   .plms-active-tab{
     color: #ffffff;
-    border-bottom: solid var(--primary-base);
+    /* border-bottom: solid var(--primary-base);.label */
     font-weight: 500;
     border-radius: 8px;
     background: #8F14CC;

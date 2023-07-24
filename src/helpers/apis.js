@@ -8,8 +8,13 @@ export const saveForm = async (payload, token) => {
             token: `${token}`,
         },
     }).then(res => res.data.data)
-    .catch(err => console.log(error))
-
+    .catch(err => {
+        if(err.response.data.error.length > 0){
+            alert(err.response.data.error)
+        }
+       return err.response.data
+    })
+    
     return response;
 
 }
@@ -21,7 +26,7 @@ export const saveEditedForm = async (payload, token) => {
             token: `${token}`,
         },
     }).then(res => res.data.data)
-    .catch(err => console.log(err))
+    .catch(err => console.log(err.response))
 
     return response;
 

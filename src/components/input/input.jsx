@@ -104,7 +104,7 @@ export function Label({
 }) {
   return (
     <div className="row" style={{justifyContent: 'space-between'}}>
-      <div className="row label text-montserrat text-12 text-weight-5" style={{gap: '5px'}}>
+      <div className="row label text-montserrat text-12 text-weight-5" style={{gap: '5px',flex: 'auto'}}>
           <div className={required ? 'required' : ''}>{label}</div>
 
           {(error || showCheck) && <img 

@@ -47,17 +47,16 @@ export default function DraftTable({
                 { list.map((item, index) => (
                     <div key={`${item}-${index}`} className='draft-table-row' >
                         <div className='draft-row-text'>{ item.id.substring(0,10)+'...' }</div>
-                        <div className='draft-row-text'>{ item.student_name }</div>
-                        <div className='draft-row-text'>{ item.applicant_phone }</div>
-                        <div className='draft-row-text'>{ item.loan_amount }</div>
-                        <div className='draft-row-text'>{ item.course }</div>
+                        <div className='draft-row-text'>{ item.student_name ? item.student_name : '-' }</div>
+                        <div className='draft-row-text'>{ item.applicant_phone ? item.applicant_phone : '-'}</div>
+                        <div className='draft-row-text'>{ item.loan_amount > 0 ? item.loan_amount : '-' }</div>
+                        <div className='draft-row-text'>{ item.course ? item.course : '-' }</div>
                         <div className='draft-row-text' style={{flex: '1 1 0px'}}>
                             <div className='column'>
                                 <span>{item.access_username}</span>
                                 <span>{moment(item.updated_at).format('MMMM Do YYYY, h:mm:ss a')}</span>
                             </div>
-                            
-                            </div>
+                        </div>
                         <div className='draft-row-text draft-icon-container' style={{flex: '1 1 0px'}}>
                             <img src={editIcon} height={24} width={24} style={{ objectFit: 'contain',cursor: 'pointer'}} onClick={() => onRowClick(item, index)}/>
                             <img src={trashIcon} height={24} width={24} style={{ objectFit: 'contain',marginLeft: 8,cursor: 'pointer'}} onClick={()=> onDeleteDraft(item,index)} />

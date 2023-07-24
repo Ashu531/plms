@@ -17,14 +17,17 @@ export default function LeadForm({
     setFormData
 }) {
 
+    const [draftActive,setDraftActive] = useState(false)
+
     const handleSave = async (addAnother) => {
         let res = await saveForm(requestData(formData), token);
-
-        if(addAnother){
-            setFormData({...leadState});
-        } else {
-            onBackPress();
-        }
+        // if(res.error.length > 0){
+            if(addAnother){
+                setFormData({...leadState});
+            } else {
+                onBackPress();
+            }
+        
     }
 
     const handleSaveDraft = async () => {
@@ -50,16 +53,27 @@ export default function LeadForm({
                     viewType={formViewTypes.CREATE}
                     previousFormData={formData}
                     formData={formData}
-                    setFormData={(data) => setFormData(data)}
+                    setFormData={(data) => {
+                        console.log(data,"data")
+                        if(data.leadId.length > 0 && data.studentName.length > 0){
+                            setDraftActive(true)
+                        }
+                        setFormData(data)
+                    }}
                 />
 
                 <div className='row' style={{gap: '1rem'}}>
                     <Button
                         text='Save Draft'
-                        classes={{
+                        classes={draftActive ?{
                             borderRadius: 8,
                             border: '1px solid #8F14CC',
                             height: '44px'
+                        } : {
+                            borderRadius: 8,
+                            border: '1px solid #8F14CC',
+                            height: '44px',
+                            opacity: 0.5
                         }}
                         textClass={{
                             color: '#8F14CC',
@@ -67,22 +81,27 @@ export default function LeadForm({
                             fontFamily: 'Montserrat',
                             fontWeight: 600
                         }}
-                        onClick={handleSaveDraft}
+                        onClick={draftActive && handleSaveDraft}
                     />
                     <Button 
                         text='Save & Add Another Lead'
-                        classes={{
-                            background: '#8F14CC',
-                            borderRadius: '8px',
+                        classes={draftActive ?{
+                            borderRadius: 8,
+                            border: '1px solid #8F14CC',
                             height: '44px'
+                        } : {
+                            borderRadius: 8,
+                            border: '1px solid #8F14CC',
+                            height: '44px',
+                            opacity: 0.5
                         }}
                         textClass={{
-                            color: '#FFF',
+                            color: '#8F14CC',
                             fontSize: '14px',
                             fontFamily: 'Montserrat',
                             fontWeight: 600
                         }}
-                        onClick={()=>{handleSave(true)}}
+                        onClick={()=>{draftActive && handleSave(true)}}
                     />
                     <Button 
                         text='Save Lead'

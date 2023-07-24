@@ -32,7 +32,8 @@ export function Dropdown({
                 value={value ? value : dropdownValue}
                 style={{
                     color: (value && value == -1) || (value == null && dropdownValue == placeholder) ? '#8C8C8C' : '#0B090D',
-                    outline: error ? '1px solid #DE3B4F' : '1px solid #EAEAEA'
+                    outline: error ? '1px solid #DE3B4F' : '1px solid #EAEAEA',
+                    background: '#ffffff'
                 }}
             >
                 {placeholder && <option>{placeholder}</option>}
