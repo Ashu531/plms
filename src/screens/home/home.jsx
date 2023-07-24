@@ -278,13 +278,13 @@ export default function Home({token}) {
             return res.data.data;
         }else{
             setNoResult(true)
+
         }
         
     }).catch(err=>{
-
-        console.log(err.response)
         if(err.response.status !== 200){
             setNoResult(true)
+            setLoader(false)
         }
     });
   }
@@ -343,6 +343,7 @@ export default function Home({token}) {
         newStatusList[statusIndices.ALL] = {...newStatusList[statusIndices.ALL], count: allData?.count}
     }else{
         setNoResult(true)
+        setLoader(false)
     }
 
     incompleteData = await incompleteData;
@@ -351,6 +352,7 @@ export default function Home({token}) {
     newStatusList[statusIndices.INCOMPLETE] = {...newStatusList[statusIndices.INCOMPLETE], count: incompleteData?.count}
     }else{
         setNoResult(true)
+        setLoader(false)
     }
 
     inProcessData = await inProcessData;
@@ -359,6 +361,7 @@ export default function Home({token}) {
         newStatusList[statusIndices.IN_PROCESS] = {...newStatusList[statusIndices.IN_PROCESS], count: inProcessData?.count}
     }else{
         setNoResult(true)
+        setLoader(false)
     }
 
     closedData = await closedData;
@@ -367,6 +370,7 @@ export default function Home({token}) {
     newStatusList[statusIndices.CLOSED] = {...newStatusList[statusIndices.CLOSED], count: closedData?.count}
      }else{
         setNoResult(true)
+        setLoader(false)
     }
 
     approvedData = await approvedData;
@@ -375,6 +379,7 @@ export default function Home({token}) {
     newStatusList[statusIndices.APPROVED] = {...newStatusList[statusIndices.APPROVED], count: approvedData?.count}
     }else{
         setNoResult(true)
+        setLoader(false)
     }
 
     disbursedData = await disbursedData;
@@ -383,6 +388,7 @@ export default function Home({token}) {
     newStatusList[statusIndices.DISBURSED] = {...newStatusList[statusIndices.DISBURSED], count: disbursedData?.count}
     }else{
         setNoResult(true)
+        setLoader(false)
     }
 
     setTableData(newTableData);
@@ -401,7 +407,6 @@ export default function Home({token}) {
   };
 
   const getQuickViewData=async(leadData)=>{
-    console.log(leadData,"leadData+++++")
     await axios.get(`${API_URL}/api/loan/overview/${leadData?.leadId}/`,{
         headers: {
             token: `${token}`,
