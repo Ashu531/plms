@@ -85,11 +85,7 @@ export default function LeadForm({
                     />
                     <Button 
                         text='Save & Add Another Lead'
-                        classes={draftActive ?{
-                            borderRadius: 8,
-                            border: '1px solid #8F14CC',
-                            height: '44px'
-                        } : {
+                        classes={{
                             borderRadius: 8,
                             border: '1px solid #8F14CC',
                             height: '44px',
@@ -101,7 +97,7 @@ export default function LeadForm({
                             fontFamily: 'Montserrat',
                             fontWeight: 600
                         }}
-                        onClick={()=>{draftActive && handleSave(true)}}
+                        onClick={()=>{handleSave(true)}}
                     />
                     <Button 
                         text='Save Lead'
