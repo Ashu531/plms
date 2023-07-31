@@ -208,13 +208,19 @@ const handleDocTypeSelection = (docType) => {
                     </div>
                 </div>
                 <div className='column' style={{alignItems:'flex-end'}}>
-                    <div className='row' style={{justifyContent:'flex-end'}}>
-                        <span className='lead-page-intruction-label'>Lead Consent: </span>
-                        <img src={consentIcon} />
-                    </div>
-                    <span className='consent-link' onClick={()=>props?.openUserConsentModal()}>
-                        Ask for Consent
-                    </span>
+                    {
+                        props?.consent ? 
+                        <div className='row' style={{justifyContent:'flex-end'}}>
+                            <span className='lead-page-intruction-label'>Lead Consent: </span>
+                            <img src={consentIcon} />
+                        </div>
+                        :
+                         <span className='consent-link' onClick={()=>props?.openUserConsentModal()}>
+                            Ask for Consent
+                         </span>
+                    }
+                    
+                   
                 </div>
             </div>
         </div>

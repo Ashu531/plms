@@ -54,7 +54,6 @@ export default function LeadForm({
                     previousFormData={formData}
                     formData={formData}
                     setFormData={(data) => {
-                        console.log(data,"data")
                         if(data.leadId.length > 0 && data.studentName.length > 0){
                             setDraftActive(true)
                         }
@@ -89,7 +88,6 @@ export default function LeadForm({
                             borderRadius: 8,
                             border: '1px solid #8F14CC',
                             height: '44px',
-                            opacity: 0.5
                         }}
                         textClass={{
                             color: '#8F14CC',

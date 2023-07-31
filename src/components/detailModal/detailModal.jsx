@@ -5,6 +5,7 @@ import pendingIcon from '../../assets/Icons/pendingIcon.svg'
 import Button from '../button/button.jsx';
 import consentIcon from '../../assets/Icons/consentIcon.svg'
 import axios from 'axios';
+import { Bars, TailSpin } from "react-loader-spinner";
 
 export default function DetailModal(props) {
 
@@ -64,7 +65,8 @@ export default function DetailModal(props) {
                         </div>
                     </div>
                 </div>
-                <div className='modal-divider' style={{margin: '8px 0px'}}/>
+                {props?.pendecyData.length > 0 && <div className='modal-divider' style={{margin: '8px 0px'}}/>}
+                
                 {
                     props?.pendecyData.length > 0 && 
                     <div className='column full-width'>
@@ -92,8 +94,24 @@ export default function DetailModal(props) {
                         </div>
                 </div>
                 }
+
+                {
+                    props?.pendencyResponse &&
+                    <div style={{width: '100%'}}>
+                        <div className='modal-divider'/>
+                        <div className='column full-width' style={{margin: '40px 0px'}}>
+                            <div className='modal-header'>
+                            Pendencies
+                            </div>
+                            <div className='column full-width' style={{marginTop: 12}}>
+                                <TailSpin color="#0DB78F" height={30} width={30}/>
+                            </div>
+                        </div>
+                        <div className='modal-divider'/>
+                    </div>
+                }
                 
-                <div className='modal-divider' style={{margin: '8px 0px'}}/>
+                {props?.pendecyData.length > 0 && <div className='modal-divider' style={{margin: '8px 0px'}}/>}
                 <div className='column full-width'>
                     <div className='modal-header'>
                     Last Update

@@ -53,6 +53,7 @@ export default function DownloadPage(props) {
         setLoader(false)
         if(res?.data?.data?.length > 0){
           setTableData(res.data.data)
+          setNoResult(false)
         }else{
           setTableData([])
           setNoResult(true)

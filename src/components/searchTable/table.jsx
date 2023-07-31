@@ -1,17 +1,29 @@
 import React,{useEffect, useState} from 'react'
 import sortIcon from '../../assets/Icons/sortIcon.svg'
 import './table.css'
+import { Bars, TailSpin } from "react-loader-spinner";
 
 export default function SearchTable({
     list,
     onRowClick,
-    onIconClick
+    onIconClick,
+    turnOnButtonLoader
 }){
-console.log(list,"list+++")
+
+    const [buttonLoader,setButtonLoader] = useState(false)
+
     const handleIconClick = (event, item, index) => {
         event.stopPropagation();
         onIconClick(item, index);
     }
+
+    useEffect(()=>{
+        if(turnOnButtonLoader.status === true){
+            setButtonLoader(true)
+        }else{
+            setButtonLoader(false)
+        }
+    },[turnOnButtonLoader])
 
     return (
         <div className='table'>
@@ -50,7 +62,14 @@ console.log(list,"list+++")
                         <div className='row-text'>{ item.utr }</div>
                         {/* <div className='row-text' style={{flex: '3 1 0px'}}>{ item.updateTime }</div> */}
                         <div className='row-text icon-container' style={{flex: '1 1 0px'}} onClick={(e) => handleIconClick(e, item, index)}>
-                            <div className='caret-icon'></div>
+                             {
+                              turnOnButtonLoader?.data?.leadId === item?.leadId && buttonLoader ? 
+                                <div>
+                                    <TailSpin color="#0DB78F" height={12} width={12}/>
+                                </div>
+                                :
+                                <div className='caret-icon'></div>
+                            }
                         </div>
                     </div>
                 ))

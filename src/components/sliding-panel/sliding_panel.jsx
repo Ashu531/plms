@@ -20,6 +20,7 @@ export default function SlidingPanel(props)
                   openUploadModal={()=>props?.openUploadModal()}
                   pendecyData={props?.pendecyData}
                   consent={props?.consent}
+                  pendencyResponse={props?.pendencyResponse}
                 />
             </div>
         </div>

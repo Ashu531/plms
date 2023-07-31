@@ -107,6 +107,11 @@ export default function Home({token}) {
   const [pendecyData,setPendecyData] = useState([])
   const [consent,setUserConsent] = useState(false)
   const [loader,setLoader] = useState(false)
+  const [turnOnButtonLoader,setTurnOnButtonLoader] = useState({
+    status : false,
+    data : {}
+  })
+  const [pendencyResponse,setPendencyResponse] = useState(false)
 
   const getProfileInfo = async () => {
     const data = await getProfileData(token);
@@ -300,6 +305,7 @@ export default function Home({token}) {
   }
 
   const navigatePage = (i) => {
+    setQuery('')
     setLoader(false)
 
     if(i == 0){
@@ -431,6 +437,10 @@ export default function Home({token}) {
       }
       setFormData({...data});
       setTemporaryFormData({...data});
+      setTurnOnButtonLoader({
+        status: false,
+        data : {}
+      })
     }).catch(err=>console.log(err));
   }
 
@@ -466,11 +476,17 @@ const goToDownloads=()=>{
 }
 
 const handleTableIconClick= async (item,index)=>{
+    setTurnOnButtonLoader({
+      status: true,
+      data: item
+    })
     await getQuickViewData(item)
     navigatePage(1)
 }
 
 const handleTableRowClick=(item,index)=>{
+  setPendencyResponse(true)
+  openSlidingPanel()
   getPendencyData(item)
 }
 
@@ -481,18 +497,20 @@ const getPendencyData=async(item)=>{
       },
   }).
   then(res => {
-      handlePendencyData(res.data.data)
+      handlePendencyData(res.data.data,res.data.consent)
       if(res.data.consent === 'Y'){
           setUserConsent(true)
+      }else{
+          setUserConsent(false)
       }
       // setPendecyData(res.data.data)
   }).catch(err=>console.log(err));
 }
 
-const handlePendencyData=(item)=>{
+const handlePendencyData=(item,consentData)=>{
   let pendencyArr = Object.entries(item);
   let pendencyOriginals = []
-  if(!consent){
+  if(consentData !== 'Y'){
     pendencyOriginals.push('Consent')
   }
   pendencyArr.map((item,index)=>{
@@ -500,7 +518,7 @@ const handlePendencyData=(item)=>{
       pendencyOriginals.push(item[0])
   })
   setPendecyData(pendencyOriginals)
-  openSlidingPanel()
+  setPendencyResponse(false)
 }
 
 const closeUploadModal=()=>{
@@ -585,9 +603,11 @@ useEffect(() => {
                                 handleTableIconClick(item,index)
                             }}
                         onRowClick={(item, index) => {
+                            setPendecyData([])
                             setLeadInfo(item)
                             handleTableRowClick(item,index)
                         }}
+                        turnOnButtonLoader={turnOnButtonLoader}
                   /> 
               }
               {
@@ -602,6 +622,7 @@ useEffect(() => {
                             setLeadInfo(item)
                             openSlidingPanel()
                         }}
+                        turnOnButtonLoader={turnOnButtonLoader}
                   />
               }
             </div>
@@ -627,6 +648,7 @@ useEffect(() => {
            previousFormData={formData}
            formData={temporaryFormData}
            setFormData={setTemporaryFormData}
+           consent={consent}
            />
         </div>
       )}
@@ -663,6 +685,7 @@ useEffect(() => {
           token={token}
           pendecyData={pendecyData}
           consent={consent}
+          pendencyResponse={pendencyResponse}
         />
       )}
       {openLeadForm && 
