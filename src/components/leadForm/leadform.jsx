@@ -515,13 +515,13 @@ export function EditableLeadForm ({
                 {showHeadings && 
                     <div className='row' style={{justifyContent: 'space-between', alignItems: 'center', padding: '0 0 20px 0'}}>
                         <div className='text-montserrat text-weight-6 text-20 form-heading'>Student Details</div>
-                        {!editingStates.lead && <img src={editIcon} onClick={() => setEditingStates({...editingStates, lead: true})}/>}
+                        {/* {!editingStates.lead && <img src={editIcon} onClick={() => setEditingStates({...editingStates, lead: true})}/>}
                         {editingStates.lead && 
                             <div className='row clickable-heading' style={{justifyContent: 'flex-end', gap: '25px', alignItems: 'baseline'}}>
                                 <div className='clickable-text text-montserrat text-weight-6 text-16' onClick={() => discardChanges(0)}>Discard Changes</div>
                                 <div className='clickable-text text-montserrat text-weight-6 text-16' onClick={() => saveChanges(0)}>Save</div>
                             </div>
-                        }
+                        } */}
                     </div>
                 }
                 <LeadDetailForm
@@ -538,13 +538,13 @@ export function EditableLeadForm ({
                 {showHeadings && 
                     <div className='row' style={{justifyContent: 'space-between', alignItems: 'center', padding: '0 0 30px 0'}}>
                         <div className='text-montserrat text-weight-6 text-20 form-heading'>Loan Details</div>
-                        {!editingStates.loan && <img src={editIcon} onClick={() => setEditingStates({...editingStates, loan: true})}/>}
+                        {/* {!editingStates.loan && <img src={editIcon} onClick={() => setEditingStates({...editingStates, loan: true})}/>}
                         {editingStates.loan && 
                             <div className='row clickable-heading' style={{justifyContent: 'flex-end', gap: '25px', alignItems: 'baseline'}}>
                                 <div className='clickable-text text-montserrat text-weight-6 text-16' onClick={() => discardChanges(1)}>Discard Changes</div>
                                 <div className='clickable-text text-montserrat text-weight-6 text-16' onClick={() => saveChanges(1)}>Save</div>
                             </div>
-                        }
+                        } */}
                     </div>
                 }
                 <LoanDetailsForm

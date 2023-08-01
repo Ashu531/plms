@@ -279,11 +279,7 @@ export default function Home({token}) {
             if(endpoint === statusEndpoints.ALL){
                 setStatusCount(res?.data?.data?.count)
             }
-            setLoader(false)
             return res.data.data;
-        }else{
-            setNoResult(true)
-
         }
         
     }).catch(err=>{
@@ -343,63 +339,36 @@ export default function Home({token}) {
     let newStatusList = [...statusList];
 
     allData = await allData;
-
-    if(allData?.leads && allData?.leads.length > 0){
         newTableData[statusIndices.ALL] = allData?.leads;
         newStatusList[statusIndices.ALL] = {...newStatusList[statusIndices.ALL], count: allData?.count}
-    }else{
-        setNoResult(true)
-        setLoader(false)
-    }
 
     incompleteData = await incompleteData;
-    if(incompleteData?.leads && incompleteData?.leads.length > 0){
-    newTableData[statusIndices.INCOMPLETE] = incompleteData?.leads;
-    newStatusList[statusIndices.INCOMPLETE] = {...newStatusList[statusIndices.INCOMPLETE], count: incompleteData?.count}
-    }else{
-        setNoResult(true)
-        setLoader(false)
-    }
+      newTableData[statusIndices.INCOMPLETE] = incompleteData?.leads;
+      newStatusList[statusIndices.INCOMPLETE] = {...newStatusList[statusIndices.INCOMPLETE], count: incompleteData?.count}
 
     inProcessData = await inProcessData;
-    if(inProcessData?.leads && inProcessData?.leads.length > 0){
         newTableData[statusIndices.IN_PROCESS] = inProcessData?.leads;
         newStatusList[statusIndices.IN_PROCESS] = {...newStatusList[statusIndices.IN_PROCESS], count: inProcessData?.count}
-    }else{
-        setNoResult(true)
-        setLoader(false)
-    }
+ 
 
     closedData = await closedData;
-    if(closedData?.leads && closedData?.leads.length > 0){
-    newTableData[statusIndices.CLOSED] = closedData?.leads;
-    newStatusList[statusIndices.CLOSED] = {...newStatusList[statusIndices.CLOSED], count: closedData?.count}
-     }else{
-        setNoResult(true)
-        setLoader(false)
-    }
+      newTableData[statusIndices.CLOSED] = closedData?.leads;
+      newStatusList[statusIndices.CLOSED] = {...newStatusList[statusIndices.CLOSED], count: closedData?.count}
+ 
 
     approvedData = await approvedData;
-    if(approvedData?.leads && approvedData?.leads.length > 0){
-    newTableData[statusIndices.APPROVED] = approvedData?.leads;
-    newStatusList[statusIndices.APPROVED] = {...newStatusList[statusIndices.APPROVED], count: approvedData?.count}
-    }else{
-        setNoResult(true)
-        setLoader(false)
-    }
+      newTableData[statusIndices.APPROVED] = approvedData?.leads;
+      newStatusList[statusIndices.APPROVED] = {...newStatusList[statusIndices.APPROVED], count: approvedData?.count}
+
 
     disbursedData = await disbursedData;
-    if(disbursedData?.leads && disbursedData?.leads.length > 0){
-    newTableData[statusIndices.DISBURSED] = disbursedData?.leads;
-    newStatusList[statusIndices.DISBURSED] = {...newStatusList[statusIndices.DISBURSED], count: disbursedData?.count}
-    }else{
-        setNoResult(true)
-        setLoader(false)
-    }
+      newTableData[statusIndices.DISBURSED] = disbursedData?.leads;
+      newStatusList[statusIndices.DISBURSED] = {...newStatusList[statusIndices.DISBURSED], count: disbursedData?.count}
+
 
     setTableData(newTableData);
     setStatusList(newStatusList);
-    
+    setLoader(false)
   }
 
   useEffect(() => {
@@ -540,7 +509,7 @@ useEffect(() => {
          {
             screen !== 1 &&  
             <Header 
-                onSearchChange={onSearch} 
+                onSearchChange={onSearch}
                 goToHomePage={(i) => navigatePage(i)} 
                 goToDraftPage={()=>goToDraftPage()}
                 goToDownloads={()=>goToDownloads()}
@@ -608,10 +577,11 @@ useEffect(() => {
                             handleTableRowClick(item,index)
                         }}
                         turnOnButtonLoader={turnOnButtonLoader}
+                        loader={loader}
                   /> 
               }
               {
-               query.length > 0 && searchData && searchData?.length > 0 && 
+               query.length > 0 && searchData && searchData?.length > 0 &&
                 <SearchTable
                         list={searchData}
                         onIconClick={(item, index) => {
@@ -623,7 +593,7 @@ useEffect(() => {
                             openSlidingPanel()
                         }}
                         turnOnButtonLoader={turnOnButtonLoader}
-                  />
+                  /> 
               }
             </div>
 

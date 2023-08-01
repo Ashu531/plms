@@ -13,7 +13,8 @@ export default function Header({
     goToDraftPage,
     screen,
     goToDownloads,
-    goToHomePage
+    goToHomePage,
+    onDraftSearch
 }) {
 
     const handleBack=()=>{
@@ -37,15 +38,15 @@ export default function Header({
                  </div>
            } */}
 
-           {
+            {
              screen === 2 && 
              <div className='row' >
-                 <img src={caretIcon} onClick={()=>handleBack()} style={{cursor:'pointer'}}/>
-                <div className='header-title'>
-                    Drafts
-                </div>
+                    <img src={caretIcon} onClick={()=>handleBack()} style={{cursor:'pointer'}}/>
+                    <div className='header-title'>
+                        Drafts
+                    </div>
              </div>
-           }
+           } 
 
             {
              screen === 3 && 
