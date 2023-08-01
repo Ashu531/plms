@@ -182,7 +182,7 @@ export default function Home({token}) {
             let detail = res?.data?.data?.leads;
             setLoader(false)
             setSearchData(detail)
-            setSearchCount(res?.data?.data?.count)
+            setSearchCount(res?.data?.data?.totalCount)
             setNoResult(false)
         }else{
             setLoader(false)
@@ -277,7 +277,7 @@ export default function Home({token}) {
     then(res => {
         if(res?.status === 200){
             if(endpoint === statusEndpoints.ALL){
-                setStatusCount(res?.data?.data?.count)
+                setStatusCount(res?.data?.data?.totalCount)
             }
             return res.data.data;
         }

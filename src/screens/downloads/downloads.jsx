@@ -4,11 +4,11 @@ import axios from 'axios';
 import downloadIcon from '../../assets/Icons/downloadIcon.svg'
 import disabledDownload from '../../assets/Icons/disabledDownload.svg'
 import DraftTable from '../../components/draftTable/draftTable.jsx';
-import DatePicker from 'react-date-picker';
 import Button from '../../components/button/button.jsx';
 import moment from 'moment'
 import DownloadTable from '../../components/downloadsTable/downloadsTable.jsx';
 import { Bars, TailSpin } from "react-loader-spinner";
+import { ReactDatez, ReduxReactDatez } from 'react-datez'
 // import { downloadCSV } from '../../helpers/downloadCSV.js';
 
 const filter = [
@@ -33,6 +33,8 @@ export default function DownloadPage(props) {
   const [leadInfo,setLeadInfo] = useState({})
   const [startDate,setStartDate] = useState('');
   const [endDate,setEndDate] = useState('');
+  const [startDateValue,setStartDateValue] = useState('');
+  const [endDateValue,setEndDateValue] = useState('');
   const [csvData,setCsvData] = useState('')
   const [loader,setLoader] = useState(false)
   const [noResult,setNoResult] = useState(false)
@@ -68,19 +70,22 @@ export default function DownloadPage(props) {
   }
 
   const handleStartDate=(value)=>{
-    let simplifiedDate = moment(value).format('L');  
-    let date = new Date(simplifiedDate) 
-    setStartDate(date.valueOf())
+    let simplifiedDate = moment(value);  
+    let date = Math.floor(new Date(simplifiedDate).getTime() / 1000)
+    console.log(date,"date++++")
+    setStartDate(simplifiedDate)
+    setStartDateValue(date)
   }
 
   const handleEndDate=(value)=>{
-    let simplifiedDate = moment(value).format('L');  
-    let date = new Date(simplifiedDate) 
-    setEndDate(date.valueOf())
+    let simplifiedDate = moment(value);  
+    let date = Math.floor(new Date(simplifiedDate).getTime() / 1000)
+    setEndDate(simplifiedDate)
+    setEndDateValue(date)
   }
 
   const generateReport=async()=>{
-    await axios.get(`${API_URL}/api/loan/download/report/?start_date=${startDate}&end_date=${endDate}`,{
+    await axios.get(`${API_URL}/api/loan/download/report/?start_date=${startDateValue}&end_date=${endDateValue}`,{
       headers: {
           token: `${props?.token}`,
       },
@@ -104,6 +109,7 @@ export default function DownloadPage(props) {
   }
 
   const generateIndividualReport=async(item)=>{
+    setLoader(true)
     let startDate = item?.from_date;
     let endDate = item?.to_date;
     await axios.get(`${API_URL}/api/loan/download/report/?start_date=${startDate}&end_date=${endDate}`,{
@@ -114,41 +120,56 @@ export default function DownloadPage(props) {
     then(res => {
       // getDownloads()
       downloadCSV(res.data)
+      setLoader(false)
       return res.data
-    }).catch(err=>console.log(err));
+    }).catch(err=>{
+      console.log(err)
+      setLoader(false)
+    });
   } 
 
   const getFilteredDownload=async(id)=>{
+    setNoResult(false)
     if(filterType === id ){
       setFilterType(0)
       getDownloads()
+      setStartDate('')
+      setEndDate('')
     }else{
-      setFilterType(id)
-      setLoader(true)
-      await axios.get(`${API_URL}/api/loan/download/logs/?date_type=${id}`,{
-          headers: {
-              token: `${props?.token}`,
-          },
-      }).
-      then(res => {
-          setLoader(false)
-          console.log(res.data)
-          if(res?.data?.data?.length > 0){
-            setTableData(res.data.data)
-          }else{
-            setTableData([])
-            setNoResult(true)
-          }
-      }).catch(err=>{
-        setLoader(false)
-      });
+      let today = moment()
+      if(id === 1){
+        setFilterType(id)
+        let date = Math.floor(new Date(today).getTime() / 1000)
+        setEndDate(today)
+        setStartDate(today)
+        setStartDateValue(date)
+        setEndDateValue(date)
+      }else if(id === 2){
+        setFilterType(id)
+        
+        let weekStart = moment().startOf('isoWeek');
+        let weekEnd = moment().endOf('isoWeek');
+        setEndDate(weekEnd)
+        setStartDate(weekStart)
+        setStartDateValue(Math.floor(new Date(weekStart).getTime() / 1000))
+        setEndDateValue(Math.floor(new Date(weekEnd).getTime() / 1000))
+      }else if(id === 3){
+        setFilterType(id)
+        
+        let monthStart = moment().startOf('month');
+        let monthEnd = moment().endOf('month');
+        setEndDate(monthEnd)
+        setStartDate(monthStart)
+        setStartDateValue(Math.floor(new Date(monthStart).getTime() / 1000))
+        setEndDateValue(Math.floor(new Date(monthEnd).getTime() / 1000))
+      }
+      
     }
-
-    
   }
 
+  
+
   return (
-    <>
     <div className='download-page'>
          <div className='row' style={{gap: '12px'}}>
                
@@ -172,11 +193,11 @@ export default function DownloadPage(props) {
           >
            
             <div>
-              <DatePicker onChange={handleStartDate} value={startDate} />
+              <ReactDatez inputStyle={{height: 30,borderRadius: 8,border: '1px solid #F5EBFF'}} name="dateInput" handleChange={handleStartDate} value={startDate} allowPast={true} allowFuture={false} />
             </div>
             <span className='conjuction-text'>to</span>
             <div>
-              <DatePicker onChange={handleEndDate} value={endDate} />
+              <ReactDatez inputStyle={{height: 30,borderRadius: 8,border: '1px solid #F5EBFF'}} name="dateInput" handleChange={handleEndDate} value={endDate} allowPast={true} allowFuture={false} />
             </div>
           </div>
           <div className='column' style={{marginTop: 24}}>
@@ -233,11 +254,10 @@ export default function DownloadPage(props) {
           </div>
           {
             loader && 
-              <div className="credenc-loader-white fullscreen-loader">
+              <div className="download-credenc-loader-white download-fullscreen-loader">
                 <TailSpin color="#00BFFF" height={100} width={100}/>
               </div>
           }
     </div>
-    </>
   )
 }
