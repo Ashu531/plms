@@ -342,30 +342,30 @@ export default function Home({token}) {
 
     allData = await allData;
         newTableData[statusIndices.ALL] = allData?.leads;
-        newStatusList[statusIndices.ALL] = {...newStatusList[statusIndices.ALL], count: allData?.count}
+        newStatusList[statusIndices.ALL] = {...newStatusList[statusIndices.ALL], count: allData?.totalCount}
 
     incompleteData = await incompleteData;
       newTableData[statusIndices.INCOMPLETE] = incompleteData?.leads;
-      newStatusList[statusIndices.INCOMPLETE] = {...newStatusList[statusIndices.INCOMPLETE], count: incompleteData?.count}
+      newStatusList[statusIndices.INCOMPLETE] = {...newStatusList[statusIndices.INCOMPLETE], count: incompleteData?.totalCount}
 
     inProcessData = await inProcessData;
         newTableData[statusIndices.IN_PROCESS] = inProcessData?.leads;
-        newStatusList[statusIndices.IN_PROCESS] = {...newStatusList[statusIndices.IN_PROCESS], count: inProcessData?.count}
+        newStatusList[statusIndices.IN_PROCESS] = {...newStatusList[statusIndices.IN_PROCESS], count: inProcessData?.totalCount}
  
 
     closedData = await closedData;
       newTableData[statusIndices.CLOSED] = closedData?.leads;
-      newStatusList[statusIndices.CLOSED] = {...newStatusList[statusIndices.CLOSED], count: closedData?.count}
+      newStatusList[statusIndices.CLOSED] = {...newStatusList[statusIndices.CLOSED], count: closedData?.totalCount}
  
 
     approvedData = await approvedData;
       newTableData[statusIndices.APPROVED] = approvedData?.leads;
-      newStatusList[statusIndices.APPROVED] = {...newStatusList[statusIndices.APPROVED], count: approvedData?.count}
+      newStatusList[statusIndices.APPROVED] = {...newStatusList[statusIndices.APPROVED], count: approvedData?.totalCount}
 
 
     disbursedData = await disbursedData;
       newTableData[statusIndices.DISBURSED] = disbursedData?.leads;
-      newStatusList[statusIndices.DISBURSED] = {...newStatusList[statusIndices.DISBURSED], count: disbursedData?.count}
+      newStatusList[statusIndices.DISBURSED] = {...newStatusList[statusIndices.DISBURSED], count: disbursedData?.totalCount}
 
 
     setTableData(newTableData);

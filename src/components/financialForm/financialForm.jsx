@@ -4,6 +4,7 @@ import { Dropdown } from '../dropdown/dropdown.jsx'
 import { Input } from '../input/input.jsx'
 import './/financialForm.css'
 import axios from 'axios';
+import { Bars, TailSpin } from "react-loader-spinner";
 
 const employmentStatusList = [
     {
@@ -51,9 +52,13 @@ export default function FinancialForm({
 }) {
 
     const [employmentStatus, setEmploymentStatus] = useState({...defaultDropdownState});
-    const [monthySalary, setMonthySalary] = useState({...defaultState});
+    const [monthySalary, setMonthySalary] = useState({
+        value: '',
+        error: null
+    });
     const [companyName, setCompanyName] = useState({...defaultState});
-
+    const [financialData,setFinancialData] = useState({})
+    const [loader,setLoader] = useState(false)
 
     const defaultState = {
         value: '',
@@ -66,20 +71,16 @@ export default function FinancialForm({
     }
 
     useEffect(()=>{
-        handleFinancialData()
-    },[leadData])
+        getOverviewData()
+    },[])
 
 
-    const handleFinancialData=()=>{
-
-        
-
-        if(leadData?.borrowerData?.netMonthlyIncome > 0){
+    const handleFinancialData=(data)=>{
+        if(data?.borrowerData?.netMonthlyIncome > 0){
             setMonthySalary({
                 ...monthySalary,
-                value: leadData?.borrowerData?.netMonthlyIncome,
+                value: data?.borrowerData?.netMonthlyIncome,
             })
-            console.log("coming+++")
         }else{
             setMonthySalary({
                 ...monthySalary,
@@ -89,18 +90,18 @@ export default function FinancialForm({
         
         setCompanyName({
             ...companyName,
-            value: leadData?.borrowerData?.lastCurrentEmployer,
+            value: data?.borrowerData?.lastCurrentEmployer,
         })
 
         employmentStatusList.forEach((item,index)=>{
-            if(item.value === leadData?.borrowerData?.employmentStatusId){
+            if(item.value === data?.borrowerData?.employmentStatusId){
                 setEmploymentStatus({
                     ...employmentStatus,
-                    value : leadData?.borrowerData?.employmentStatusId
+                    value : data?.borrowerData?.employmentStatusId
                 })
             }
         })
-
+        setLoader(false)
     }
 
     const employmentStatusLabel = () => 'Employment Status ';
@@ -223,7 +224,7 @@ export default function FinancialForm({
     }
 
     const submitData=async()=>{
-
+        setLoader(true)
         let data = {
             netMonthlyIncome: monthySalary.value,
             lastCurrentEmployer: companyName.value,
@@ -236,8 +237,26 @@ export default function FinancialForm({
             },
         }).
         then(res => {
-            location.reload()
+            // location.reload()
+            getOverviewData()
             console.log(res)
+        }).catch(err=>{
+            setLoader(false)
+            console.log(err)
+        });
+    }
+
+    const getOverviewData=async()=>{
+        setLoader(true)
+        await axios.get(`${API_URL}/api/loan/overview/LEAD-${leadData?.borrowerData.leadId}/`,{
+            headers: {
+                token: `${token}`,
+            },
+        }).
+        then(res => {
+            let resData = res?.data?.data?.data;
+            setFinancialData(resData)
+            handleFinancialData(resData)
         }).catch(err=>console.log(err));
     }
 
@@ -308,6 +327,12 @@ export default function FinancialForm({
             </div>
             
         </div>
+        {
+            loader && 
+              <div className="download-credenc-loader-white download-fullscreen-loader">
+                <TailSpin color="#00BFFF" height={100} width={100}/>
+              </div>
+        }
     </div>
   )
 }
