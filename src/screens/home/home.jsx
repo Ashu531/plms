@@ -112,6 +112,7 @@ export default function Home({token}) {
     data : {}
   })
   const [pendencyResponse,setPendencyResponse] = useState(false)
+  const [draftSaved,setDraftSaved] = useState(false)
 
   const getProfileInfo = async () => {
     const data = await getProfileData(token);
@@ -141,7 +142,8 @@ export default function Home({token}) {
         courseFee: `${data?.course_fee}`,
         loanAmount: `${data?.loan_amount}`,
         tenure: `${data?.tenure}`,
-        advanceEmi: `${data?.advance_emi}`
+        advanceEmi: `${data?.advance_emi}`,
+        id: `${data?.id}`
       }
       setFormData({...formData});
       setTemporaryFormData({...formData});
@@ -499,6 +501,14 @@ const openUploadModal=()=>{
     setUploadModal(true)
 }
 
+const handleDraftSave=()=>{
+  setDraftSaved(true)
+}
+
+const unsaveDraft=()=>{
+  setDraftSaved(false)
+}
+
 useEffect(() => {
   getProfileInfo();
 }, []);
@@ -629,6 +639,8 @@ useEffect(() => {
            openLeadForm={(data) => _openLeadForm(data)} 
            leadData={leadInfo}
            token={token}
+           draftSaved={draftSaved}
+           unsaveDraft={unsaveDraft}
            />
         </div>
       )}
@@ -665,6 +677,7 @@ useEffect(() => {
           token={token}
           formData={formData} 
           setFormData={setFormData} 
+          handleDraftSave={handleDraftSave}
         />
       }
 

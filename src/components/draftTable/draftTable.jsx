@@ -21,7 +21,7 @@ export default function DraftTable({
         <div className='table'>
             <div className='table-header'>
                 <div className='draft-header-text'>
-                    Lead ID
+                    ID
                     {/* <img src={sortIcon}/> */}
                 </div>
                 <div className='draft-header-text'>

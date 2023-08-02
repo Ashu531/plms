@@ -14,10 +14,9 @@ export default function LeadForm({
     onBackPress,
     instituteName,
     formData,
-    setFormData
+    setFormData,
+    handleDraftSave
 }) {
-
-    const [draftActive,setDraftActive] = useState(false)
 
     const handleSave = async (addAnother) => {
         let res = await saveForm(requestData(formData), token);
@@ -32,6 +31,9 @@ export default function LeadForm({
 
     const handleSaveDraft = async () => {
         let res = await saveDraft(requestData(formData), token);
+        if(res.application_id.length > 0){
+            handleDraftSave()
+        }
         onBackPress();
     }
 
@@ -53,26 +55,16 @@ export default function LeadForm({
                     viewType={formViewTypes.CREATE}
                     previousFormData={formData}
                     formData={formData}
-                    setFormData={(data) => {
-                        if(data.leadId.length > 0 && data.studentName.length > 0){
-                            setDraftActive(true)
-                        }
-                        setFormData(data)
-                    }}
+                    setFormData={(data) => {setFormData(data)}}
                 />
 
                 <div className='row' style={{gap: '1rem'}}>
                     <Button
                         text='Save Draft'
-                        classes={draftActive ?{
+                        classes={{
                             borderRadius: 8,
                             border: '1px solid #8F14CC',
                             height: '44px'
-                        } : {
-                            borderRadius: 8,
-                            border: '1px solid #8F14CC',
-                            height: '44px',
-                            opacity: 0.5
                         }}
                         textClass={{
                             color: '#8F14CC',
@@ -80,7 +72,7 @@ export default function LeadForm({
                             fontFamily: 'Montserrat',
                             fontWeight: 600
                         }}
-                        onClick={draftActive && handleSaveDraft}
+                        onClick={handleSaveDraft}
                     />
                     <Button 
                         text='Save & Add Another Lead'

@@ -19,15 +19,8 @@ export default function DraftPage(props) {
   const [draftSearchData,setDraftSearchData] = useState([])
 
   useEffect(()=>{
-    // if(props?.draftQuery.length === 0){
-    //   setSearchData([])
-    //   setNoResult(false)
       getDrafts()
-    // }else if(props?.draftQuery.length > 0){
-    //   setTableData([])
-    //   setNoResult(true)
-    // }
-  },[])
+  },[props?.draftSaved])
 
   const getDrafts=async()=>{
     setLoader(true)
@@ -48,6 +41,7 @@ export default function DraftPage(props) {
       console.log(err)
       setLoader(false)
     });
+    props?.unsaveDraft()
   }
 
   const deleteDraft=async(item,index)=>{
@@ -153,8 +147,8 @@ export default function DraftPage(props) {
                         onRowClick={(item, index) => {
                           setLeadInfo(item)
                           openLeadForm(item)
-                      }}
-                      onDeleteDraft={(item,index)=>deleteDraft(item,index)}
+                        }}
+                        onDeleteDraft={(item,index)=>deleteDraft(item,index)}
                   /> 
               } 
                {

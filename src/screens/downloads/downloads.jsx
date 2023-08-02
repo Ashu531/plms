@@ -62,6 +62,7 @@ export default function DownloadPage(props) {
         }
     }).catch(err=>{
       setLoader(false)
+      setNoResult(true)
     });
   }
 
@@ -72,7 +73,6 @@ export default function DownloadPage(props) {
   const handleStartDate=(value)=>{
     let simplifiedDate = moment(value);  
     let date = Math.floor(new Date(simplifiedDate).getTime() / 1000)
-    console.log(date,"date++++")
     setStartDate(simplifiedDate)
     setStartDateValue(date)
   }
@@ -85,6 +85,8 @@ export default function DownloadPage(props) {
   }
 
   const generateReport=async()=>{
+    setNoResult(false)
+    setLoader(true)
     await axios.get(`${API_URL}/api/loan/download/report/?start_date=${startDateValue}&end_date=${endDateValue}`,{
       headers: {
           token: `${props?.token}`,
@@ -95,8 +97,13 @@ export default function DownloadPage(props) {
       downloadCSV(res.data)
       setStartDate('')
       setEndDate('')
+      setLoader(false)
       return res.data
-    }).catch(err=>console.log(err));
+    }).catch(err=>{
+      console.log(err.response.data.data)
+      setLoader(false)
+      alert(err.response.data.data)
+    });
   }
 
   const downloadCSV=(data)=>{
@@ -125,11 +132,12 @@ export default function DownloadPage(props) {
     }).catch(err=>{
       console.log(err)
       setLoader(false)
+      alert(err.response.statusText)
     });
   } 
 
   const getFilteredDownload=async(id)=>{
-    setNoResult(false)
+    // setNoResult(false)
     if(filterType === id ){
       setFilterType(0)
       getDownloads()

@@ -145,7 +145,6 @@ export const leadState = {
 }
 
 export const requestData = (formData) => {
-    console.log(formData,"jhgfhgjj")
     return {
         "leadId": formData.leadId,
         "student_name": formData.studentName,
@@ -159,6 +158,7 @@ export const requestData = (formData) => {
         "loan_amount": formData.loanAmount,
         "tenure": formData.tenure,
         "emi": formData.advanceEmi,
-        "borrowerUuid": formData.borrowerUuid
+        "borrowerUuid": formData.borrowerUuid,
+        "id": formData?.id
     }
 }
