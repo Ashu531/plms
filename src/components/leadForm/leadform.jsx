@@ -367,7 +367,11 @@ export function EditableLeadForm ({
         const delayDebounce = setTimeout(() => {
             const error = mobileValidation(mobileState.value);
             if(error != 'cannot be empty'){
-                setMobileState({...mobileState, error: `${error} mobile number`});
+                if(error == null){
+                    setMobileState({...mobileState, error: error});
+                } else {
+                    setMobileState({...mobileState, error: `${error} mobile number`});
+                }
             }
 
             if(error == null){
@@ -382,7 +386,11 @@ export function EditableLeadForm ({
         const delayDebounce = setTimeout(() => {
             const error = emailValidation(emailState.value);
             if(error != 'cannot be empty'){
-                setEmailState({...emailState, error: `${error} email`})
+                if(error == null){
+                    setEmailState({...emailState, error: error})
+                } else {
+                    setEmailState({...emailState, error: `${error} email`})
+                }
             }
 
             if(error == null){
@@ -418,7 +426,11 @@ export function EditableLeadForm ({
         const delayDebounce = setTimeout(() => {
             const error = basicValidation(courseState.value);
             if(error != 'cannot be empty'){
-                setCourseState({...courseState, error: error})
+                if(error == null){
+                    setCourseState({...courseState, error: error})
+                } else {
+                    setCourseState({...courseState, error: `${error} course name`})
+                }
             }
 
             if(error == null){
