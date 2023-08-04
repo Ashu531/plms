@@ -9,9 +9,9 @@ export const saveForm = async (payload, token) => {
         },
     }).then(res => res.data.data)
     .catch(err => {
-        if(err.response.data.error.length > 0){
-            alert(err.response.data.error)
-        }
+        // if(err.response.data.error.length > 0){
+        //     alert(err.response.data.error)
+        // }
        return err.response.data
     })
     

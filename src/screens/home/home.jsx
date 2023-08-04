@@ -112,7 +112,6 @@ export default function Home({token}) {
     data : {}
   })
   const [pendencyResponse,setPendencyResponse] = useState(false)
-  const [draftSaved,setDraftSaved] = useState(false)
 
   const getProfileInfo = async () => {
     const data = await getProfileData(token);
@@ -505,10 +504,6 @@ const handleDraftSave=()=>{
   setDraftSaved(true)
 }
 
-const unsaveDraft=()=>{
-  setDraftSaved(false)
-}
-
 useEffect(() => {
   getProfileInfo();
 }, []);
@@ -636,11 +631,9 @@ useEffect(() => {
     {screen === 2 && (
         <div className="full-width">
           <DraftPage 
-           openLeadForm={(data) => _openLeadForm(data)} 
-           leadData={leadInfo}
-           token={token}
-           draftSaved={draftSaved}
-           unsaveDraft={unsaveDraft}
+            openLeadForm={(data) => _openLeadForm(data)} 
+            leadData={leadInfo}
+            token={token}
            />
         </div>
       )}

@@ -151,7 +151,7 @@ export default function LeadDetailForm({
   return (
     <div className='column' style={{width: '100%', gap:'15px'}}>
         
-        <Input
+        {/* <Input
             label={getLabel(studentFormInputTypes.leadId)}
             required={getRequired(studentFormInputTypes.leadId)}
             showCheck={getCheck(studentFormInputTypes.leadId)}
@@ -161,7 +161,7 @@ export default function LeadDetailForm({
             disabled={getDisabled(studentFormInputTypes.leadId)}
             error={getError(studentFormInputTypes.leadId)}
             type={getType(studentFormInputTypes.leadId)}
-        />
+        /> */}
 
         <Input
             label={getLabel(studentFormInputTypes.name)}

@@ -19,13 +19,41 @@ export default function LeadForm({
 }) {
 
     const handleSave = async (addAnother) => {
+
+        // const leadIdError = basicValidation(formData.leadId);
+        const nameError = basicValidation(formData.studentName);
+        const instituteError = basicValidation(formData.institute);
+        const mobileError = mobileValidation(formData.mobile);
+        const emailError = emailValidation(formData.email);
+        const borrowerNameError = basicValidation(formData.borrowerName);
+        const courseError = basicValidation(formData.course);
+        const courseFeeError = amountValidation(formData.courseFee);
+        const loanAmountError = amountValidation(formData.loanAmount);
+        const tenureError = amountValidation(formData.tenure);
+        const advanceEmiError = dropdownValidation(formData.advanceEmi);
+
+        if(
+            nameError || instituteError || mobileError || emailError ||
+            borrowerNameError || courseError || courseFeeError || loanAmountError || tenureError || advanceEmiError
+        ) {
+            console.log(nameError , instituteError , mobileError , emailError ,
+                borrowerNameError , courseError , courseFeeError , loanAmountError , tenureError , advanceEmiError)
+            return;
+        }
+
         let res = await saveForm(requestData(formData), token);
-        // if(res.error.length > 0){
-            if(addAnother){
-                setFormData({...leadState});
-            } else {
-                onBackPress();
-            }
+
+        if(addAnother){
+            setFormData({...leadState});
+        } else {
+            onBackPress();
+        }
+
+        if(res.message){
+            alert(res.message)
+        } else {
+            alert(res.data.message);
+        }
         
     }
 
@@ -339,7 +367,7 @@ export function EditableLeadForm ({
         const delayDebounce = setTimeout(() => {
             const error = mobileValidation(mobileState.value);
             if(error != 'cannot be empty'){
-                setMobileState({...mobileState, error: error});
+                setMobileState({...mobileState, error: `${error} mobile number`});
             }
 
             if(error == null){
@@ -354,7 +382,7 @@ export function EditableLeadForm ({
         const delayDebounce = setTimeout(() => {
             const error = emailValidation(emailState.value);
             if(error != 'cannot be empty'){
-                setEmailState({...emailState, error: error})
+                setEmailState({...emailState, error: `${error} email`})
             }
 
             if(error == null){
@@ -373,7 +401,7 @@ export function EditableLeadForm ({
             }
 
             if(error == null){
-                setFormData({...formData, borrowerName: borrowerNameState.value});
+                setFormData({...formData, borrowerName: borrowerNameState.value, studentName: nameState.value});
             }
         }, 0)
     
@@ -425,7 +453,7 @@ export function EditableLeadForm ({
             }
 
             if(error == null){
-                setFormData({...formData, loanAmount: loanAmountState.value});
+                setFormData({...formData, loanAmount: loanAmountState.value, courseFee: courseFeeState.value});
             }
         }, 0)
     
