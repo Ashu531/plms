@@ -239,6 +239,7 @@ export default function FinancialForm({
         then(res => {
             // location.reload()
             getOverviewData()
+            alert('Data Submitted Successfully!')
             console.log(res)
         }).catch(err=>{
             setLoader(false)

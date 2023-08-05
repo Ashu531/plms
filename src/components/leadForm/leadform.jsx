@@ -8,6 +8,7 @@ import Button from '../button/button.jsx';
 import { amountValidation, basicValidation, dropdownValidation, emailValidation, mobileValidation } from '../../helpers/validations.js';
 import Lead, { leadState, requestData } from '../../entities/formDetails.js';
 import { saveDraft, saveForm } from '../../helpers/apis';
+import { Bars, TailSpin } from "react-loader-spinner";
 
 export default function LeadForm({
     token,
@@ -17,9 +18,10 @@ export default function LeadForm({
     setFormData,
     handleDraftSave
 }) {
+    const [loader,setLoader] = useState(false)
 
     const handleSave = async (addAnother) => {
-
+        setLoader(true)
         // const leadIdError = basicValidation(formData.leadId);
         const nameError = basicValidation(formData.studentName);
         const instituteError = basicValidation(formData.institute);
@@ -49,6 +51,8 @@ export default function LeadForm({
             onBackPress();
         }
 
+        setLoader(false)
+
         if(res.message){
             alert(res.message)
         } else {
@@ -62,6 +66,7 @@ export default function LeadForm({
         if(res.application_id.length > 0){
             handleDraftSave()
         }
+        alert("Draft Saved Successfully!")
         onBackPress();
     }
 
@@ -134,6 +139,12 @@ export default function LeadForm({
                     />
                 </div>
        </div>
+          {
+            loader && 
+              <div className="download-credenc-loader-white download-fullscreen-loader">
+                <TailSpin color="#00BFFF" height={100} width={100}/>
+              </div>
+          }
    </div>
   )
 }
@@ -192,6 +203,7 @@ export function EditableLeadForm ({
     };
     
     const handleNameChange = (str) => {
+        console.log(str,"name")
         setNameState({...nameState, value: str});
     };
 
@@ -200,6 +212,7 @@ export function EditableLeadForm ({
     };
 
     const handleMobileChange = (str) => {
+        console.log(str,"mobile")
         setMobileState({...mobileState, value: str});
     };
 
@@ -331,11 +344,21 @@ export function EditableLeadForm ({
         const delayDebounce = setTimeout(() => {
             const error = basicValidation(nameState.value);
             if(error != 'cannot be empty'){
-                setNameState({...nameState, error: error});
+                if(error == null){
+                    setNameState({...nameState, error: error});
+                }else{
+                    setNameState({...nameState, error: `${error} student name`});
+                }
+                
             }
 
             if(borrowerNameState.sameAsStudent == true){
-                setBorrowerNameState({...borrowerNameState, value: nameState.value});
+                if(error == null){
+                    setBorrowerNameState({...borrowerNameState, value: nameState.value});
+                }else{
+                    setBorrowerNameState({...borrowerNameState, error: `${error} borrower name`});
+                }
+                
             }
 
             if(error == null){

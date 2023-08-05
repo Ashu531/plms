@@ -107,6 +107,8 @@ export default function Home({token}) {
   const [pendecyData,setPendecyData] = useState([])
   const [consent,setUserConsent] = useState(false)
   const [loader,setLoader] = useState(false)
+  const [draftSaved,setDraftSaved] = useState(false)
+
   const [turnOnButtonLoader,setTurnOnButtonLoader] = useState({
     status : false,
     data : {}
@@ -128,7 +130,7 @@ export default function Home({token}) {
   };
 
   const _openLeadForm = (data) => {
-
+    setDraftSaved(false)
     if(data){
       const formData = {
         leadId: `${data?.lead_id}`,
@@ -153,6 +155,7 @@ export default function Home({token}) {
 
   const _closeLeadForm = () => {
     setOpenLeadForm(false);
+    resetDetailsPage()
   };
 
   ///////////////////////////////////////////////////////////////
@@ -634,6 +637,7 @@ useEffect(() => {
             openLeadForm={(data) => _openLeadForm(data)} 
             leadData={leadInfo}
             token={token}
+            draftSaved={draftSaved}
            />
         </div>
       )}

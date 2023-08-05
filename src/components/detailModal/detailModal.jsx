@@ -128,8 +128,8 @@ export default function DetailModal(props) {
                    </div>
                 </div>
             </div>
-            <div className='modal-footer row full-width'>
-                <Button
+            <div className='modal-footer row full-width' style={{justifyContent: 'center'}}>
+                {/* <Button
                     text='Edit Details'
                     classes={{
                         borderRadius: 8,
@@ -144,7 +144,7 @@ export default function DetailModal(props) {
                         fontWeight: 600
                     }}
                     onClick={()=>goToDetailPage()}
-                />
+                /> */}
                 <Button 
                     text='View Full Details'
                     classes={{

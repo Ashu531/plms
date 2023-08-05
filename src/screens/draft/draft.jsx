@@ -18,9 +18,9 @@ export default function DraftPage(props) {
   const [draftQuery,setDraftQuery] = useState('')
   const [draftSearchData,setDraftSearchData] = useState([])
 
-  // useEffect(()=>{
-  //     getDrafts()
-  // },[props?.draftSaved])
+  useEffect(()=>{
+      getDrafts()
+  },[props?.draftSaved])
 
   const getDrafts=async()=>{
     setLoader(true)
