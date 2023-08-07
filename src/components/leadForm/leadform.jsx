@@ -40,6 +40,8 @@ export default function LeadForm({
         ) {
             console.log(nameError , instituteError , mobileError , emailError ,
                 borrowerNameError , courseError , courseFeeError , loanAmountError , tenureError , advanceEmiError)
+                setLoader(false)
+                alert("All the fields are mandatory to fill")
             return;
         }
 
@@ -203,7 +205,6 @@ export function EditableLeadForm ({
     };
     
     const handleNameChange = (str) => {
-        console.log(str,"name")
         setNameState({...nameState, value: str});
     };
 
@@ -212,7 +213,6 @@ export function EditableLeadForm ({
     };
 
     const handleMobileChange = (str) => {
-        console.log(str,"mobile")
         setMobileState({...mobileState, value: str});
     };
 
