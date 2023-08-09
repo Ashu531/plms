@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import Button from "../../components/button/button.jsx";
 import addIcon from "../../assets/Icons/addIcon.svg";
 import Status from "../../components/status/status.jsx";
@@ -114,6 +114,20 @@ export default function Home({token}) {
     data : {}
   })
   const [pendencyResponse,setPendencyResponse] = useState(false)
+
+  useEffect(() => {
+    document.addEventListener("keydown", escFunction, false);
+
+    return () => {
+      document.removeEventListener("keydown", escFunction, false);
+    };
+  }, [escFunction]);
+
+  const escFunction = useCallback((event) => {
+    if (event.key === "Escape") {
+      setOpenLeadForm(false)
+    }
+  }, []);
 
   const getProfileInfo = async () => {
     const data = await getProfileData(token);

@@ -110,8 +110,8 @@ const getDocumentType = () => {
     then(res => {
         setCommentLoader(false)
         console.log(res)
-        if(res.data.data.length > 0){
-            setComments(res.data.data)
+        if(res.data.data.data.length > 0){
+            setComments(res.data.data.data)
         }else{
             setCommentNoResult(true)
         }
@@ -120,6 +120,8 @@ const getDocumentType = () => {
         setCommentLoader(false)
     });
  }
+
+ console.log(comments,"lkjhgfdxgchjkl")
 
  const getActivityData=async()=>{
     setActivityLoader(true)
@@ -347,8 +349,8 @@ const handleDocTypeSelection = (docType) => {
                                     return(
                                          <ActivityCard 
                                                 title={item.log}
-                                                name={item.category}
-                                                time={item.created.date}
+                                                name={item.updatedBy}
+                                                time={item?.createdAt?.date}
                                         />
                                     )
                                 })
