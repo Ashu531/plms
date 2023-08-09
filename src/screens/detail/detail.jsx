@@ -109,19 +109,16 @@ const getDocumentType = () => {
     }).
     then(res => {
         setCommentLoader(false)
-        console.log(res)
+
         if(res.data.data.data.length > 0){
             setComments(res.data.data.data)
         }else{
             setCommentNoResult(true)
         }
-        
     }).catch(err=>{
         setCommentLoader(false)
     });
- }
-
- console.log(comments,"lkjhgfdxgchjkl")
+}
 
  const getActivityData=async()=>{
     setActivityLoader(true)
@@ -204,18 +201,25 @@ const handleDocTypeSelection = (docType) => {
                     <div className='column' style={{marginTop: 20,marginLeft: 12}}>
                         <span className='lead-page-heading'>{props?.leadData?.fullName}</span>
                         <span className='lead-page-subheading'> {props?.leadData?.mobile}</span>
-                        { props?.leadData?.utr &&
-                            <span className='lead-page-subheading'>UTR : {props?.leadData?.utr}</span>
-                        } 
+                         
                     </div>
                 </div>
                 <div className='column' style={{alignItems:'flex-end'}}>
                     {
                         props?.consent ? 
+                        <>
                         <div className='row' style={{justifyContent:'flex-end'}}>
                             <span className='lead-page-intruction-label'>Lead Consent: </span>
                             <img src={consentIcon} />
                         </div>
+                        {
+                           props?.leadData?.disbursementDatetime &&
+                           <span className='lead-page-subheading-time'>Given On:  {props?.leadData?.disbursementDatetime}</span> 
+                        }
+                        { props?.leadData?.utr &&
+                            <span className='lead-page-subheading'>UTR : {props?.leadData?.utr}</span>
+                        }
+                        </>
                         :
                          <span className='consent-link' onClick={()=>props?.openUserConsentModal()}>
                             Ask for Consent
