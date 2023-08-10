@@ -1,6 +1,6 @@
 import React,{useEffect, useState, useRef} from 'react';
 import caretIcon from '../../assets/Icons/caretIcon.svg'
-import consentIcon from '../../assets/Icons/consentIcon.svg'
+import consentIcon from '../../assets/Icons/userConsentIcon.svg'
 import DocumentCard from '../../components/documentCard/documentCard.jsx';
 import TabBar from '../../components/tabBar/tabBar.jsx';
 import Upload, { uploadtStates } from '../../components/upload/upload.jsx';

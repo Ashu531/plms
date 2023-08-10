@@ -3,7 +3,7 @@ import './/detailModal.css'
 import uploadIcon from '../../assets/Icons/uploadIcon.svg'
 import pendingIcon from '../../assets/Icons/pendingIcon.svg'
 import Button from '../button/button.jsx';
-import consentIcon from '../../assets/Icons/consentIcon.svg'
+import consentIcon from '../../assets/Icons/userConsentIcon.svg'
 import axios from 'axios';
 import { Bars, TailSpin } from "react-loader-spinner";
 
