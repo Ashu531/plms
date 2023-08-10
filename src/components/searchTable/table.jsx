@@ -45,10 +45,10 @@ export default function SearchTable({
                 <div className='header-text'>
                     UTR
                 </div>
-                {/* <div className='header-text' style={{flex: '3 1 0px'}}>
-                    Time of Update
-                    <img src={sortIcon} style={{marginLeft: 5}}/>
-                </div> */}
+                <div className='header-text' style={{flex: '3 1 0px'}}>
+                    Disbursed On
+                    {/* <img src={sortIcon} style={{marginLeft: 5}}/> */}
+                </div>
                 <div className='header-text' style={{flex: '1 1 0px'}}></div>
             </div>
                 <div className='table-row-container'>
@@ -59,8 +59,8 @@ export default function SearchTable({
                             <div className='row-text'>{ item.fullName }</div>
                             <div className='row-text'>{ item.mobile }</div>
                             <div className='row-text'>{ item.loanRequired }</div>
-                            <div className='row-text'>{ item.utr }</div>
-                            {/* <div className='row-text' style={{flex: '3 1 0px'}}>{ item.updateTime }</div> */}
+                            <div className='row-text'>{ item.utr ? item.utr : '-' }</div>
+                            <div className='row-text' style={{flex: '3 1 0px'}}>{ item.disbursementDatetime ? item.disbursementDatetime : '-' }</div>
                             <div className='row-text icon-container' style={{flex: '1 1 0px'}} onClick={(e) => handleIconClick(e, item, index)}>
                                 {
                                 turnOnButtonLoader?.data?.leadId === item?.leadId && buttonLoader ? 

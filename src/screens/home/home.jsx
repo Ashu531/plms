@@ -463,12 +463,14 @@ const goToDownloads=()=>{
 }
 
 const handleTableIconClick= async (item,index)=>{
-    setTurnOnButtonLoader({
+  setPendencyResponse(true)
+  getPendencyData(item)
+  setTurnOnButtonLoader({
       status: true,
       data: item
-    })
-    await getQuickViewData(item)
-    navigatePage(1)
+  })
+  await getQuickViewData(item)
+  navigatePage(1)
 }
 
 const handleTableRowClick=(item,index)=>{
