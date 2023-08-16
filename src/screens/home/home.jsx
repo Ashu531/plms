@@ -440,13 +440,13 @@ export default function Home({token}) {
         email: data.data.borrowerData.email
     }
 
-    // const response = await axios.post(`${API_URL}/api/loan/ask/consent/${leadInfo.leadId}/`,detail,{
-    //     headers: {
-    //         token: `3de1186482cdde561ca24e0e03f0753cd2616eba`,
-    //     },
-    // })
-    // .then(res => res.data)
-    // .catch(error => error.response.data);
+    const response = await axios.post(`${API_URL}/api/loan/ask/consent/${leadInfo.leadId}/`,detail,{
+        headers: {
+            token: `3de1186482cdde561ca24e0e03f0753cd2616eba`,
+        },
+    })
+    .then(res => res.data)
+    .catch(error => error.response.data);
     closeUserConsentModal()
 }
 
@@ -527,6 +527,10 @@ useEffect(() => {
   getProfileInfo();
 }, []);
 
+const removeSearchQuery=()=>{
+  setQuery('')
+}
+
   return (
     <div className="home-container">
       
@@ -538,6 +542,8 @@ useEffect(() => {
                 goToDraftPage={()=>goToDraftPage()}
                 goToDownloads={()=>goToDownloads()}
                 screen={screen}
+                query={query}
+                removeSearchQuery={()=>removeSearchQuery()}
            />
          } 
         {screen === 0 && (
@@ -570,7 +576,7 @@ useEffect(() => {
             
             <Button
               leadingIcon={addIcon}
-              text="Create"
+              text="Create Lead"
               classes={{
                 background: "#8F14CC",
                 borderRadius: "8px",
@@ -600,6 +606,7 @@ useEffect(() => {
                             setLeadInfo(item)
                             handleTableRowClick(item,index)
                         }}
+                        tableType={getSelectedStatusIndex()}
                         turnOnButtonLoader={turnOnButtonLoader}
                         loader={loader}
                   /> 
@@ -697,7 +704,7 @@ useEffect(() => {
       {consentModal && (
         <UserConsentModal
           closeUserConsentModal={() => closeUserConsentModal()}
-          submitConsent={()=>getQuickViewData()}
+          submitConsent={()=>getQuickViewData(leadInfo)}
           token={token}
         />
       )}

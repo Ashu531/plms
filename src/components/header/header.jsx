@@ -14,7 +14,9 @@ export default function Header({
     screen,
     goToDownloads,
     goToHomePage,
-    onDraftSearch
+    onDraftSearch,
+    query,
+    removeSearchQuery
 }) {
 
     const handleBack=()=>{
@@ -24,12 +26,14 @@ export default function Header({
 
   return (
    <div className='plms-navbar-header'>
-       <div style={{width: '40%'}}>
+       <div style={{width: 380}}>
            {
              screen === 0 && <Search
-                                placeholder={'Search Leads'}
-                                onChange={onSearchChange}
-                            />
+                placeholder={'Search for Leads'}
+                onChange={onSearchChange}
+                query={query}
+                removeSearchQuery={()=>removeSearchQuery()}
+            />
            }
 
             {/* {

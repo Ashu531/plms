@@ -19,7 +19,7 @@ export default function DocumentCard({
                 {title}
             </div>
             <div className='pending-icon-content'>
-                <img src={pendingIcon}/>
+                <img src={pendingIcon} height={12} width={12} style={{objectFit: 'contain'}} />
             </div>
         </div>
         <div className='column'>

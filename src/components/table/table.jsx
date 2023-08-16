@@ -9,6 +9,7 @@ export default function Table({
     onIconClick,
     turnOnButtonLoader,
     loader,
+    tableType
 }){
 
     const [buttonLoader,setButtonLoader] = useState(false)
@@ -44,13 +45,26 @@ export default function Table({
                     Amount
                     {/* <img src={sortIcon} style={{marginLeft: 5}}/> */}
                 </div>
-                <div className='header-text'>
+                {
+                    (tableType === 0 || tableType === 5) &&
+                    <div className='header-text'>
+                        UTR
+                    </div>
+                }
+                {
+                    (tableType === 0 || tableType === 5) &&
+                    <div className='header-text' style={{flex: '3 1 0px'}}>
+                    Disbursed On
+                        {/* <img src={sortIcon} style={{marginLeft: 5}}/> */}
+                    </div>
+                }
+                {/* <div className='header-text'>
                     UTR
                 </div>
                 <div className='header-text' style={{flex: '3 1 0px'}}>
                     Disbursed On
-                    {/* <img src={sortIcon} style={{marginLeft: 5}}/> */}
-                </div>
+                    <img src={sortIcon} style={{marginLeft: 5}}/>
+                </div> */}
                 <div className='header-text' style={{flex: '1 1 0px'}}></div>
             </div>
                 
@@ -62,8 +76,16 @@ export default function Table({
                             <div className='row-text'>{ item.fullName }</div>
                             <div className='row-text'>{ item.mobile }</div>
                             <div className='row-text'>{ item.loanRequired }</div>
-                            <div className='row-text'>{ item.utr ? item.utr : '-' }</div>
-                            <div className='row-text' style={{flex: '3 1 0px'}}>{ item.disbursementDatetime ? item.disbursementDatetime : '-' }</div>
+                            {
+                                (tableType === 0 || tableType === 5) &&
+                                <div className='row-text'>{ item.utr ? item.utr : '-' }</div>
+                            }
+                            {
+                                (tableType === 0 || tableType === 5) &&
+                                <div className='row-text' style={{flex: '3 1 0px'}}>{ item.disbursementDatetime ? item.disbursementDatetime : '-' }</div>
+                            }
+                            {/* <div className='row-text'>{ item.utr ? item.utr : '-' }</div>
+                            <div className='row-text' style={{flex: '3 1 0px'}}>{ item.disbursementDatetime ? item.disbursementDatetime : '-' }</div> */}
                             <div className='row-text icon-container' style={{flex: '1 1 0px'}} onClick={(e) => handleIconClick(e, item, index)}>
                                 {
                                 turnOnButtonLoader?.data?.leadId === item?.leadId && buttonLoader ? 

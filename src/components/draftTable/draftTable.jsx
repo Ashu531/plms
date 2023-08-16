@@ -45,7 +45,7 @@ export default function DraftTable({
             </div>
             <div className='table-row-container'>
                 { list.map((item, index) => (
-                    <div key={`${item}-${index}`} className='draft-table-row' >
+                    <div key={`${item}-${index}`} className='draft-table-row' onClick={() => onRowClick(item, index)}>
                         <div className='draft-row-text'>{ item.id.substring(0,10)+'...' }</div>
                         <div className='draft-row-text'>{ item.student_name ? item.student_name : '-' }</div>
                         <div className='draft-row-text'>{ item.applicant_phone ? item.applicant_phone : '-'}</div>
@@ -58,7 +58,7 @@ export default function DraftTable({
                             </div>
                         </div>
                         <div className='draft-row-text draft-icon-container' style={{flex: '1 1 0px'}}>
-                            <img src={editIcon} height={24} width={24} style={{ objectFit: 'contain',cursor: 'pointer'}} onClick={() => onRowClick(item, index)}/>
+                            <img src={editIcon} height={24} width={24} style={{ objectFit: 'contain',cursor: 'pointer'}} />
                             <img src={trashIcon} height={24} width={24} style={{ objectFit: 'contain',marginLeft: 8,cursor: 'pointer'}} onClick={()=> onDeleteDraft(item,index)} />
                         </div>
                     </div>

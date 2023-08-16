@@ -128,7 +128,7 @@ export default function DetailModal(props) {
                    </div>
                 </div>
             </div>
-            <div className='modal-footer row full-width' style={{justifyContent: 'center'}}>
+            <div className='modal-footer row full-width' style={{marginTop: 24}}>
                 {/* <Button
                     text='Edit Details'
                     classes={{
@@ -151,7 +151,7 @@ export default function DetailModal(props) {
                         background: '#8F14CC',
                         borderRadius: '8px',
                         height: '44px',
-                        width: '150px',
+                        width: '220px',
                     }}
                     textClass={{
                         color: '#FFF',

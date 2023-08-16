@@ -73,7 +73,7 @@ export function DropTitle({
 }) {
 
   return (
-    <div className={`row droptitle ${expanded ? 'expanded' : ''}`} style={{gap: '10px'}} onClick={onClick}>
+    <div className={`row droptitle ${expanded ? 'expanded' : ''}`} style={{gap: '10px',cursor:'pointer'}} onClick={onClick}>
         {leadingIcon && <img src={leadingIcon} style={{width: '20px', height: '20px'}}/>}
         <div className='text-montserrat text-weight-5 text-16 title'>{title}</div>
         {trailingIcon && 

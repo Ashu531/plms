@@ -51,7 +51,10 @@ export default function DraftPage(props) {
   }).
   then(res => {
     getDrafts()
-  }).catch(err=>console.log(err));
+  }).catch(err=>{
+    console.log(err.response.data)
+    alert(err.response.data.error)
+  });
   }
 
   const openLeadForm=(item)=>{
@@ -115,7 +118,7 @@ export default function DraftPage(props) {
     <div className='draft-page'>
           <div className='draft-page-header'>
               <Search 
-                placeholder={'Search Draft Leads'}
+                placeholder={'Search for Draft Leads'}
                 onChange={onDraftSearch}
               />
           </div>

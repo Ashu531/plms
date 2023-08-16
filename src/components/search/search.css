@@ -36,3 +36,10 @@ label {
     margin: 0;
     cursor: pointer;
 }
+
+.close-icon-content{
+    height: 24px;
+    width: 24px;
+    /* margin-top: 3px; */
+    cursor: pointer;
+}

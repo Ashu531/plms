@@ -11,6 +11,7 @@
     display: flex;
     justify-content: flex-end;
     align-items: flex-end;
+    gap: 35px;
 }
 
 .logout-container{
@@ -38,4 +39,5 @@
     line-height: normal;
     text-transform: uppercase;
     text-align: start;
+    margin-left: 15px;
 }

@@ -58,6 +58,7 @@ export default function FinancialForm({
     });
     const [companyName, setCompanyName] = useState({...defaultState});
     const [financialData,setFinancialData] = useState({})
+    const [isSalaried,setIsSalaried] = useState(false)
     const [loader,setLoader] = useState(false)
 
     const defaultState = {
@@ -74,6 +75,13 @@ export default function FinancialForm({
         getOverviewData()
     },[])
 
+    useEffect(()=>{
+        if(employmentStatus.value === '3'){
+            setIsSalaried(true)
+        }else{
+            setIsSalaried(false)
+        }
+    },[employmentStatus])
 
     const handleFinancialData=(data)=>{
         if(data?.borrowerData?.netMonthlyIncome > 0){
@@ -280,21 +288,6 @@ export default function FinancialForm({
                     error={getError(financialFormInputTypes.employmentStatus)}
                 />
                 <div className='finacial-form-divider'/>
-                <Input
-                    label={getLabel(financialFormInputTypes.monthySalary)}
-                    required={getRequired(financialFormInputTypes.monthySalary)}
-                    showCheck={getCheck(financialFormInputTypes.monthySalary)}
-                    placeholder={getPlaceholder(financialFormInputTypes.monthySalary)}
-                    leadingText={'₹'}
-                    value={getValue(financialFormInputTypes.monthySalary)}
-                    onChange={(str) => onChange(financialFormInputTypes.monthySalary, str)}
-                    disabled={getDisabled(financialFormInputTypes.monthySalary)}
-                    error={getError(financialFormInputTypes.monthySalary)}
-                    // type={getType(financialFormInputTypes.monthySalary)}
-                />
-            </div>
-            <div className='row' style={{justifyContent:"space-between"}}>
-                <div style={{width:'45%'}}>
                     <Input
                         label={getLabel(financialFormInputTypes.companyName)}
                         required={getRequired(financialFormInputTypes.companyName)}
@@ -307,6 +300,24 @@ export default function FinancialForm({
                         // style={{width: '50%'}}
                         // type={getType(financialFormInputTypes.companyName)}
                     />
+            </div>
+            <div className='row' style={{justifyContent:"space-between"}}>
+                <div style={{width:'45%'}}>
+                    {
+                        isSalaried && 
+                        <Input
+                            label={getLabel(financialFormInputTypes.monthySalary)}
+                            required={getRequired(financialFormInputTypes.monthySalary)}
+                            showCheck={getCheck(financialFormInputTypes.monthySalary)}
+                            placeholder={getPlaceholder(financialFormInputTypes.monthySalary)}
+                            leadingText={'₹'}
+                            value={getValue(financialFormInputTypes.monthySalary)}
+                            onChange={(str) => onChange(financialFormInputTypes.monthySalary, str)}
+                            disabled={getDisabled(financialFormInputTypes.monthySalary)}
+                            error={getError(financialFormInputTypes.monthySalary)}
+                            // type={getType(financialFormInputTypes.monthySalary)}
+                        />
+                    }
                 </div>
                 <div style={{width: '45%'}}>
                          <Button 

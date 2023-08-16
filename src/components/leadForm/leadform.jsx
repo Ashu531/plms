@@ -75,12 +75,12 @@ export default function LeadForm({
   return (
    <div className='lead-form-modal'>
        <div className='lead-form-modal-content'>
-                <div className='lead-form-modal-header row full-width-modal'>
+                <div className='lead-form-modal-header row'>
                     <div className='row'>
                         <img src={caretIcon} onClick={onBackPress} style={{cursor:'pointer'}} />
                         <span className='lead-modal-header'>Lead Creation</span>
                     </div>
-                    <div className='column' style={{alignItems:'flex-end'}}>
+                    <div className='column' style={{alignItems:'flex-start'}}>
                         <span className='lead-modal-instructions' style={{justifyContent:'flex-start'}}>*Mandatory Fields<br/>**You must fill all mandatory fields to save a lead</span>
                     </div>
                 </div>

@@ -4,7 +4,7 @@
     position: relative;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    justify-content: flex-start;
     align-items: flex-end;
     flex-shrink: 0;
 }
@@ -147,8 +147,8 @@
 }
 
 .modal-footer{
-    position: absolute;
+    /* position: absolute;
     bottom: 0px;
-    left: 0px;
+    left: 0px; */
     background: #fff;
 }

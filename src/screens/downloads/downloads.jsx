@@ -110,7 +110,7 @@ export default function DownloadPage(props) {
     const url = window.URL.createObjectURL(new Blob([data]));
     const link = document.createElement('a');
     link.href = url;
-    link.setAttribute('download', 'file.csv');
+    link.setAttribute('download', `Report:${moment(startDate).format('L')}-${moment(endDate).format('L')}`);
     document.body.appendChild(link);
     link.click();
   }
@@ -201,11 +201,11 @@ export default function DownloadPage(props) {
           >
            
             <div>
-              <ReactDatez inputStyle={{height: 30,borderRadius: 8,border: '1px solid #F5EBFF'}} name="dateInput" handleChange={handleStartDate} value={startDate} allowPast={true} allowFuture={false} />
+              <ReactDatez inputStyle={{height: 30,borderRadius: 8,border: '1px solid #F5EBFF'}} placeholder="DD/MM/YYYY" name="dateInput" handleChange={handleStartDate} value={startDate} allowPast={true} allowFuture={false} />
             </div>
             <span className='conjuction-text'>to</span>
             <div>
-              <ReactDatez inputStyle={{height: 30,borderRadius: 8,border: '1px solid #F5EBFF'}} name="dateInput" handleChange={handleEndDate} value={endDate} allowPast={true} allowFuture={false} />
+              <ReactDatez inputStyle={{height: 30,borderRadius: 8,border: '1px solid #F5EBFF'}} placeholder="DD/MM/YYYY" name="dateInput" handleChange={handleEndDate} value={endDate} allowPast={true} allowFuture={false} />
             </div>
           </div>
           <div className='column' style={{marginTop: 24}}>

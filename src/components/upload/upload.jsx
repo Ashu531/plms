@@ -166,9 +166,9 @@ export default function Upload({
             {currentUploadState == uploadtStates.drop && <div className="plms-dropzone" onClick={() => fileInputField.current.click()} onDrop={handleDrop} onDragOver={handleDragOver}>
                 <input type='file' accept="image/jpeg,image/jpg,image/png,application/pdf" ref={fileInputField} onChange={handleSelected} style={{visibility: 'hidden'}} />
                 <img src={cloudIcon} onDragOver={handleDragOver} height={60} width={60} style={{objectFit: 'contain'}}/>
-                <div className="title" style={{color: '#6699ff', margin: '1rem 0px 0px'}} onDragOver={handleDragOver}>Drag & Drop files</div>
-                <span className='or-text'>or</span>
-                <div className="subtitle" style={{fontSize: '16px', margin: '0px 0px 1rem'}} onDragOver={handleDragOver}>Browse Files</div>
+                <div className="plms-title" style={{margin: '1rem 0px 0px'}} onDragOver={handleDragOver}>Drag & Drop files</div>
+                <span className='plms-or-text'>or</span>
+                <div className="plms-subtitle" style={{fontSize: '16px', margin: '0px 0px 1rem'}} onDragOver={handleDragOver}>Browse Files</div>
             </div>}
             {currentUploadState != uploadtStates.drop && selectedFiles.length > 0 && <div className="plms-file-container">
                 {selectedFiles.map((file, i) => (

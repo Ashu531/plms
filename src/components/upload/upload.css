@@ -85,27 +85,35 @@
   }
 
   .plms-title{
-    color: #444;
-    font-size: 20px;
+    color: #444444;
     font-family: 'Montserrat';
+    font-size: 20px;
+    font-style: normal;
     font-weight: 500;
+    line-height: normal;
     text-transform: capitalize;
   }
 
   .plms-or-text{
-    color: #444;
-    font-size: 12px;
+    color: #444444;
     font-family: 'Montserrat';
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    margin: 10px 0px;
   }
 
 
   .plms-subtitle{
-    margin: 18px 0;
-    text-align: center;
-    color: #0B090D;
-    font-size: 14px;
+    color: #8F14CC;
     font-family: 'Montserrat';
+    font-size: 20px;
+    font-style: normal;
     font-weight: 500;
+    line-height: normal;
+    text-decoration-line: underline;
+    text-transform: capitalize;
   }
 
   .file-preview{
