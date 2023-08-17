@@ -39,7 +39,9 @@ export const saveDraft = async (payload, token) => {
             token: `${token}`,
         },
     }).then(res => res.data.data)
-    .catch(err => console.log(err))
+    .catch(err => {
+        alert(err.response.data.error)
+    })
 
     return response;
 
