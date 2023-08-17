@@ -114,12 +114,18 @@ export default function DraftPage(props) {
     return () => clearTimeout(delayDebounce);
   }, [draftQuery]);
 
+  const removeDraftSearchQuery=()=>{
+    setDraftQuery('')
+  }
+
   return (
     <div className='draft-page'>
           <div className='draft-page-header'>
               <Search 
                 placeholder={'Search for Draft Leads'}
                 onChange={onDraftSearch}
+                query={draftQuery}
+                removeSearchQuery={()=>removeDraftSearchQuery()}
               />
           </div>
           <div
