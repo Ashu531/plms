@@ -108,6 +108,7 @@ export default function Home({token}) {
   const [consent,setUserConsent] = useState(false)
   const [loader,setLoader] = useState(false)
   const [draftSaved,setDraftSaved] = useState(false)
+  const [refreshed,setRefreshed] = useState(false)
 
   const [turnOnButtonLoader,setTurnOnButtonLoader] = useState({
     status : false,
@@ -482,6 +483,12 @@ const handleTableRowClick=(item,index)=>{
   getPendencyData(item)
 }
 
+const onRefresh=(item)=>{
+  setLeadInfo(item)
+  handleTableIconClick(item)
+  handleRefresh()
+}
+
 const getPendencyData=async(item)=>{
   await axios.get(`${API_URL}/api/loan/pendencies/${item?.leadId}/`,{
       headers: {
@@ -532,6 +539,10 @@ useEffect(() => {
 
 const removeSearchQuery=()=>{
   setQuery('')
+}
+
+const handleRefresh=()=>{
+  setRefreshed(!refreshed)
 }
 
   return (
@@ -653,6 +664,9 @@ const removeSearchQuery=()=>{
            formData={temporaryFormData}
            setFormData={setTemporaryFormData}
            consent={consent}
+           onRefresh={(item)=>onRefresh(item)}
+           handleRefresh={()=>handleRefresh()}
+           refreshed={refreshed}
            />
         </div>
       )}
