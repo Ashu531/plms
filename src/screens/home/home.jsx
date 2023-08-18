@@ -399,14 +399,17 @@ export default function Home({token}) {
     setConsentModal(true);
   };
 
-  const getQuickViewData=async(leadData)=>{
+  const getQuickViewData=async(leadData,type)=>{
     await axios.get(`${API_URL}/api/loan/overview/${leadData?.leadId}/`,{
         headers: {
             token: `${token}`,
         },
     }).
     then(res => {
+      if(type==='consent'){
         submitConsent(res?.data?.data)
+      }
+      
         const resData = res?.data?.data?.data?.borrowerData;
         setLeadOverview(resData)
         let data = {
@@ -704,7 +707,7 @@ const removeSearchQuery=()=>{
       {consentModal && (
         <UserConsentModal
           closeUserConsentModal={() => closeUserConsentModal()}
-          submitConsent={()=>getQuickViewData(leadInfo)}
+          submitConsent={()=>getQuickViewData(leadInfo,'consent')}
           token={token}
         />
       )}

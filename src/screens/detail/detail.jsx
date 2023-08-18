@@ -22,7 +22,8 @@ const documentTypes = [
     'Landline Bill', 
     'Electricity Bill', 
     'Gas Bill', 
-    'Water Bill'
+    'Water Bill',
+    'Others'
 ]
 
 export default function DetailPage({
@@ -91,6 +92,7 @@ const getDocumentType = () => {
         case 'Electricity Bill': return 'PHOTO' 
         case 'Gas Bill': return 'PHOTO' 
         case 'Water Bill': return 'PHOTO'
+        case 'Others': return 'PHOTO'
     }
 }
 
@@ -192,6 +194,8 @@ const handleDocTypeSelection = (docType) => {
         }
 }
 
+console.log(leadOverview,"leadData++")
+
   return (
     <div className='lead-detail-page'>
         <div className='lead-page-header full-width'>
@@ -199,9 +203,8 @@ const handleDocTypeSelection = (docType) => {
                 <div className='row'>
                     <img src={caretIcon} onClick={()=>handleBack()} style={{cursor:'pointer'}}/>
                     <div className='column' style={{marginTop: 20,marginLeft: 12}}>
-                        <span className='lead-page-heading'>{props?.leadData?.fullName}</span>
+                        <span className='lead-page-heading' >{props?.leadData?.fullName} : {props?.leadData?.leadId}</span>
                         <span className='lead-page-subheading'> {props?.leadData?.mobile}</span>
-                         
                     </div>
                 </div>
                 <div className='column' style={{alignItems:'flex-end'}}>
@@ -212,12 +215,16 @@ const handleDocTypeSelection = (docType) => {
                             <span className='lead-page-intruction-label'>Lead Consent: </span>
                             <img src={consentIcon} />
                         </div>
-                        {
-                           props?.leadData?.disbursementDatetime &&
-                           <span className='lead-page-subheading-time'>Given On:  {props?.leadData?.disbursementDatetime}</span> 
+                        { leadOverview?.utrDetail.utrNo &&
+                            <span className='lead-page-subheading' style={{marginTop:0}}>UTR : {leadOverview?.utrDetail?.utrNo}</span>
                         }
-                        { props?.leadData?.utr &&
-                            <span className='lead-page-subheading'>UTR : {props?.leadData?.utr}</span>
+                        {
+                           leadOverview?.utrDetail?.disbursementDate &&
+                           <span className='lead-page-subheading-time'>Disbursed at:  {leadOverview?.utrDetail?.disbursementDate}</span> 
+                        }
+                        {
+                           leadOverview?.utrDetail?.disbursementAmount &&
+                           <span className='lead-page-subheading-time'>Disbursed Amount:  {leadOverview?.utrDetail?.disbursementAmount}</span> 
                         }
                         </>
                         :
@@ -265,7 +272,7 @@ const handleDocTypeSelection = (docType) => {
                             <DocumentCard
                                 onClick={()=>handleDocumentsCard('PAN Card')}
                                 title={'PAN Card'}
-                                desc={'Upload a clear image of your PAN Card clearly stating your name and date of birth.'}
+                                desc={'Upload a clear image of your Document clearly stating your name and date of birth.'}
                                 instruction={'Format: PDF, PNG, JPEG, JPG.'}
                             />
                         </div>
@@ -273,7 +280,7 @@ const handleDocTypeSelection = (docType) => {
                             <DocumentCard
                                 onClick={()=>handleDocumentsCard('Aadhaar Card')}
                                 title={'Aadhaar Card'}
-                                desc={'Upload a clear image of your PAN Card clearly stating your name and date of birth.'}
+                                desc={'Upload a clear image of your Document clearly stating your name and date of birth.'}
                                 instruction={'Format: PDF, PNG, JPEG, JPG.'}
                             />
                         </div>
@@ -281,7 +288,7 @@ const handleDocTypeSelection = (docType) => {
                             <DocumentCard
                                 onClick={()=>handleDocumentsCard('Bank Statement')}
                                 title={'Bank Statement'}
-                                desc={'Upload a clear image of your PAN Card clearly stating your name and date of birth.'}
+                                desc={'Upload a clear image of your Document clearly stating your name and date of birth.'}
                                 instruction={'Format: PDF, PNG, JPEG, JPG.'}
                             />
                         </div>
@@ -307,7 +314,7 @@ const handleDocTypeSelection = (docType) => {
                                     onClick={()=>handleDocumentsCard(docType)}
                                     id={`${docType}-${index}`}
                                     title={docType}
-                                    desc={'Upload a clear image of your PAN Card clearly stating your name and date of birth.'}
+                                    desc={'Upload a clear image of your Document clearly stating your name and date of birth.'}
                                     instruction={'Format: PDF, PNG, JPEG, JPG.'}
                                     isMandatory={false}
                                     onRemove={() => {
