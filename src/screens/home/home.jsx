@@ -16,6 +16,7 @@ import UploadModal from "../../components/uploadModal/uploadModal.jsx";
 import DownloadPage from "../downloads/downloads.jsx";
 import { getProfileData } from "../../helpers/apis.js";
 import { Bars, TailSpin } from "react-loader-spinner";
+import StudentModal from "../../components/studentModal/studentModal.jsx";
 
 const statuses = [
   {
@@ -108,6 +109,7 @@ export default function Home({token}) {
   const [consent,setUserConsent] = useState(false)
   const [loader,setLoader] = useState(false)
   const [draftSaved,setDraftSaved] = useState(false)
+  const [studentModal,setStudentModal] = useState(false)
 
   const [turnOnButtonLoader,setTurnOnButtonLoader] = useState({
     status : false,
@@ -399,14 +401,17 @@ export default function Home({token}) {
     setConsentModal(true);
   };
 
-  const getQuickViewData=async(leadData)=>{
+  const getQuickViewData=async(leadData,type)=>{
     await axios.get(`${API_URL}/api/loan/overview/${leadData?.leadId}/`,{
         headers: {
             token: `${token}`,
         },
     }).
     then(res => {
+      if(type === 'consent'){
         submitConsent(res?.data?.data)
+      }
+       
         const resData = res?.data?.data?.data?.borrowerData;
         setLeadOverview(resData)
         let data = {
@@ -442,11 +447,11 @@ export default function Home({token}) {
 
     const response = await axios.post(`${API_URL}/api/loan/ask/consent/${leadInfo.leadId}/`,detail,{
         headers: {
-            token: `3de1186482cdde561ca24e0e03f0753cd2616eba`,
+            token: token,
         },
     })
     .then(res => res.data)
-    .catch(error => error.response.data);
+    .catch(error => alert(error.response.data.data.message));
     closeUserConsentModal()
 }
 
@@ -531,6 +536,14 @@ const removeSearchQuery=()=>{
   setQuery('')
 }
 
+const openStudentModal=()=>{
+  setStudentModal(true)
+}
+
+const closeStudentModal=()=>{
+  setStudentModal(false)
+}
+
   return (
     <div className="home-container">
       
@@ -573,6 +586,23 @@ const removeSearchQuery=()=>{
               query?.length === 0 ?  <div className="lead-count">Showing {statusCount} leads</div>
               : <div className="lead-count">Showing {searchCount} leads</div>
             }
+          <div className='create-button-container'>
+            <Button
+              leadingIcon={addIcon}
+              text="Lead from Student"
+              classes={{
+                background: "#8F14CC",
+                borderRadius: "8px",
+                height: "44px",
+              }}
+              textClass={{
+                color: "#FFF",
+                fontSize: "16px",
+                fontFamily: "Montserrat",
+                fontWeight: 500,
+              }}
+              onClick={openStudentModal}
+            />
             
             <Button
               leadingIcon={addIcon}
@@ -590,6 +620,7 @@ const removeSearchQuery=()=>{
               }}
               onClick={_openLeadForm}
             />
+          </div>  
           </div>
 
           <div className="table-container">
@@ -704,7 +735,7 @@ const removeSearchQuery=()=>{
       {consentModal && (
         <UserConsentModal
           closeUserConsentModal={() => closeUserConsentModal()}
-          submitConsent={()=>getQuickViewData(leadInfo)}
+          submitConsent={()=>getQuickViewData(leadInfo,'consent')}
           token={token}
         />
       )}
@@ -717,6 +748,14 @@ const removeSearchQuery=()=>{
             docType={''}
             borrowerUuid={leadInfo.borrowerUuid}
             leadId={leadInfo.leadId}
+          />
+      }
+
+      {
+          studentModal &&
+          <StudentModal 
+            closeStudentModal={()=>closeStudentModal()}
+            token={token}
           />
       }
 
