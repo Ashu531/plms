@@ -168,9 +168,15 @@ export default function Home({token}) {
     setOpenLeadForm(true);
   };
 
-  const _closeLeadForm = () => {
+  const _closeLeadForm = async(res) => {
+    let leadData = res.data.borrowerData;
+    leadData['leadId'] = `LEAD-${leadData.leadId}`
+    setLeadInfo(leadData)
+    setLoader(true)
     setOpenLeadForm(false);
-    resetDetailsPage()
+    // getQuickViewData(leadData)
+    // resetDetailsPage()
+    handleTableIconClick(leadData)
   };
 
   ///////////////////////////////////////////////////////////////
@@ -475,6 +481,7 @@ const handleTableIconClick= async (item,index)=>{
   })
   await getQuickViewData(item)
   navigatePage(1)
+  setLoader(false)
 }
 
 const handleTableRowClick=(item,index)=>{
@@ -709,7 +716,7 @@ const handleRefresh=()=>{
       )}
       {openLeadForm && 
         <LeadForm 
-          onBackPress={_closeLeadForm} 
+          onBackPress={(res)=>_closeLeadForm(res)} 
           instituteName={profile.college} 
           token={token}
           formData={formData} 

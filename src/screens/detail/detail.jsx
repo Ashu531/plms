@@ -213,7 +213,7 @@ const handleRefresh=async()=>{
                 <div className='row'>
                     <img src={caretIcon} onClick={()=>handleBack()} style={{cursor:'pointer'}}/>
                     <div className='column' style={{marginTop: 20,marginLeft: 12}}>
-                        <span className='lead-page-heading' >{props?.leadData?.fullName} : {props?.leadData?.leadId}</span>
+                        <span className='lead-page-heading' >{props?.leadData?.fullName && props?.leadData?.fullName.length > 0 ? props?.leadData?.fullName : `${props?.leadData?.studentFirstName} ${props?.leadData?.studentMiddleName} ${props?.leadData?.studentLastName}`} : {props?.leadData?.leadId}</span>
                         <span className='lead-page-subheading'> {props?.leadData?.mobile}</span>
                     </div>
                 </div>
