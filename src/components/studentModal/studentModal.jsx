@@ -34,7 +34,7 @@ export default function StudentModal({
             },
         }).
         then(res => { 
-      
+                console.log(res,"res+++")
                 if(pageNumber <= 1){
                     if(res.data.data.length > 0){
                         setStudentList([...res.data.data])
@@ -93,7 +93,7 @@ export default function StudentModal({
 
     const handleSearch = async(query) => {
         //search api here
-        await axios.get(`${API_URL}/api/fees/v2/optional_installment/student/page/100/1/?search=${query}`,{
+        await axios.get(`${API_URL}/api/fees/v2/optional_installment/student/page/1000/1/?search=${query}`,{
             headers: {
                 token: `${token}`,
             },
@@ -112,7 +112,7 @@ export default function StudentModal({
     const handleStudentSelect=(item)=>{
         onStudentSelection(item)
     }
-
+console.log(noResult,"jlhugjyhfg")
   return (
     <div className='student-form-modal'>
        <div className='student-form-modal-content'>
@@ -133,8 +133,8 @@ export default function StudentModal({
                     />
                 </div>
                 <div className='student-modal-list'>
-                    {
-                        query && query.length > 0 ?
+                    { 
+                     query && query.length > 0 ?
                             <div style={{  
                                 paddingBottom: '10rem',
                                 display:'flex',
@@ -156,7 +156,7 @@ export default function StudentModal({
                             dataLength={studentList.length}
                             next={fetchMoreData}
                             hasMore={hasNextPage}
-                            loader={<h4 style={{color:'#000'}}>Loading...</h4>}
+                            // loader={<h4 style={{color:'#000'}}>Loading...</h4>}
                             height={560}
                             style={{  
                                 paddingBottom: '10rem',
@@ -178,10 +178,9 @@ export default function StudentModal({
                             }
                             
                         </InfiniteScroll>
-
                     }
                     { noResult &&
-                        <div className='no-result-content'>
+                        <div className='modal-no-result-content'>
                             <span>No Results</span>
                         </div>
                     }

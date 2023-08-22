@@ -122,3 +122,14 @@
     background-position-y: center;
     background-position-x: left;
 }
+
+.modal-no-result-content{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    margin-top: 10rem;
+    color: #000;
+    position: fixed;
+    top: 10rem;
+}
