@@ -50,7 +50,7 @@ export default function LeadForm({
         if(addAnother){
             setFormData({...leadState});
         } else {
-            onBackPress();
+            onBackPress(res);
         }
 
         setLoader(false)

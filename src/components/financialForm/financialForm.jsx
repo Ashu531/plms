@@ -76,12 +76,14 @@ export default function FinancialForm({
     },[])
 
     useEffect(()=>{
-        if(employmentStatus.value === '3'){
+        if(employmentStatus.value === '3' || employmentStatus.value === 3){
             setIsSalaried(true)
         }else{
             setIsSalaried(false)
         }
     },[employmentStatus])
+
+    console.log(isSalaried,"salaried+++")
 
     const handleFinancialData=(data)=>{
         if(data?.borrowerData?.netMonthlyIncome > 0){

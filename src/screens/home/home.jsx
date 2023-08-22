@@ -110,6 +110,7 @@ export default function Home({token}) {
   const [loader,setLoader] = useState(false)
   const [draftSaved,setDraftSaved] = useState(false)
   const [studentModal,setStudentModal] = useState(false)
+  const [refreshed,setRefreshed] = useState(false)
 
   const [turnOnButtonLoader,setTurnOnButtonLoader] = useState({
     status : false,
@@ -169,10 +170,15 @@ export default function Home({token}) {
     setOpenLeadForm(true);
   };
 
-  const _closeLeadForm = () => {
+  const _closeLeadForm = async(res) => {
+    let leadData = res.data.borrowerData;
+    leadData['leadId'] = `LEAD-${leadData.leadId}`
+    setLeadInfo(leadData)
+    setLoader(true)
     setOpenLeadForm(false);
-    resetDetailsPage()
-    updateScreen()
+    // getQuickViewData(leadData)
+    // resetDetailsPage()
+    handleTableIconClick(leadData)
   };
 
   ///////////////////////////////////////////////////////////////
@@ -477,12 +483,19 @@ const handleTableIconClick= async (item,index)=>{
   })
   await getQuickViewData(item)
   navigatePage(1)
+  setLoader(false)
 }
 
 const handleTableRowClick=(item,index)=>{
   setPendencyResponse(true)
   openSlidingPanel()
   getPendencyData(item)
+}
+
+const onRefresh=(item)=>{
+  setLeadInfo(item)
+  handleTableIconClick(item)
+  handleRefresh()
 }
 
 const getPendencyData=async(item)=>{
@@ -570,6 +583,10 @@ const onStudentSelection=async(data)=>{
     }
   setLoader(false)
   setOpenLeadForm(true);
+}
+
+const handleRefresh=()=>{
+  setRefreshed(!refreshed)
 }
 
   return (
@@ -709,6 +726,9 @@ const onStudentSelection=async(data)=>{
            formData={temporaryFormData}
            setFormData={setTemporaryFormData}
            consent={consent}
+           onRefresh={(item)=>onRefresh(item)}
+           handleRefresh={()=>handleRefresh()}
+           refreshed={refreshed}
            />
         </div>
       )}
@@ -751,7 +771,7 @@ const onStudentSelection=async(data)=>{
       )}
       {openLeadForm && 
         <LeadForm 
-          onBackPress={_closeLeadForm} 
+          onBackPress={(res)=>_closeLeadForm(res)} 
           instituteName={profile.college} 
           token={token}
           formData={formData} 

@@ -105,3 +105,19 @@
     font-weight: 400;
     line-height: normal;
 }
+
+.plms-light-text{
+    color: #444;
+    font-family: 'Montserrat';
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+
+.plms-refresh-container{
+    position: fixed;
+    top: 5px;
+    right: 36px;
+    cursor: pointer;
+}

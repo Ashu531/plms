@@ -22,6 +22,7 @@ export default function LoanDetailsForm({
     const advanceEmiLabel = () => 'Advance EMI';
 
     const advanceEmiOptions = [
+        {id: 0, label: 0, disabled: false},
         {id: 1, label: 1, disabled: false},
         {id: 2, label: 2, disabled: false},
         {id: 3, label: 3, disabled: false},

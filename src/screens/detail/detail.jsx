@@ -22,7 +22,8 @@ const documentTypes = [
     'Landline Bill', 
     'Electricity Bill', 
     'Gas Bill', 
-    'Water Bill'
+    'Water Bill',
+    'Others'
 ]
 
 export default function DetailPage({
@@ -43,7 +44,6 @@ export default function DetailPage({
  const [selectedDocTypes, setSelectedDocTypes] = useState(new Set([]));
  const [currentUploadState, setCurrentUploadState] = useState(uploadtStates.drop);
 
-
 const [selectedFiles, setSelectedFiles] = useState([]);
 const [deletedFiles, setDeletedFiles] = useState([]);
 const [verified, setVerified] = useState(false);
@@ -53,6 +53,7 @@ const [activityLoader,setActivityLoader] = useState(false)
 const [activityNoResult,setActivityNoResult] = useState(false)
 const [commentLoader,setCommentLoader] = useState(false)
 const [commentNoResult,setCommentNoResult] = useState(false)
+const [loader,setLoader] = useState(false)
 
 const switchToDropState = () => {
     setCurrentUploadState(uploadtStates.drop)
@@ -91,6 +92,7 @@ const getDocumentType = () => {
         case 'Electricity Bill': return 'PHOTO' 
         case 'Gas Bill': return 'PHOTO' 
         case 'Water Bill': return 'PHOTO'
+        case 'Others': return 'PHOTO'
     }
 }
 
@@ -148,7 +150,10 @@ const getDocumentType = () => {
     }).
     then(res => {
         setLeadData(res.data.data.data)
-    }).catch(err=>console.log(err));
+    }).catch(err=>{
+        console.log(err)
+    });
+    
  }
 
  const updateLead = async () => {
@@ -192,6 +197,15 @@ const handleDocTypeSelection = (docType) => {
         }
 }
 
+const handleRefresh=async()=>{
+    setLoader(true)
+    props?.onRefresh(props?.leadData)
+    await getActivityData()
+    await getUserComment()
+    await getLeadOverview()
+    setLoader(false)
+}
+
   return (
     <div className='lead-detail-page'>
         <div className='lead-page-header full-width'>
@@ -199,9 +213,8 @@ const handleDocTypeSelection = (docType) => {
                 <div className='row'>
                     <img src={caretIcon} onClick={()=>handleBack()} style={{cursor:'pointer'}}/>
                     <div className='column' style={{marginTop: 20,marginLeft: 12}}>
-                        <span className='lead-page-heading'>{props?.leadData?.fullName}</span>
+                        <span className='lead-page-heading' >{props?.leadData?.fullName && props?.leadData?.fullName.length > 0 ? props?.leadData?.fullName : `${props?.leadData?.studentFirstName} ${props?.leadData?.studentMiddleName} ${props?.leadData?.studentLastName}`} : {props?.leadData?.leadId}</span>
                         <span className='lead-page-subheading'> {props?.leadData?.mobile}</span>
-                         
                     </div>
                 </div>
                 <div className='column' style={{alignItems:'flex-end'}}>
@@ -212,12 +225,16 @@ const handleDocTypeSelection = (docType) => {
                             <span className='lead-page-intruction-label'>Lead Consent: </span>
                             <img src={consentIcon} />
                         </div>
-                        {
-                           props?.leadData?.disbursementDatetime &&
-                           <span className='lead-page-subheading-time'>Given On:  {props?.leadData?.disbursementDatetime}</span> 
+                        { leadOverview?.utrDetail?.utrNo &&
+                            <span className='lead-page-subheading' style={{marginTop:0}}>UTR : {leadOverview?.utrDetail?.utrNo}</span>
                         }
-                        { props?.leadData?.utr &&
-                            <span className='lead-page-subheading'>UTR : {props?.leadData?.utr}</span>
+                        {
+                           leadOverview?.utrDetail?.disbursementDate &&
+                           <span className='lead-page-subheading-time'>Disbursed at:  {leadOverview?.utrDetail?.disbursementDate}</span> 
+                        }
+                        {
+                           leadOverview?.utrDetail?.disbursementAmount &&
+                           <span className='lead-page-subheading-time'>Disbursed Amount:  ₹{leadOverview?.utrDetail?.disbursementAmount}</span> 
                         }
                         </>
                         :
@@ -265,7 +282,7 @@ const handleDocTypeSelection = (docType) => {
                             <DocumentCard
                                 onClick={()=>handleDocumentsCard('PAN Card')}
                                 title={'PAN Card'}
-                                desc={'Upload a clear image of your PAN Card clearly stating your name and date of birth.'}
+                                desc={'Upload a clear image of your Document clearly stating your name and date of birth.'}
                                 instruction={'Format: PDF, PNG, JPEG, JPG.'}
                             />
                         </div>
@@ -273,7 +290,7 @@ const handleDocTypeSelection = (docType) => {
                             <DocumentCard
                                 onClick={()=>handleDocumentsCard('Aadhaar Card')}
                                 title={'Aadhaar Card'}
-                                desc={'Upload a clear image of your PAN Card clearly stating your name and date of birth.'}
+                                desc={'Upload a clear image of your Document clearly stating your name and date of birth.'}
                                 instruction={'Format: PDF, PNG, JPEG, JPG.'}
                             />
                         </div>
@@ -281,7 +298,7 @@ const handleDocTypeSelection = (docType) => {
                             <DocumentCard
                                 onClick={()=>handleDocumentsCard('Bank Statement')}
                                 title={'Bank Statement'}
-                                desc={'Upload a clear image of your PAN Card clearly stating your name and date of birth.'}
+                                desc={'Upload a clear image of your Document clearly stating your name and date of birth.'}
                                 instruction={'Format: PDF, PNG, JPEG, JPG.'}
                             />
                         </div>
@@ -307,7 +324,7 @@ const handleDocTypeSelection = (docType) => {
                                     onClick={()=>handleDocumentsCard(docType)}
                                     id={`${docType}-${index}`}
                                     title={docType}
-                                    desc={'Upload a clear image of your PAN Card clearly stating your name and date of birth.'}
+                                    desc={'Upload a clear image of your Document clearly stating your name and date of birth.'}
                                     instruction={'Format: PDF, PNG, JPEG, JPG.'}
                                     isMandatory={false}
                                     onRemove={() => {
@@ -401,6 +418,15 @@ const handleDocTypeSelection = (docType) => {
                 </div>
             }
         </div>
+        <div className='plms-refresh-container' onClick={()=>handleRefresh()}>
+             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="#000000" viewBox="0 0 256 256"><path d="M194.83,189.18a4,4,0,0,1,0,5.65c-1,1-25.65,25.17-66.83,25.17-23.93,0-47.35-10.05-67.73-29.08a146.39,146.39,0,0,1-16.27-18V208a4,4,0,0,1-8,0V160a4,4,0,0,1,4-4H88a4,4,0,0,1,0,8H47.41c10,14.06,38.39,48,80.59,48,37.75,0,60.95-22.6,61.18-22.83A4,4,0,0,1,194.83,189.18ZM216,44a4,4,0,0,0-4,4V83.07a146.39,146.39,0,0,0-16.27-18C175.35,46.05,151.93,36,128,36,86.82,36,62.2,60.14,61.17,61.17a4,4,0,0,0,5.65,5.66C67.05,66.6,90.25,44,128,44c42.2,0,70.63,33.94,80.59,48H168a4,4,0,0,0,0,8h48a4,4,0,0,0,4-4V48A4,4,0,0,0,216,44Z"></path></svg>
+        </div>
+        {
+        loader && 
+          <div className="credenc-loader-white fullscreen-loader" style={{position:'absolute'}}>
+            <TailSpin color="#00BFFF" height={100} width={100}/>
+          </div>
+        }
     </div>
   )
 }
