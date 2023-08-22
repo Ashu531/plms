@@ -116,8 +116,9 @@
 }
 
 .plms-refresh-container{
-    position: fixed;
+    /* position: fixed;
     top: 5px;
-    right: 36px;
+    right: 36px; */
     cursor: pointer;
+    margin-right: 10px;
 }
