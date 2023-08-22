@@ -94,3 +94,31 @@
     align-items: center;
     margin-top: 2.4rem;
 }
+
+.modal-credenc-loader-white{
+    position: fixed;
+    top: 0;
+    left: 0;
+    padding: 1rem 0;
+    z-index: 2;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    pointer-events: none;
+    border-radius: 1.2rem;
+}
+
+.modal-fullscreen-loader{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* backdrop-filter: blur(0.1rem); */
+    background-size: auto;
+    -webkit-background-size: auto;
+    -moz-background-size: auto;
+    -o-background-size: auto;
+    background-position-y: center;
+    background-position-x: left;
+}

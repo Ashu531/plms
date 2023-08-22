@@ -4,22 +4,28 @@ import caretIcon from '../../assets/Icons/caretIcon.svg';
 import InfiniteScroll from "react-infinite-scroll-component";
 import Search from '../search/search.jsx';
 import axios from 'axios';
+import { Bars, TailSpin } from "react-loader-spinner";
 
 export default function StudentModal({
     closeStudentModal,
-    token
+    token,
+    onStudentSelection
 }) {
 
     const [query,setQuery] = useState('')
     const [pageNumber,setPageNumber] = useState(1)
     const [studentList,setStudentList] = useState([])
     const [hasNextPage, setHasNextPage] = useState(true);
+    const [loader,setLoader] = useState(false)
+    const [noResult,setNoResult] = useState(false)
 
     useEffect(()=>{
         getStudentList()
     },[pageNumber])
 
     const getStudentList=async()=>{
+        setNoResult(false)
+        setLoader(true)
         await axios.get(`${API_URL}/api/fees/v2/student/page/${window.innerHeight < 1100 ? 20 : 40}/${
             pageNumber
           }/?`,{
@@ -28,43 +34,84 @@ export default function StudentModal({
             },
         }).
         then(res => { 
-            if(studentList.length > 0){
-                setStudentList([...studentList,res.data.data])
-            }else{
-                setStudentList(res.data.data)
-            }
+      
+                if(pageNumber <= 1){
+                    if(res.data.data.length > 0){
+                        setStudentList([...res.data.data])
+                    }else{
+                        setNoResult(true)
+                    }
+                }else{
+                    setStudentList([...studentList,...res.data.data])
+                }
             
-        }).catch(err=>console.log(err));
-    }
-console.log(studentList,"jkhgfdszfghjkhgfdxg")
-    const removeSearchQuery=()=>{
-        setQuery('')
+            setLoader(false)
+        }).catch(err=>{
+            setLoader(false)
+            console.log(err)
+        });
     }
 
-    const onChange=(e)=>{
-        setQuery(e)
+    const removeSearchQuery=()=>{
+        setQuery('')
+        setStudentList([])
+        if(pageNumber > 1){
+            setPageNumber(1)
+        }else{
+            getStudentList()
+        }
+    }
+
+    const onSearch=(e)=>{
+        setNoResult(false)
+        if(e.length > 0){
+            setQuery(e)
+        }else{
+            setQuery('')
+            setStudentList([])
+            if(pageNumber > 1){
+                setPageNumber(1)
+            }else{
+                getStudentList()
+            }
+        }
     }
 
     const fetchMoreData=()=>{
         setPageNumber(pageNumber+1)
     }
 
-    // const getScrollHeight = () => {
+    useEffect(() => {
+        const delayDebounce = setTimeout(() => {
+            if(query?.length > 0){
+                handleSearch(query);
+            }
+         }, 500);
+    
+        return () => clearTimeout(delayDebounce);
+      }, [query]);
 
-    //     if(selectedStudentsList.length > 1){
-    //         switch(true){
-    //             case window.innerHeight < 700: return window.innerHeight * 0.6;
-    //             case window.innerHeight < 1300: return window.innerHeight * 0.68;
-    //             default: return window.innerHeight * 0.85;
-    //         }
-    //     }
+    const handleSearch = async(query) => {
+        //search api here
+        await axios.get(`${API_URL}/api/fees/v2/optional_installment/student/page/100/1/?search=${query}`,{
+            headers: {
+                token: `${token}`,
+            },
+        }).
+        then(res => {
+            if(res?.data?.data.length > 0){
+                let list = res?.data?.data;
+                setStudentList(list)
+            }else{
+                setStudentList([])
+                setNoResult(true)
+            }
+        }).catch(err=>console.log(err));
+      };
 
-    //     switch(true){
-    //         case window.innerHeight < 700: return window.innerHeight * 0.65;
-    //         case window.innerHeight < 1300: return window.innerHeight * 0.78;
-    //         default: return window.innerHeight * 0.9;
-    //     }
-    // }
+    const handleStudentSelect=(item)=>{
+        onStudentSelection(item)
+    }
 
   return (
     <div className='student-form-modal'>
@@ -80,41 +127,73 @@ console.log(studentList,"jkhgfdszfghjkhgfdxg")
                 </div>
                 <div className='student-modal-search-container'>
                     <Search
-                      onChange={(e)=>onChange(e)}
+                      onChange={(e)=>onSearch(e)}
                       query={query}
                       removeSearchQuery={()=>removeSearchQuery()}
                     />
                 </div>
                 <div className='student-modal-list'>
-                    <InfiniteScroll
-                        dataLength={studentList.length}
-                        next={fetchMoreData}
-                        hasMore={hasNextPage}
-                        loader={<h4 style={{color:'#000'}}>Loading...</h4>}
-                        height={560}
-                        style={{  
-                            paddingBottom: '10rem',
-                            display:'flex',
-                            flexDirection:'column',
-                            justifyContent:'flex-start',
-                            gap:12,
-                            width:'100%'
-                        }}
-                    >
-                        {
-                            studentList.map((item,index)=>{
-                                return(
-                                    <div className='student-list-element' key={index}>
-                                        <p>{item.name}</p>
-                                    </div>
-                                )
-                            })
-                        }
-                        
-                    </InfiniteScroll>
+                    {
+                        query && query.length > 0 ?
+                            <div style={{  
+                                paddingBottom: '10rem',
+                                display:'flex',
+                                flexDirection:'column',
+                                justifyContent:'flex-start',
+                                gap:12,
+                                width:'100%'
+                            }}>
+                                {
+                                studentList.map((item,index)=>{
+                                    return(
+                                        <div className='student-list-element' key={index} onClick={()=>handleStudentSelect(item)}>
+                                            <p>{item.name}</p>
+                                        </div>
+                                    )
+                                })}
+                            </div>     : 
+                        <InfiniteScroll
+                            dataLength={studentList.length}
+                            next={fetchMoreData}
+                            hasMore={hasNextPage}
+                            loader={<h4 style={{color:'#000'}}>Loading...</h4>}
+                            height={560}
+                            style={{  
+                                paddingBottom: '10rem',
+                                display:'flex',
+                                flexDirection:'column',
+                                justifyContent:'flex-start',
+                                gap:12,
+                                width:'100%'
+                            }}
+                        >
+                            {
+                                studentList.map((item,index)=>{
+                                    return(
+                                        <div className='student-list-element' key={index} onClick={()=>handleStudentSelect(item)}>
+                                            <p>{item.name}</p>
+                                        </div>
+                                    )
+                                })
+                            }
+                            
+                        </InfiniteScroll>
+
+                    }
+                    { noResult &&
+                        <div className='no-result-content'>
+                            <span>No Results</span>
+                        </div>
+                    }
+                    
                 </div>
        </div>
-
+       {
+            loader && 
+            <div className="modal-credenc-loader-white modal-fullscreen-loader" style={{position:'fixed'}}>
+                <TailSpin color="#00BFFF" height={60} width={60}/>
+            </div>
+        }
    </div>
   )
 }

@@ -165,13 +165,14 @@ export default function Home({token}) {
       setFormData({...formData});
       setTemporaryFormData({...formData});
     }
-
+    setLoader(false)
     setOpenLeadForm(true);
   };
 
   const _closeLeadForm = () => {
     setOpenLeadForm(false);
     resetDetailsPage()
+    updateScreen()
   };
 
   ///////////////////////////////////////////////////////////////
@@ -544,6 +545,33 @@ const closeStudentModal=()=>{
   setStudentModal(false)
 }
 
+const onStudentSelection=async(data)=>{
+  let college_name = localStorage.getItem('fms-platform')
+  setLoader(true)
+  setStudentModal(false)
+  setDraftSaved(false)
+    if(data){
+      const formData = {
+        leadId: ``,
+        studentName: `${data?.details?.Name}`,
+        institute: `${college_name}`,
+        mobile: `${data?.phone_number}`,
+        email: `${data?.details?.Email}`,
+        borrowerName: ``,
+        course: ``,
+        courseFee: ``,
+        loanAmount: ``,
+        tenure: ``,
+        advanceEmi: ``,
+        id: `${data?.id}`
+      }
+      setFormData({...formData});
+      setTemporaryFormData({...formData});
+    }
+  setLoader(false)
+  setOpenLeadForm(true);
+}
+
   return (
     <div className="home-container">
       
@@ -756,6 +784,7 @@ const closeStudentModal=()=>{
           <StudentModal 
             closeStudentModal={()=>closeStudentModal()}
             token={token}
+            onStudentSelection={(data)=>onStudentSelection(data)}
           />
       }
 

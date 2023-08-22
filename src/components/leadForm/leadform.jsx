@@ -93,13 +93,14 @@ export default function LeadForm({
                     setFormData={(data) => {setFormData(data)}}
                 />
 
-                <div className='row' style={{gap: '1rem'}}>
+                <div className='row' style={{gap: '1rem',width: '100%',justifyContent:'space-between'}}>
                     <Button
                         text='Save Draft'
                         classes={{
                             borderRadius: 8,
                             border: '1px solid #8F14CC',
-                            height: '44px'
+                            height: '44px',
+                            width:'30%'
                         }}
                         textClass={{
                             color: '#8F14CC',
@@ -115,6 +116,7 @@ export default function LeadForm({
                             borderRadius: 8,
                             border: '1px solid #8F14CC',
                             height: '44px',
+                            width:'30%'
                         }}
                         textClass={{
                             color: '#8F14CC',
@@ -129,7 +131,8 @@ export default function LeadForm({
                         classes={{
                             background: '#8F14CC',
                             borderRadius: '8px',
-                            height: '44px'
+                            height: '44px',
+                            width:'30%'
                         }}
                         textClass={{
                             color: '#FFF',
