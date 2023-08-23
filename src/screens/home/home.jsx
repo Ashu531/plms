@@ -163,6 +163,7 @@ export default function Home({token}) {
         advanceEmi: `${data?.advance_emi}`,
         id: `${data?.id}`
       }
+
       setFormData({...formData});
       setTemporaryFormData({...formData});
     }
@@ -175,11 +176,15 @@ export default function Home({token}) {
     leadData['leadId'] = `LEAD-${leadData.leadId}`
     setLeadInfo(leadData)
     setLoader(true)
-    setOpenLeadForm(false);
     // getQuickViewData(leadData)
     // resetDetailsPage()
     handleTableIconClick(leadData)
   };
+
+  const handleCloseLeadForm=()=>{
+    setOpenLeadForm(false)
+    resetDetailsPage()
+  }
 
   ///////////////////////////////////////////////////////////////
   // Search Start
@@ -563,6 +568,11 @@ const onStudentSelection=async(data)=>{
   setLoader(true)
   setStudentModal(false)
   setDraftSaved(false)
+
+  let collectionAmount = data?.collection;
+  let collectionArray = collectionAmount.split('/');
+  let courseAmount = parseInt(collectionArray[1]) - parseInt(collectionArray[0])
+
     if(data){
       const formData = {
         leadId: ``,
@@ -571,12 +581,12 @@ const onStudentSelection=async(data)=>{
         mobile: `${data?.phone_number}`,
         email: `${data?.details?.Email}`,
         borrowerName: ``,
-        course: ``,
-        courseFee: ``,
+        course: `${data?.details?.Course}`,
+        courseFee: `${courseAmount}`,
         loanAmount: ``,
         tenure: ``,
         advanceEmi: ``,
-        id: `${data?.id}`
+        id: ``
       }
       setFormData({...formData});
       setTemporaryFormData({...formData});
@@ -777,6 +787,7 @@ const handleRefresh=()=>{
           formData={formData} 
           setFormData={setFormData} 
           handleDraftSave={handleDraftSave}
+          handleCloseLeadForm={()=>handleCloseLeadForm()}
         />
       }
 

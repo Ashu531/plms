@@ -49,7 +49,7 @@ export default function DraftTable({
                         <div className='draft-row-text' onClick={() => onRowClick(item, index)}>{ item.id.substring(0,10)+'...' }</div>
                         <div className='draft-row-text' onClick={() => onRowClick(item, index)}>{ item.student_name ? item.student_name : '-' }</div>
                         <div className='draft-row-text' onClick={() => onRowClick(item, index)}>{ item.applicant_phone ? item.applicant_phone : '-'}</div>
-                        <div className='draft-row-text' onClick={() => onRowClick(item, index)}>{ item.loan_amount > 0 ? item.loan_amount : '-' }</div>
+                        <div className='draft-row-text' onClick={() => onRowClick(item, index)}>{ item.loan_amount > 0 ? `₹${item.loan_amount}` : '-' }</div>
                         <div className='draft-row-text' onClick={() => onRowClick(item, index)}>{ item.course ? item.course : '-' }</div>
                         <div className='draft-row-text' style={{flex: '1 1 0px'}} onClick={() => onRowClick(item, index)}>
                             <div className='column'>

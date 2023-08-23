@@ -16,7 +16,8 @@ export default function LeadForm({
     instituteName,
     formData,
     setFormData,
-    handleDraftSave
+    handleDraftSave,
+    handleCloseLeadForm
 }) {
     const [loader,setLoader] = useState(false)
 
@@ -34,16 +35,16 @@ export default function LeadForm({
         const tenureError = amountValidation(formData.tenure);
         const advanceEmiError = dropdownValidation(formData.advanceEmi);
 
-        if(
-            nameError || instituteError || mobileError || emailError ||
-            borrowerNameError || courseError || courseFeeError || loanAmountError || tenureError || advanceEmiError
-        ) {
-            console.log(nameError , instituteError , mobileError , emailError ,
-                borrowerNameError , courseError , courseFeeError , loanAmountError , tenureError , advanceEmiError)
-                setLoader(false)
-                alert("All the fields are mandatory to fill")
-            return;
-        }
+        // if(
+        //     nameError || instituteError || mobileError || emailError ||
+        //     borrowerNameError || courseError || courseFeeError || loanAmountError || tenureError || advanceEmiError
+        // ) {
+        //     console.log(nameError , instituteError , mobileError , emailError ,
+        //         borrowerNameError , courseError , courseFeeError , loanAmountError , tenureError , advanceEmiError)
+        //         setLoader(false)
+        //         // alert("All the fields are mandatory to fill")
+        //     return;
+        // }
 
         let res = await saveForm(requestData(formData), token);
 
@@ -69,7 +70,7 @@ export default function LeadForm({
             handleDraftSave()
         }
         alert("Draft Saved Successfully!")
-        onBackPress();
+        handleCloseLeadForm();
     }
 
   return (
@@ -77,7 +78,7 @@ export default function LeadForm({
        <div className='lead-form-modal-content'>
                 <div className='lead-form-modal-header row'>
                     <div className='row'>
-                        <img src={caretIcon} onClick={onBackPress} style={{cursor:'pointer'}} />
+                        <img src={caretIcon} onClick={handleCloseLeadForm} style={{cursor:'pointer'}} />
                         <span className='lead-modal-header'>Lead Creation</span>
                     </div>
                     <div className='column' style={{alignItems:'flex-start'}}>
@@ -251,6 +252,7 @@ export function EditableLeadForm ({
     };
 
     const handleLoanAmountChange = (str) => {
+        console.log(str,"str++++")
         setLoanAmountState({...loanAmountState, value: str});
     };
 
@@ -475,7 +477,7 @@ export function EditableLeadForm ({
             }
 
             if(error == null){
-                handleLoanAmountChange(courseFeeState.value);
+                // handleLoanAmountChange(courseFeeState.value);
                 setFormData({...formData, courseFee: courseFeeState.value});
             }
         }, 0)
@@ -491,7 +493,8 @@ export function EditableLeadForm ({
             }
 
             if(error == null){
-                setFormData({...formData, loanAmount: loanAmountState.value, courseFee: courseFeeState.value});
+                // handleLoanAmountChange(loanAmountState.value);
+                setFormData({...formData, loanAmount: loanAmountState.value});
             }
         }, 0)
     
