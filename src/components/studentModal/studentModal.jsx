@@ -112,7 +112,7 @@ export default function StudentModal({
     const handleStudentSelect=(item)=>{
         onStudentSelection(item)
     }
-console.log(noResult,"jlhugjyhfg")
+
   return (
     <div className='student-form-modal'>
        <div className='student-form-modal-content'>
@@ -132,7 +132,7 @@ console.log(noResult,"jlhugjyhfg")
                       removeSearchQuery={()=>removeSearchQuery()}
                     />
                 </div>
-                <div className='student-modal-list'>
+                <div className='student-modal-list' style={studentList.length > 4 ? {overflow: 'scroll'} : {overflow: 'hidden'}}>
                     { 
                      query && query.length > 0 ?
                             <div style={{  

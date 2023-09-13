@@ -178,7 +178,7 @@ export default function Home({token}) {
     setLoader(true)
     // getQuickViewData(leadData)
     // resetDetailsPage()
-    handleTableIconClick(leadData)
+    handleTableIconClick(leadData,'detail')
   };
 
   const handleCloseLeadForm=()=>{
@@ -488,6 +488,7 @@ const handleTableIconClick= async (item,index)=>{
   })
   await getQuickViewData(item)
   navigatePage(1)
+  setOpenLeadForm(false)
   setLoader(false)
 }
 
