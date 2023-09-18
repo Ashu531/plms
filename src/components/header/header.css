@@ -41,3 +41,23 @@
     text-align: start;
     margin-left: 15px;
 }
+
+.plms-draft-count-content{
+    height: 16px;
+    width: 16px;
+    background: #8F14CC;
+    padding: 4px;
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    top: -5px;
+}
+
+.plms-draft-count-text{
+    color: #FFFFFF;
+    font-size: 10px;
+    font-family: 'Montserrat';
+    font-style: normal;
+}

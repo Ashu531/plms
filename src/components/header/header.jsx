@@ -16,7 +16,8 @@ export default function Header({
     goToHomePage,
     onDraftSearch,
     query,
-    removeSearchQuery
+    removeSearchQuery,
+    draftCount
 }) {
 
     const handleBack=()=>{
@@ -44,11 +45,11 @@ export default function Header({
 
             {
              screen === 2 && 
-             <div className='row' >
+             <div className='row'>
                     <img src={caretIcon} onClick={()=>handleBack()} style={{cursor:'pointer'}}/>
                     <div className='header-title'>
                         Drafts
-                    </div>
+                    </div>   
              </div>
            } 
 
@@ -65,7 +66,15 @@ export default function Header({
        </div>
         <div className='header-content'>
             {/* <img src={userIcon} style={{width: '36px', height: '36px'}} /> */}
-            <img src={draftIcon} style={{width: '36px', height: '36px',cursor: 'pointer'}} onClick={()=>goToDraftPage()} />
+            <div style={{position:'relative'}}>
+                <img src={draftIcon} style={{width: '36px', height: '36px',cursor: 'pointer'}} onClick={()=>goToDraftPage()} />
+                <div className='plms-draft-count-content'>
+                            <div className='plms-draft-count-text'>
+                                {draftCount}
+                            </div>    
+                </div> 
+            </div>
+            
             <img src={downloads} style={{width: '36px', height: '36px',cursor: 'pointer'}} onClick={()=>goToDownloads()} />
             {/* <img src={bellIcon} style={{width: '36px', height: '36px'}} /> */}
             {/* <div className='logout-container'>

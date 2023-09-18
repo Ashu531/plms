@@ -80,3 +80,21 @@
     border-bottom: 1.5px solid #0B090D;
     transform: rotate(-45deg);
 }
+
+.draft-applied-content{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 4px;
+    background: #009E5B;
+    margin-top: 5px;
+    width: 12rem;
+}
+
+.draft-applied-text{
+    color: #FFFFFF;
+    font-size: 12px;
+    font-family: 'Montserrat';
+    font-weight: 500;
+    padding: 3px 0px;
+}

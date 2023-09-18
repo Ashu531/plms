@@ -14,7 +14,7 @@ import UserConsentModal from "../../components/userConsentModal/userConsentModal
 import DraftPage from "../draft/draft.jsx";
 import UploadModal from "../../components/uploadModal/uploadModal.jsx";
 import DownloadPage from "../downloads/downloads.jsx";
-import { getProfileData } from "../../helpers/apis.js";
+import { getProfileData,getDraftCount } from "../../helpers/apis.js";
 import { Bars, TailSpin } from "react-loader-spinner";
 import StudentModal from "../../components/studentModal/studentModal.jsx";
 
@@ -111,6 +111,7 @@ export default function Home({token}) {
   const [draftSaved,setDraftSaved] = useState(false)
   const [studentModal,setStudentModal] = useState(false)
   const [refreshed,setRefreshed] = useState(false)
+  const [draftCount,setDraftCount] = useState(0)
 
   const [turnOnButtonLoader,setTurnOnButtonLoader] = useState({
     status : false,
@@ -550,7 +551,13 @@ const handleDraftSave=()=>{
 
 useEffect(() => {
   getProfileInfo();
+  getDraftInfo()
 }, []);
+
+const getDraftInfo=async()=>{
+  const data = await getDraftCount(token);
+  setDraftCount(data);
+}
 
 const removeSearchQuery=()=>{
   setQuery('')
@@ -613,6 +620,7 @@ const handleRefresh=()=>{
                 screen={screen}
                 query={query}
                 removeSearchQuery={()=>removeSearchQuery()}
+                draftCount={draftCount}
            />
          } 
         {screen === 0 && (

@@ -8,6 +8,7 @@ import DraftTable from '../../components/draftTable/draftTable.jsx';
 import { Bars, TailSpin } from "react-loader-spinner";
 import DraftSearchTable from '../../components/draftSearchTable/draftSearchTable.jsx';
 import Search from '../../components/search/search.jsx';
+import ConfirmationModal from '../../components/confirmationModal/confirmationModal.jsx';
 
 export default function DraftPage(props) {
 
@@ -17,6 +18,8 @@ export default function DraftPage(props) {
   const [noResult,setNoResult] = useState(false)
   const [draftQuery,setDraftQuery] = useState('')
   const [draftSearchData,setDraftSearchData] = useState([])
+  const [confirmationModal,setConfirmationModal] = useState(false)
+  const [currentLead,setCurrentLead] = useState({})
 
   useEffect(()=>{
       getDrafts()
@@ -43,16 +46,18 @@ export default function DraftPage(props) {
     });
   }
 
-  const deleteDraft=async(item,index)=>{
-    await axios.delete(`${API_URL}/api/loan/lead/draft/${item?.id}/`,{
+  const deleteDraft=async()=>{
+    await axios.delete(`${API_URL}/api/loan/lead/draft/${currentLead?.id}/`,{
       headers: {
           token: `${props?.token}`,
       },
   }).
   then(res => {
     getDrafts()
+    closeConfirmationModal()
   }).catch(err=>{
     console.log(err.response.data)
+    closeConfirmationModal()
     alert(err.response.data.error)
   });
   }
@@ -118,6 +123,16 @@ export default function DraftPage(props) {
     setDraftQuery('')
   }
 
+  const closeConfirmationModal=()=>{
+    setCurrentLead({})
+    setConfirmationModal(false)
+  }
+  
+  const openConfirmationModal=(item,index)=>{
+    setCurrentLead(item)
+    setConfirmationModal(true)
+  }
+
   return (
     <div className='draft-page'>
           <div className='draft-page-header'>
@@ -144,7 +159,7 @@ export default function DraftPage(props) {
                             setLeadInfo(item)
                             openLeadForm(item)
                         }}
-                        onDeleteDraft={(item,index)=>deleteDraft(item,index)}
+                        onDeleteDraft={(item,index)=>openConfirmationModal(item,index)}
                   />
                }
 
@@ -156,7 +171,7 @@ export default function DraftPage(props) {
                           setLeadInfo(item)
                           openLeadForm(item)
                         }}
-                        onDeleteDraft={(item,index)=>deleteDraft(item,index)}
+                        onDeleteDraft={(item,index)=>openConfirmationModal(item,index)}
                   /> 
               } 
                {
@@ -167,6 +182,20 @@ export default function DraftPage(props) {
                }
             
           </div> 
+          {
+            confirmationModal && 
+            (
+              <ConfirmationModal
+                closeConfirmationModal={() => closeConfirmationModal()}
+                onDeleteDraft={()=>deleteDraft()}
+                title="Delete financing lead"
+                instruction='Are you sure you want to delete the loan lead draft?'
+                description='By deleting the recorded will be removed and if the student had applied  for the loan it will get cancelled.'
+                primaryButtonText='Delete'
+                secondaryButtonText='Cancel'
+              />
+            )
+          }
           {
             loader && 
               <div className="credenc-loader-white fullscreen-loader">

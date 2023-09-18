@@ -60,3 +60,16 @@ export const getProfileData = async (token) => {
     return response;
 
 }
+
+export const getDraftCount = async (token) => {
+
+    const response = await axios.get(`${API_URL}/api/loan/draftscount/`, {
+        headers: {
+            token: `${token}`,
+        },
+    }).then(res => res.data.data)
+    .catch(err => console.log(err))
+
+    return response;
+
+}

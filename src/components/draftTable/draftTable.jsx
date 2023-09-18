@@ -46,7 +46,18 @@ export default function DraftTable({
             <div className='table-row-container'>
                 { list.map((item, index) => (
                     <div key={`${item}-${index}`} className='draft-table-row'>
-                        <div className='draft-row-text' onClick={() => onRowClick(item, index)}>{ item.id.substring(0,10)+'...' }</div>
+                        <div className='draft-row-text' onClick={() => onRowClick(item, index)}>
+                            { item.id.substring(0,10)+'...' }
+                            {
+                                item?.type === 'fms' && 
+                                <div className='draft-applied-content'>
+                                    <div className='draft-applied-text'>
+                                        Student Applied
+                                    </div>
+                                </div>
+                            }
+                               
+                        </div>
                         <div className='draft-row-text' onClick={() => onRowClick(item, index)}>{ item.student_name ? item.student_name : '-' }</div>
                         <div className='draft-row-text' onClick={() => onRowClick(item, index)}>{ item.applicant_phone ? item.applicant_phone : '-'}</div>
                         <div className='draft-row-text' onClick={() => onRowClick(item, index)}>{ item.loan_amount > 0 ? `₹${item.loan_amount}` : '-' }</div>
