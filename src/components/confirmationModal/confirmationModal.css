@@ -61,9 +61,10 @@
 .confirmation-button-container{
     width: 100%;
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-end;
     align-items: center;
     margin: 24px 0px 12px 0px;
+    gap: 16px;
 }
 
 .confirmation-container{

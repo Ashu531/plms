@@ -52,14 +52,14 @@ export default function DraftPage(props) {
           token: `${props?.token}`,
       },
   }).
-  then(res => {
-    getDrafts()
+    then(res => {
+      getDrafts()
+      props?.getDraftInfo()
+    }).catch(err=>{
+      console.log(err.response.data)
+      alert(err.response.data.error)
+    });
     closeConfirmationModal()
-  }).catch(err=>{
-    console.log(err.response.data)
-    closeConfirmationModal()
-    alert(err.response.data.error)
-  });
   }
 
   const openLeadForm=(item)=>{

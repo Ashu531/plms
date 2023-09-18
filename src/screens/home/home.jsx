@@ -336,7 +336,7 @@ export default function Home({token}) {
   const navigatePage = (i) => {
     setQuery('')
     setLoader(false)
-
+    getDraftCount()
     if(i == 0){
       resetDetailsPage();
     }
@@ -469,6 +469,7 @@ export default function Home({token}) {
 }
 
 const goToDraftPage=()=>{
+    getDraftInfo()
     setLoader(false)
     let i = 2
     setScreen(i)
@@ -759,6 +760,7 @@ const handleRefresh=()=>{
             leadData={leadInfo}
             token={token}
             draftSaved={draftSaved}
+            getDraftInfo={()=>getDraftInfo()}
            />
         </div>
       )}

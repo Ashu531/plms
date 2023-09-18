@@ -21,22 +21,6 @@ export default function ConfirmationModal(props) {
                 </div>
                 <div className='confirmation-button-container'>
                     <Button 
-                      text={props?.primaryButtonText}
-                      classes={{
-                          background: '#8F14CC',
-                          borderRadius: '8px',
-                          height: '44px',
-                          width: '150px',
-                      }}
-                      textClass={{
-                          color: '#FFF',
-                          fontSize: '16px',
-                          fontFamily: 'Montserrat',
-                          fontWeight: 500
-                      }}
-                      onClick={()=>props?.onDeleteDraft()}
-                    />
-                    <Button 
                       text={props?.secondaryButtonText}
                       classes={{
                           background: '#8F14CC',
@@ -52,6 +36,23 @@ export default function ConfirmationModal(props) {
                       }}
                       onClick={()=>props?.closeConfirmationModal()}
                     />
+                    <Button 
+                      text={props?.primaryButtonText}
+                      classes={{
+                          background: '#8F14CC',
+                          borderRadius: '8px',
+                          height: '44px',
+                          width: '150px',
+                      }}
+                      textClass={{
+                          color: '#FFF',
+                          fontSize: '16px',
+                          fontFamily: 'Montserrat',
+                          fontWeight: 500
+                      }}
+                      onClick={()=>props?.onDeleteDraft()}
+                    />
+                   
                 </div>
             </div>
             <div className='confirmation-closeIcon' onClick={()=>props?.closeConfirmationModal()}>
