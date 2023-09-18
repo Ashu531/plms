@@ -17,7 +17,8 @@ export default function LeadForm({
     formData,
     setFormData,
     handleDraftSave,
-    handleCloseLeadForm
+    handleCloseLeadForm,
+    getDraftCount
 }) {
     const [loader,setLoader] = useState(false)
 
@@ -53,7 +54,7 @@ export default function LeadForm({
         } else {
             onBackPress(res);
         }
-
+        getDraftCount()
         setLoader(false)
 
         if(res.message){

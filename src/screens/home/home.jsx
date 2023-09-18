@@ -336,7 +336,6 @@ export default function Home({token}) {
   const navigatePage = (i) => {
     setQuery('')
     setLoader(false)
-    getDraftCount()
     if(i == 0){
       resetDetailsPage();
     }
@@ -622,6 +621,8 @@ const handleRefresh=()=>{
                 query={query}
                 removeSearchQuery={()=>removeSearchQuery()}
                 draftCount={draftCount}
+                getDraftCount={()=>getDraftInfo()}
+                token={token}
            />
          } 
         {screen === 0 && (
@@ -799,6 +800,7 @@ const handleRefresh=()=>{
           setFormData={setFormData} 
           handleDraftSave={handleDraftSave}
           handleCloseLeadForm={()=>handleCloseLeadForm()}
+          getDraftCount={()=>getDraftInfo()}
         />
       }
 

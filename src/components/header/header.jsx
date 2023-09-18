@@ -17,13 +17,15 @@ export default function Header({
     onDraftSearch,
     query,
     removeSearchQuery,
-    draftCount
+    getDraftCount,
+    draftCount,
 }) {
 
     const handleBack=()=>{
+        getDraftCount()
         let i = 0
         goToHomePage(i)
-      }
+    }
 
   return (
    <div className='plms-navbar-header'>
