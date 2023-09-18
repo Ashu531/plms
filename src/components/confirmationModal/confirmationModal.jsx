@@ -23,16 +23,16 @@ export default function ConfirmationModal(props) {
                     <Button 
                       text={props?.secondaryButtonText}
                       classes={{
-                          background: '#8F14CC',
-                          borderRadius: '8px',
-                          height: '44px',
-                          width: '150px',
+                        borderRadius: 8,
+                        border: '1px solid #8F14CC',
+                        height: '44px',
+                        width:'30%'
                       }}
                       textClass={{
-                          color: '#FFF',
-                          fontSize: '16px',
+                          color: '#8F14CC',
+                          fontSize: '14px',
                           fontFamily: 'Montserrat',
-                          fontWeight: 500
+                          fontWeight: 600
                       }}
                       onClick={()=>props?.closeConfirmationModal()}
                     />
