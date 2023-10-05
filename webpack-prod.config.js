@@ -38,7 +38,7 @@ const configs = addBaseConfig({
       title: "React Cards",
       filename: "index.html",
       template: "./index.html",
-      favicon: "src/assets/credenc-logo.svg",
+      // favicon: "src/assets/credenc-logo.svg",
     }),
   ],
   devServer: {
