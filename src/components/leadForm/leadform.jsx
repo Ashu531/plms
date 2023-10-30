@@ -253,7 +253,6 @@ export function EditableLeadForm ({
     };
 
     const handleLoanAmountChange = (str) => {
-        console.log(str,"str++++")
         setLoanAmountState({...loanAmountState, value: str});
     };
 

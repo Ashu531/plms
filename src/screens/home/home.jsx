@@ -578,18 +578,18 @@ const onStudentSelection=async(data)=>{
   setDraftSaved(false)
 
   let collectionAmount = data?.collection;
-  let collectionArray = collectionAmount.split('/');
-  let courseAmount = parseInt(collectionArray[1]) - parseInt(collectionArray[0])
+  // let collectionArray = collectionAmount.split('/');
+  let courseAmount = collectionAmount.adhoc_total + collectionAmount.academic_total
 
     if(data){
       const formData = {
         leadId: ``,
-        studentName: `${data?.details?.Name}`,
+        studentName: `${data?.metadata?.name}`,
         institute: `${college_name}`,
-        mobile: `${data?.phone_number}`,
-        email: `${data?.details?.Email}`,
+        mobile: `${data?.metadata.phone_number}`,
+        email: `${data?.metadata?.email}`,
         borrowerName: ``,
-        course: `${data?.details?.Course}`,
+        course: `${data?.metadata?.course}`,
         courseFee: `${courseAmount}`,
         loanAmount: ``,
         tenure: ``,

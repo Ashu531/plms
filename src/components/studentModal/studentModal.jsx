@@ -147,7 +147,7 @@ export default function StudentModal({
                                 studentList.map((item,index)=>{
                                     return(
                                         <div className='student-list-element' key={index} onClick={()=>handleStudentSelect(item)}>
-                                            <p>{item.name}</p>
+                                            <p>{item.metadata.name}</p>
                                         </div>
                                     )
                                 })}
@@ -171,7 +171,7 @@ export default function StudentModal({
                                 studentList.map((item,index)=>{
                                     return(
                                         <div className='student-list-element' key={index} onClick={()=>handleStudentSelect(item)}>
-                                            <p>{item.name}</p>
+                                            <p>{item.metadata.name}</p>
                                         </div>
                                     )
                                 })
