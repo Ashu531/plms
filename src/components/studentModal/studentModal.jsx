@@ -93,7 +93,7 @@ export default function StudentModal({
 
     const handleSearch = async(query) => {
         //search api here
-        await axios.get(`${API_URL}/api/fees/v2/optional_installment/student/page/1000/1/?search=${query}`,{
+        await axios.get(`${API_URL}/api/fees/v2/student/page/1000/1/?search=${query}`,{
             headers: {
                 token: `${token}`,
             },
@@ -147,7 +147,7 @@ export default function StudentModal({
                                 studentList.map((item,index)=>{
                                     return(
                                         <div className='student-list-element' key={index} onClick={()=>handleStudentSelect(item)}>
-                                            <p>{item?.name}</p>
+                                            <p>{item?.metadata?.name}</p>
                                         </div>
                                     )
                                 })}
