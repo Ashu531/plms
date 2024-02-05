@@ -1,18 +1,21 @@
 import React,{useEffect,useState} from 'react';
 import './studentModal.css';
-import caretIcon from '../../assets/Icons/caretIcon.svg';
+import addIcon from "../../assets/Icons/addIcon.svg";
 import InfiniteScroll from "react-infinite-scroll-component";
 import Search from '../search/search.jsx';
 import axios from 'axios';
 import { Bars, TailSpin } from "react-loader-spinner";
+import Button from "../../components/button/button.jsx";
 
 export default function StudentModal({
     closeStudentModal,
     token,
-    onStudentSelection
+    onStudentSelection,
+    openStudentForm,
+    student
 }) {
 
-    const [query,setQuery] = useState('')
+    const [query,setQuery] = useState(student || '')
     const [pageNumber,setPageNumber] = useState(1)
     const [studentList,setStudentList] = useState([])
     const [hasNextPage, setHasNextPage] = useState(true);
@@ -34,7 +37,6 @@ export default function StudentModal({
             },
         }).
         then(res => { 
-                console.log(res,"res+++")
                 if(pageNumber <= 1){
                     if(res.data.data.length > 0){
                         setStudentList([...res.data.data])
@@ -126,10 +128,29 @@ export default function StudentModal({
                     </div>
                 </div>
                 <div className='student-modal-search-container'>
-                    <Search
-                      onChange={(e)=>onSearch(e)}
-                      query={query}
-                      removeSearchQuery={()=>removeSearchQuery()}
+                    <div style={{width: '70%'}}>
+                        <Search
+                        onChange={(e)=>onSearch(e)}
+                        query={query}
+                        removeSearchQuery={()=>removeSearchQuery()}
+                        />
+                    </div>
+                    
+                    <Button
+                        leadingIcon={addIcon}
+                        text="Add Student"
+                        classes={{
+                            background: "#8F14CC",
+                            borderRadius: "8px",
+                            height: "44px",
+                        }}
+                        textClass={{
+                            color: "#FFF",
+                            fontSize: "16px",
+                            fontFamily: "Montserrat",
+                            fontWeight: 500,
+                        }}
+                        onClick={openStudentForm}
                     />
                 </div>
                 <div className='student-modal-list' style={studentList.length > 4 ? {overflow: 'scroll'} : {overflow: 'hidden'}}>

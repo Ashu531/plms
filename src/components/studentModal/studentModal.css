@@ -90,9 +90,10 @@
 
 .student-modal-search-container{
     display: flex;
-    justify-content: flex-start;
+    justify-content: space-between;
     align-items: center;
     margin-top: 2.4rem;
+    width: 100%;
 }
 
 .modal-credenc-loader-white{

@@ -71,7 +71,7 @@ const statusEndpoints = {
 
 
 
-export default function Home({token}) {
+export default function Home({token,student,onAddStudentClick}) {
 
 
   const initialFormState = {
@@ -552,7 +552,14 @@ const handleDraftSave=()=>{
 useEffect(() => {
   getProfileInfo();
   getDraftInfo()
+  openPlmsStudentDialog()
 }, []);
+
+const openPlmsStudentDialog=()=>{
+  if(student.length > 0){
+    openStudentModal()
+  }
+}
 
 const getDraftInfo=async()=>{
   const data = await getDraftCount(token);
@@ -599,13 +606,18 @@ const onStudentSelection=async(data)=>{
       setFormData({...formData});
       setTemporaryFormData({...formData});
     }
-  setLoader(false)
-  setOpenLeadForm(true);
-}
+    setLoader(false)
+    setOpenLeadForm(true);
+  }
 
-const handleRefresh=()=>{
-  setRefreshed(!refreshed)
-}
+  const handleRefresh=()=>{
+    setRefreshed(!refreshed)
+  }
+
+  const openStudentForm=()=>{
+    setOpenLeadForm(false);
+    onAddStudentClick()
+  }
 
   return (
     <div className="home-container">
@@ -670,7 +682,7 @@ const handleRefresh=()=>{
               onClick={openStudentModal}
             />
             
-            <Button
+            {/* <Button
               leadingIcon={addIcon}
               text="Create Lead"
               classes={{
@@ -685,7 +697,7 @@ const handleRefresh=()=>{
                 fontWeight: 500,
               }}
               onClick={_openLeadForm}
-            />
+            /> */}
           </div>  
           </div>
 
@@ -829,6 +841,8 @@ const handleRefresh=()=>{
             closeStudentModal={()=>closeStudentModal()}
             token={token}
             onStudentSelection={(data)=>onStudentSelection(data)}
+            openStudentForm={()=>openStudentForm()}
+            student={student}
           />
       }
 

@@ -9,7 +9,7 @@ export default function Search({
     query
 }) {
 
-  const [event,setEvent] = useState('')
+  const [event,setEvent] = useState(query || '')
 
   const handleOnChange=(e)=>{
     onChange(e)

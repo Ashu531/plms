@@ -9,6 +9,7 @@ import { amountValidation, basicValidation, dropdownValidation, emailValidation,
 import Lead, { leadState, requestData } from '../../entities/formDetails.js';
 import { saveDraft, saveForm } from '../../helpers/apis';
 import { Bars, TailSpin } from "react-loader-spinner";
+import ClickAwayListener from 'react-click-away-listener';
 
 export default function LeadForm({
     token,
@@ -75,7 +76,9 @@ export default function LeadForm({
     }
 
   return (
+    
    <div className='lead-form-modal'>
+       <ClickAwayListener onClickAway={() => handleCloseLeadForm()}>
        <div className='lead-form-modal-content'>
                 <div className='lead-form-modal-header row'>
                     <div className='row'>
@@ -146,6 +149,7 @@ export default function LeadForm({
                     />
                 </div>
        </div>
+       </ClickAwayListener>
           {
             loader && 
               <div className="download-credenc-loader-white download-fullscreen-loader">
@@ -153,6 +157,7 @@ export default function LeadForm({
               </div>
           }
    </div>
+   
   )
 }
 
