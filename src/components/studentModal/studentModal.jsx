@@ -23,8 +23,10 @@ export default function StudentModal({
     const [noResult,setNoResult] = useState(false)
 
     useEffect(()=>{
-        getStudentList()
-    },[pageNumber])
+        if(student?.length === 0){
+            getStudentList()
+        }
+     },[pageNumber])
 
     const getStudentList=async()=>{
         setNoResult(false)

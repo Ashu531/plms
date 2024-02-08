@@ -71,7 +71,7 @@ const statusEndpoints = {
 
 
 
-export default function Home({token,student,onAddStudentClick}) {
+export default function Home({token,student,onAddStudentClick,removeStudentName}) {
 
 
   const initialFormState = {
@@ -556,7 +556,7 @@ useEffect(() => {
 }, []);
 
 const openPlmsStudentDialog=()=>{
-  if(student.length > 0){
+  if(student?.length > 0){
     openStudentModal()
   }
 }
@@ -576,6 +576,7 @@ const openStudentModal=()=>{
 
 const closeStudentModal=()=>{
   setStudentModal(false)
+  removeStudentName()
 }
 
 const onStudentSelection=async(data)=>{
