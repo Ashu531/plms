@@ -577,9 +577,11 @@ const openStudentModal=()=>{
 const closeStudentModal=()=>{
   setStudentModal(false)
   removeStudentName()
+
 }
 
 const onStudentSelection=async(data)=>{
+
   let college_name = localStorage.getItem('fms-platform')
   setLoader(true)
   setStudentModal(false)
@@ -616,6 +618,7 @@ const onStudentSelection=async(data)=>{
   }
 
   const openStudentForm=()=>{
+    sessionStorage.setItem('previous', 'plms');
     setOpenLeadForm(false);
     onAddStudentClick()
   }
