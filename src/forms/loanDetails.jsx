@@ -16,7 +16,7 @@ export default function LoanDetailsForm({
 
     const nameLabel = () => 'Borrower Name';
     const courseLabel = () => 'Course';
-    const courseFeeLabel = () => 'course Fee';
+    const courseFeeLabel = () => 'Course Fee';
     const loanAmountLabel = () => 'Loan Amount';
     const tenureLabel = () => 'Tenure (in months)';
     const advanceEmiLabel = () => 'Advance EMI';
@@ -184,6 +184,7 @@ export default function LoanDetailsForm({
             disabled={getDisabled(loanFormInputTypes.name)}
             error={getError(loanFormInputTypes.name)}
             type={getType(loanFormInputTypes.name)}
+            mandatory={true}
         />
         
         <Input
@@ -209,6 +210,7 @@ export default function LoanDetailsForm({
             disabled={getDisabled(loanFormInputTypes.courseFee)}
             error={getError(loanFormInputTypes.courseFee)}
             type={getType(loanFormInputTypes.courseFee)}
+            mandatory={true}
         />
 
         <Input
@@ -222,6 +224,7 @@ export default function LoanDetailsForm({
             disabled={getDisabled(loanFormInputTypes.loanAmount)}
             error={getError(loanFormInputTypes.loanAmount)}
             type={getType(loanFormInputTypes.loanAmount)}
+            mandatory={true}
         />
 
         <Input

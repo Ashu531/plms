@@ -148,6 +148,7 @@ export default function Home({token,student,onAddStudentClick,removeStudentName}
   };
 
   const _openLeadForm = (data) => {
+    console.log(data,"data+++")
     setDraftSaved(false)
     if(data){
       const formData = {

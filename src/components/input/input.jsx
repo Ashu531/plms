@@ -24,7 +24,8 @@ export function Input({
   error,
   type = "text",
   classes='',
-  maxLength=100
+  maxLength=100,
+  mandatory=false
 }) {
 
   const handleKey = (e) => {
@@ -68,6 +69,7 @@ export function Input({
         disablerLabel={disablerLabel} 
         disablerState={disablerState}
         onDisablerStateChange={onDisablerStateChange}
+        mandatory={mandatory}
       />
 
       <div style={{textAlign: 'start', width: '100%'}}>
@@ -100,12 +102,13 @@ export function Label({
   disabler,
   disablerLabel,
   disablerState,
-  onDisablerStateChange
+  onDisablerStateChange,
+  mandatory
 }) {
   return (
     <div className="row" style={{justifyContent: 'space-between'}}>
       <div className="row label text-montserrat text-12 text-weight-5" style={{gap: '5px',flex: 'auto'}}>
-          <div className={required ? 'required' : ''}>{label}</div>
+          <div className={required ? 'required' : ''}>{label} {mandatory && '**'}</div>
 
           {(error || showCheck) && <img 
             src={error ? errorIcon : checkIcon}

@@ -22,7 +22,6 @@ export default function LeadForm({
     getDraftCount
 }) {
     const [loader,setLoader] = useState(false)
-
     const handleSave = async (addAnother) => {
         setLoader(true)
         // const leadIdError = basicValidation(formData.leadId);
@@ -95,7 +94,9 @@ export default function LeadForm({
                     viewType={formViewTypes.CREATE}
                     previousFormData={formData}
                     formData={formData}
-                    setFormData={(data) => {setFormData(data)}}
+                    setFormData={(data) => {
+                        setFormData(data)
+                    }}
                 />
 
                 <div className='row' style={{gap: '1rem',width: '100%',justifyContent:'space-between'}}>
@@ -370,10 +371,10 @@ export function EditableLeadForm ({
                 }
                 
             }
-
-            if(error == null){
-                setFormData({...formData, studentName: nameState.value});
-            }
+            setFormData({...formData, studentName: nameState.value});
+            // if(error == null){
+            //     setFormData({...formData, studentName: nameState.value});
+            // }
 
         }, 0)
     
@@ -478,13 +479,19 @@ export function EditableLeadForm ({
         const delayDebounce = setTimeout(() => {
             const error = amountValidation(courseFeeState.value);
             if(error != 'cannot be empty'){
-                setCourseFeeState({...courseFeeState, error: error})
+                if(error == null){
+                    setCourseFeeState({...courseFeeState, error: error})
+                }else{
+                    setCourseFeeState({...courseFeeState, error: `${error} course fee`})
+                }
+                
             }
+            setFormData({...formData, courseFee: courseFeeState.value});
 
-            if(error == null){
-                // handleLoanAmountChange(courseFeeState.value);
-                setFormData({...formData, courseFee: courseFeeState.value});
-            }
+            // if(error == null){
+            //     handleCourseFeeChange(courseFeeState.value);
+            // }
+
         }, 0)
     
         return () => clearTimeout(delayDebounce)
@@ -494,13 +501,17 @@ export function EditableLeadForm ({
         const delayDebounce = setTimeout(() => {
             const error = amountValidation(loanAmountState.value);
             if(error != 'cannot be empty'){
-                setLoanAmountState({...loanAmountState, error: error})
+                if(error == null){
+                    setLoanAmountState({...loanAmountState, error: error})
+                }else{
+                    setLoanAmountState({...loanAmountState, error: `${error} loan amount`})
+                }
             }
-
-            if(error == null){
-                // handleLoanAmountChange(loanAmountState.value);
-                setFormData({...formData, loanAmount: loanAmountState.value});
-            }
+            setFormData({...formData, loanAmount: loanAmountState.value});
+            // if(error == null){
+            //     // handleLoanAmountChange(loanAmountState.value);
+            //     setFormData({...formData, loanAmount: loanAmountState.value});
+            // }
         }, 0)
     
         return () => clearTimeout(delayDebounce)
