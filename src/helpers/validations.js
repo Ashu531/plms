@@ -18,8 +18,8 @@ export const basicValidation = (str) => {
     if(str.length == 0)
         return 'cannot be empty';
 
-    if(str.match(excludeSpecialCharactersRegex) == null)
-        return 'invalid';
+    // if(str.match(excludeSpecialCharactersRegex) == null)
+    //     return 'invalid';
 
     return null;
 

@@ -36,16 +36,16 @@ export default function LeadForm({
         const tenureError = amountValidation(formData.tenure);
         const advanceEmiError = dropdownValidation(formData.advanceEmi);
 
-        // if(
-        //     nameError || instituteError || mobileError || emailError ||
-        //     borrowerNameError || courseError || courseFeeError || loanAmountError || tenureError || advanceEmiError
-        // ) {
-        //     console.log(nameError , instituteError , mobileError , emailError ,
-        //         borrowerNameError , courseError , courseFeeError , loanAmountError , tenureError , advanceEmiError)
-        //         setLoader(false)
-        //         // alert("All the fields are mandatory to fill")
-        //     return;
-        // }
+        if(
+            nameError || instituteError || mobileError || emailError ||
+            borrowerNameError || courseError || courseFeeError || loanAmountError || tenureError || advanceEmiError
+        ) {
+            console.log(nameError , instituteError , mobileError , emailError ,
+                borrowerNameError , courseError , courseFeeError , loanAmountError , tenureError , advanceEmiError)
+                setLoader(false)
+                // alert("All the fields are mandatory to fill")
+            return;
+        }
 
         let res = await saveForm(requestData(formData), token);
 
@@ -453,6 +453,8 @@ export function EditableLeadForm ({
     useEffect(() => {
         if(borrowerNameState.sameAsStudent){
             setBorrowerNameState({...borrowerNameState, value: nameState.value})
+        }else{
+            setBorrowerNameState({...borrowerNameState, value: borrowerNameState.value})
         }
     }, [borrowerNameState.sameAsStudent]);
 
@@ -466,7 +468,7 @@ export function EditableLeadForm ({
                     setCourseState({...courseState, error: `${error} course name`})
                 }
             }
-
+            console.log(error,"error")
             if(error == null){
                 setFormData({...formData, course: courseState.value});
             }

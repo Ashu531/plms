@@ -67,16 +67,7 @@ export default function DraftPage(props) {
   }
 
   const onDraftSearch=(query)=>{
-    // if(query.length > 0){
-    //   setLoader(true)
-    // }else{
-    //   setLoader(false)
-    //   setNoResult(false)
-    // }
-    
     setDraftQuery(query);
-    // setSearchCount(0)
-    // setSearchData([])
   }
 
   const handleDraftSearch = async(query) => {
@@ -91,13 +82,11 @@ export default function DraftPage(props) {
             let detail = res?.data?.data;
             setLoader(false)
             setDraftSearchData(detail)
-            // setSearchCount(res?.data?.data?.count)
             setNoResult(false)
         }
         else{
             setLoader(false)
             setNoResult(true)
-            // setSearchCount(0)
             setDraftSearchData([])
         }
         

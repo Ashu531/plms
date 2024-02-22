@@ -148,7 +148,6 @@ export default function Home({token,student,onAddStudentClick,removeStudentName}
   };
 
   const _openLeadForm = (data) => {
-    console.log(data,"data+++")
     setDraftSaved(false)
     if(data){
       const formData = {
@@ -157,7 +156,7 @@ export default function Home({token,student,onAddStudentClick,removeStudentName}
         institute: `${data?.college_name}`,
         mobile: `${data?.applicant_phone}`,
         email: `${data?.applicant_email}`,
-        borrowerName: `${data?.borrower_name}`,
+        borrowerName: `${data?.borrower}`,
         course: `${data?.course}`,
         courseFee: `${data?.course_fee}`,
         loanAmount: `${data?.loan_amount}`,
