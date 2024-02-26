@@ -197,6 +197,7 @@ export default function LoanDetailsForm({
             disabled={getDisabled(loanFormInputTypes.course)}
             error={getError(loanFormInputTypes.course)}
             type={getType(loanFormInputTypes.course)}
+            mandatory={true}
         />
 
         <Input

@@ -174,6 +174,9 @@ export default function Home({token,student,onAddStudentClick,removeStudentName}
 
   const _closeLeadForm = async(res) => {
     let leadData = res.data.borrowerData;
+
+    if(!leadData) return;
+
     leadData['leadId'] = `LEAD-${leadData.leadId}`
     setLeadInfo(leadData)
     setLoader(true)
@@ -576,7 +579,7 @@ const openStudentModal=()=>{
 
 const closeStudentModal=()=>{
   setStudentModal(false)
-  removeStudentName()
+  if(removeStudentName != null) removeStudentName();
 
 }
 

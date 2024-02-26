@@ -26,7 +26,7 @@ export function Dropdown({
 
         <div style={{textAlign: 'start', width: '100%'}}>
             <select
-                onChange={(e) => onChange != null ? onChange(e.target.value) : setDropdownValue(e.target.value)}
+                onChange={(e) => onChange != null ? e.target.value == placeholder ? onChange('') : onChange(e.target.value) : setDropdownValue(e.target.value)}
                 className="dropdown text-montserrat text-16 text-weight-5"
                 disabled = {disabled}
                 value={value ? value : dropdownValue}
