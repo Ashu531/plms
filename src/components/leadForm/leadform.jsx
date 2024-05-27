@@ -36,16 +36,16 @@ export default function LeadForm({
         const tenureError = amountValidation(formData.tenure);
         const advanceEmiError = dropdownValidation(formData.advanceEmi);
 
-        if(
-            nameError || instituteError || mobileError || emailError ||
-            borrowerNameError || courseError || courseFeeError || loanAmountError || tenureError || advanceEmiError
-        ) {
-            console.log(nameError , instituteError , mobileError , emailError ,
-                borrowerNameError , courseError , courseFeeError , loanAmountError , tenureError , advanceEmiError)
-                setLoader(false)
-                // alert("All the fields are mandatory to fill")
-            return;
-        }
+        // if(
+        //     nameError || instituteError || mobileError || emailError ||
+        //     borrowerNameError || courseError || courseFeeError || loanAmountError || tenureError || advanceEmiError
+        // ) {
+        //     console.log(nameError , instituteError , mobileError , emailError ,
+        //         borrowerNameError , courseError , courseFeeError , loanAmountError , tenureError , advanceEmiError)
+        //         setLoader(false)
+        //         alert("All the fields are mandatory to fill")
+        //     return;
+        // }
 
         let res = await saveForm(requestData(formData), token);
 
@@ -440,11 +440,12 @@ export function EditableLeadForm ({
             const error = basicValidation(borrowerNameState.value);
             if(error != 'cannot be empty'){
                 setBorrowerNameState({...borrowerNameState, error: error})
+                // return
             }
 
-            if(error == null){
+            // if(error == null){
                 setFormData({...formData, borrowerName: borrowerNameState.value, studentName: nameState.value});
-            }
+            // }
         }, 0)
     
         return () => clearTimeout(delayDebounce)
@@ -468,10 +469,9 @@ export function EditableLeadForm ({
                     setCourseState({...courseState, error: `${error} course name`})
                 }
             }
-            console.log(error,"error")
-            if(error == null){
+            // if(error == null){
                 setFormData({...formData, course: courseState.value});
-            }
+            // }
         }, 0)
     
         return () => clearTimeout(delayDebounce)
@@ -526,9 +526,9 @@ export function EditableLeadForm ({
                 setTenureState({...tenureState, error: error})
             }
 
-            if(error == null){
+            // if(error == null){
                 setFormData({...formData, tenure: tenureState.value});
-            }
+            // }
         }, 0)
     
         return () => clearTimeout(delayDebounce)
