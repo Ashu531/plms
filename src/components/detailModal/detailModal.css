@@ -1,4 +1,4 @@
-.detail-modal{
+.detail-modal {
     width: 100%;
     height: 100%;
     position: relative;
@@ -7,9 +7,10 @@
     justify-content: flex-start;
     align-items: flex-end;
     flex-shrink: 0;
+    padding-bottom: 60px; /* Add padding to make space for the footer */
 }
 
-.detail-modal-header{
+.detail-modal-header {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -19,21 +20,21 @@
     top: 0px;
 }
 
-.modal-user-name{
+.modal-user-name {
     color: #0B090D;
     font-size: 20px;
     font-family: 'Montserrat';
     font-weight: 600;
 }
 
-.modal-lead{
+.modal-lead {
     color: #444;
     font-size: 16px;
     font-family: 'Montserrat';
     font-weight: 500;
 }
 
-.upload-icon-content{
+.upload-icon-content {
     display: flex;
     padding: 10px;
     align-items: center;
@@ -43,14 +44,14 @@
     background: #FFF;
 }
 
-.modal-header-name{
+.modal-header-name {
     color: #0B090D;
     font-size: 20px;
     font-family: 'Montserrat';
     font-weight: 600;
 }
 
-.modal-header-lead{
+.modal-header-lead {
     color: #444;
     font-size: 16px;
     font-family: 'Montserrat';
@@ -58,14 +59,14 @@
     text-align: start;
 }
 
-.modal-divider{
+.modal-divider {
     height: 1px;
     background: #EAEAEA;
     width: 100%;
 }
 
-.modal-content{
-    margin-top: 8rem;
+.modal-content {
+    margin-top: 4rem;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
@@ -73,34 +74,34 @@
     width: 100%;
 }
 
-.modal-header{
+.modal-header {
     color: #0B090D;
     font-size: 18px;
     font-family: 'Montserrat';
     font-weight: 600;
 }
 
-.table-label{
+.table-label {
     color: #0B090D;
     font-size: 14px;
     font-family: 'Montserrat';
     font-weight: 500;
 }
 
-.table-value{
+.table-value {
     color: #0B090D;
     font-size: 14px;
     font-family: 'Montserrat';
     font-weight: 600;
 }
 
-.full-width{
+.full-width {
     width: 100% !important;
     justify-content: space-between;
     margin-top: 4px;
 }
 
-.table-link{
+.table-link {
     color: #8F14CC;
     font-size: 14px;
     font-family: 'Montserrat';
@@ -109,7 +110,7 @@
     cursor: pointer;
 }
 
-.pending-icon-content{
+.pending-icon-content {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -120,7 +121,7 @@
     margin-right: 8px;
 }
 
-.update-content{
+.update-content {
     display: flex;
     padding: 15px;
     flex-direction: column;
@@ -132,13 +133,14 @@
     margin-top: 12px;
 }
 
-.update-text{
+.update-text {
     color: #444;
     font-size: 10px;
     font-family: 'Montserrat';
     text-transform: capitalize;
 }
-.update-content-header{
+
+.update-content-header {
     color: #0B090D;
     font-size: 14px;
     font-family: 'Montserrat';
@@ -146,9 +148,14 @@
     text-transform: capitalize;
 }
 
-.modal-footer{
-    /* position: absolute;
-    bottom: 0px;
-    left: 0px; */
+.modal-footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
     background: #fff;
+    padding: 10px 0;
+    box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
 }

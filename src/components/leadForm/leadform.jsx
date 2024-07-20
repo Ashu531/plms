@@ -7,9 +7,10 @@ import LeadDetailForm,{formViewTypes, studentFormInputTypes} from '../../forms/l
 import Button from '../button/button.jsx';
 import { amountValidation, basicValidation, dropdownValidation, emailValidation, mobileValidation } from '../../helpers/validations.js';
 import Lead, { leadState, requestData } from '../../entities/formDetails.js';
-import { saveDraft, saveForm } from '../../helpers/apis';
+import { saveDraft, saveForm, editForm } from '../../helpers/apis';
 import { Bars, TailSpin } from "react-loader-spinner";
 import ClickAwayListener from 'react-click-away-listener';
+import axios from 'axios'
 
 export default function LeadForm({
     token,
@@ -19,14 +20,17 @@ export default function LeadForm({
     setFormData,
     handleDraftSave,
     handleCloseLeadForm,
-    getDraftCount
+    getDraftCount,
+    edit,
+    setLeadData
 }) {
+
     const [loader,setLoader] = useState(false)
+
     const handleSave = async (addAnother) => {
-        setLoader(true)
-        // const leadIdError = basicValidation(formData.leadId);
+        setLoader(true);
+    
         const nameError = basicValidation(formData.studentName);
-        const instituteError = basicValidation(formData.institute);
         const mobileError = mobileValidation(formData.mobile);
         const emailError = emailValidation(formData.email);
         const borrowerNameError = basicValidation(formData.borrowerName);
@@ -35,44 +39,54 @@ export default function LeadForm({
         const loanAmountError = amountValidation(formData.loanAmount);
         const tenureError = amountValidation(formData.tenure);
         const advanceEmiError = dropdownValidation(formData.advanceEmi);
-
-        // if(
-        //     nameError || instituteError || mobileError || emailError ||
-        //     borrowerNameError || courseError || courseFeeError || loanAmountError || tenureError || advanceEmiError
-        // ) {
-        //     console.log(nameError , instituteError , mobileError , emailError ,
-        //         borrowerNameError , courseError , courseFeeError , loanAmountError , tenureError , advanceEmiError)
-        //         setLoader(false)
-        //         alert("All the fields are mandatory to fill")
-        //     return;
-        // }
-
-        let res = await saveForm(requestData(formData), token);
-
-        if(addAnother){
-            setFormData({...leadState});
-        } else {
-            onBackPress(res);
+    
+        if (
+            nameError || mobileError || emailError ||
+            borrowerNameError || courseError || courseFeeError || loanAmountError || tenureError || advanceEmiError
+        ) {
+            setLoader(false);
+            alert("All the fields are mandatory to fill");
+            return;
         }
-        getDraftCount()
-        setLoader(false)
-
-        if(res.message){
-            alert(res.message)
-        } else {
-            alert(res.data.message);
+    
+        let res;
+        try {
+            if (edit) {
+                res = await updateLead(requestData(formData), token);
+            } else {
+                res = await saveForm(requestData(formData), token);
+            }
+    
+            console.log(res, "response");
+    
+            if (addAnother) {
+                setFormData({ ...leadState });
+            } else {
+                onBackPress(res);
+            }
+        } catch (error) {
+            console.error(error);
+            alert("An error occurred while saving the lead.");
+        } finally {
+            setLoader(false);
         }
-        
-    }
+    };
+    
 
-    const handleSaveDraft = async () => {
-        let res = await saveDraft(requestData(formData), token);
-        if(res.application_id.length > 0){
-            handleDraftSave()
+    const updateLead = async (data, token) => {
+        try {
+            const response = await axios.put(`${API_URL}/api/loan/v1/loan-lead/${data.id}/`, data, {
+                headers: {
+                    token: `${token}`,
+                },
+            });
+            return response.data; 
+        } catch (error) {
+            console.error(error);
+            throw error; 
         }
-        alert("Draft Saved Successfully!")
-        handleCloseLeadForm();
-    }
+    };
+    
 
   return (
     
@@ -100,7 +114,7 @@ export default function LeadForm({
                 />
 
                 <div className='row' style={{gap: '1rem',width: '100%',justifyContent:'space-between'}}>
-                    <Button
+                    {/* <Button
                         text='Save Draft'
                         classes={{
                             borderRadius: 8,
@@ -115,8 +129,8 @@ export default function LeadForm({
                             fontWeight: 600
                         }}
                         onClick={handleSaveDraft}
-                    />
-                    <Button 
+                    /> */}
+                    {/* <Button 
                         text='Save & Add Another Lead'
                         classes={{
                             borderRadius: 8,
@@ -131,9 +145,9 @@ export default function LeadForm({
                             fontWeight: 600
                         }}
                         onClick={()=>{handleSave(true)}}
-                    />
+                    /> */}
                     <Button 
-                        text='Save Lead'
+                        text={ edit ? 'Update Lead' : 'Save Lead'}
                         classes={{
                             background: '#8F14CC',
                             borderRadius: '8px',

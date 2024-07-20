@@ -22,7 +22,6 @@ export default function Header({
 }) {
 
     const handleBack=()=>{
-        getDraftCount()
         let i = 0
         goToHomePage(i)
     }
@@ -30,22 +29,17 @@ export default function Header({
   return (
    <div className='plms-navbar-header'>
        <div style={{width: 380}}>
-           {
-             screen === 0 && <Search
-                placeholder={'Search for Leads'}
-                onChange={onSearchChange}
-                query={query}
-                removeSearchQuery={()=>removeSearchQuery()}
-            />
-           }
+        {
+                screen === 0 &&
+                <Search
+                    placeholder={'Search for Leads'}
+                    onChange={onSearchChange}
+                    query={query}
+                    removeSearchQuery={()=>removeSearchQuery()}
+                />
+        }
 
             {/* {
-             screen === 1 && <div className='header-title'>
-                 Lead Detail
-                 </div>
-           } */}
-
-            {
              screen === 2 && 
              <div className='row'>
                     <img src={caretIcon} onClick={()=>handleBack()} style={{cursor:'pointer'}}/>
@@ -53,7 +47,7 @@ export default function Header({
                         Drafts
                     </div>   
              </div>
-           } 
+           }  */}
 
             {
              screen === 3 && 
@@ -68,14 +62,14 @@ export default function Header({
        </div>
         <div className='header-content'>
             {/* <img src={userIcon} style={{width: '36px', height: '36px'}} /> */}
-            <div style={{position:'relative'}}>
+            {/* <div style={{position:'relative'}}>
                 <img src={draftIcon} style={{width: '36px', height: '36px',cursor: 'pointer'}} onClick={()=>goToDraftPage()} />
                 <div className='plms-draft-count-content'>
                             <div className='plms-draft-count-text'>
                                 {draftCount}
                             </div>    
                 </div> 
-            </div>
+            </div> */}
             
             <img src={downloads} style={{width: '36px', height: '36px',cursor: 'pointer'}} onClick={()=>goToDownloads()} />
             {/* <img src={bellIcon} style={{width: '36px', height: '36px'}} /> */}

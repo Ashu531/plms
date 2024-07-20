@@ -4,23 +4,24 @@ import { Mixpanel } from "./mixpanel";
 
 export const saveForm = async (payload, token) => {
 
-    const response = await axios.post(`${API_URL}/api/loan/lead/create/`, payload, {
+    const response = await axios.post(`${API_URL}/api/loan/v1/loan-lead/`, payload, {
         headers: {
             token: `${token}`,
         },
     }).then(res => {
 
-        try{
-            Mixpanel?.track(`financing_lead_created`, payload)
-        } catch(e){}
+        // try{
+        //     Mixpanel?.track(`financing_lead_created`, payload)
+        // } catch(e){}
+        console.log(res,"res+++")
 
-        return res.data.data
+        return res.data
     })
     .catch(err => {
         // if(err.response.data.error.length > 0){
         //     alert(err.response.data.error)
         // }
-       return err.response.data
+       return err.response
     })
     
     return response;
@@ -29,7 +30,7 @@ export const saveForm = async (payload, token) => {
 
 export const saveEditedForm = async (payload, token) => {
 
-    const response = await axios.post(`${API_URL}/api/loan/lead/create/`, payload, {
+    const response = await axios.post(`${API_URL}/api/loan/v1/loan-lead/`, payload, {
         headers: {
             token: `${token}`,
         },

@@ -1,27 +1,24 @@
 import React from 'react';
 import './App.css';
-import Home from './screens/home/home.jsx';
+import Home from './screens/home/home.js';
+import Login from './screens/login/login.js'
 import 'react-datez/dist/css/react-datez.css';
-import { setMixpanel } from './helpers/mixpanel';
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import CheckAuthentication from '../src/components/checkAuthentication.js'
 
-export default function App({
-  token,
-  student,
-  onAddStudentClick,
-  removeStudentName, 
-  Mixpanel
-}) {
+const AuthenticatedHome = CheckAuthentication(Home);
 
-  setMixpanel(Mixpanel)
+export default function App() {
 
   return (
     <div className="App">
-      <Home 
-        token={token} 
-        student={student} 
-        onAddStudentClick={onAddStudentClick} 
-        removeStudentName={removeStudentName}
-      />
-    </div>
+      <Router>
+          <Routes>
+            <Route path="/login/*" element={<Login/>} />
+            <Route path="/dashboard" element={<AuthenticatedHome />} />
+            <Route path="/*" element={<AuthenticatedHome />} />
+          </Routes>
+      </Router>
+   </div>
   );
 }

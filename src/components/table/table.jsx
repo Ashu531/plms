@@ -1,5 +1,4 @@
 import React,{useEffect, useState} from 'react'
-import sortIcon from '../../assets/Icons/sortIcon.svg'
 import './table.css'
 import { Bars, TailSpin } from "react-loader-spinner";
 
@@ -72,10 +71,10 @@ export default function Table({
                 { list.length > 0 ? list.map((item, index) => (
                     
                         <div key={`${item}-${index}`} className='table-row' onClick={() => onRowClick(item, index)}>
-                            <div className='row-text'>{ item.leadId }</div>
-                            <div className='row-text'>{ item.fullName }</div>
-                            <div className='row-text'>{ item.mobile }</div>
-                            <div className='row-text'>{ item.loanRequired }</div>
+                            <div className='row-text'>{ item.application_id }</div>
+                            <div className='row-text'>{ item.student_name }</div>
+                            <div className='row-text'>{ item.applicant_phone }</div>
+                            <div className='row-text'>{ item.course_fee }</div>
                             {
                                 (tableType === 0 || tableType === 5) &&
                                 <div className='row-text'>{ item.utr ? item.utr : '-' }</div>

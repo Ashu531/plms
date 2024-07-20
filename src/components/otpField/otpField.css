@@ -1,0 +1,42 @@
+.otp-container {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+}
+.otp-container input::-webkit-outer-spin-button,
+.otp-container input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+.otp-container input[type=number] {
+    -moz-appearance: textfield;
+}
+.otp-container .input-field {
+    width: 100%;
+    padding: 1.6rem 2rem 1.6rem 2rem;
+    background: rgba(42, 10, 98, 0.1);
+    border-radius: 0.8rem;
+    text-align: center;
+    border: none;
+    font-family: Roboto;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 2rem;
+    line-height: 2rem;
+    color: #404040;
+}
+.otp-container .input-field:focus {
+    outline: none;
+    border: 1px solid #404040;
+}
+.otp-container .filled {
+    border: 1px solid #404040;
+}
+@media screen and (max-width: 499px) {
+    .otp-container .input-field {
+        padding: 1.6rem 1rem 1.6rem 1rem;
+    }
+}

@@ -1,5 +1,5 @@
 import React,{useEffect, useRef, useState} from 'react';
-import './/downloads.css'
+import './downloads.css'
 import axios from 'axios';
 import downloadIcon from '../../assets/Icons/downloadIcon.svg'
 import disabledDownload from '../../assets/Icons/disabledDownload.svg'

@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import DetailModal from '../detailModal/detailModal.jsx';
+import DetailModal from '../detailModal/detailModal.js';
 import './/sliding_panel.css'
 
 export default function SlidingPanel(props) 
@@ -21,6 +21,9 @@ export default function SlidingPanel(props)
                   pendecyData={props?.pendecyData}
                   consent={props?.consent}
                   pendencyResponse={props?.pendencyResponse}
+                  openLeadForm={(item) => props?.openLeadForm(item)} 
+                  enableEditMode={()=>props?.enableEditMode()}
+                  lastActivity={props?.lastActivity}
                 />
             </div>
         </div>

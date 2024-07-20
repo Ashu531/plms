@@ -31,7 +31,8 @@ export default function Upload({
     onDrop,
     onCancel,
     onSave,
-    onUpload
+    onUpload,
+    leadID
   }) {
 
   const fileInputField = useRef(null);
@@ -79,12 +80,12 @@ export default function Upload({
     selectedFiles.forEach(async (file, index) => {
       let data = new FormData();
       data.append('document_file', file);
-      data.append('referenceId', getReferenceId())
-      data.append('leadId', getLeadId())
-      data.append('documentType', getDocumentType())
-      data.append('fileName', getDocumentType())
+      // data.append('referenceId', getReferenceId())
+      // data.append('leadId', getLeadId())
+      data.append('type', getDocumentType())
+      // data.append('fileName', getDocumentType())
 
-      const res = await axios.post(`${API_URL}/api/loan/upload/documents/`, data, {
+      const res = await axios.post(`${API_URL}/api/loan/v1/loan-lead/${leadID}/documents/`, data, {
         headers: {
           token: `${token}`,
         },

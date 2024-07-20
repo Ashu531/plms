@@ -36,7 +36,7 @@ const configs = addBaseConfig({
       //   "U2FsdGVkX19p7zIuVPh8mW1fp9PdMxR0aGHzQ0IbJuw="
       // ),
       // LOGIN_API_URL: JSON.stringify("http://localhost:7777"),
-      API_URL: JSON.stringify("https://fmsbackend.credenc.com"),
+      API_URL: JSON.stringify("http://ec2-51-20-185-81.eu-north-1.compute.amazonaws.com:8000/"),
     }),
     new HtmlWebpackPlugin({
       title: "React Cards",
@@ -44,14 +44,14 @@ const configs = addBaseConfig({
       template: "./index.html",
       // favicon: "src/assets/invoid-logo.svg",
     }),
-    new ModuleFederationPlugin({
-      name: "PLMS",
-      filename: "remoteEntry.js",
-      exposes: {
-        "./app": "./src/App",
-      },
-      shared: { react: { singleton: true, eager: true }, "react-dom": { singleton: true, eager: true } },
-    }),
+    // new ModuleFederationPlugin({
+    //   name: "PLMS",
+    //   filename: "remoteEntry.js",
+    //   exposes: {
+    //     "./app": "./src/App",
+    //   },
+    //   shared: { react: { singleton: true, eager: true }, "react-dom": { singleton: true, eager: true } },
+    // }),
   ],
   devServer: {
     host: "0.0.0.0",

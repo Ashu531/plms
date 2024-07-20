@@ -146,19 +146,19 @@ export const leadState = {
 
 export const requestData = (formData) => {
     return {
-        "leadId": formData.leadId,
+        // "leadId": formData.leadId,
         "student_name": formData.studentName,
         "college": formData.institute,
-        "number": formData.mobile,
-        "email": formData.email,
+        "applicant_phone": formData.mobile,
+        "applicant_email": formData.email,
         "nameSameAsBorrower": formData.studentName == formData.borrowerName,
-        "name": formData.borrowerName,
-        "course_name": formData.course,
+        "borrower_name": formData.borrowerName,
+        "course": formData.course,
         "course_fee": formData.courseFee,
         "loan_amount": formData.loanAmount,
         "tenure": formData.tenure,
-        "emi": formData.advanceEmi,
+        "advance_emi": formData.advanceEmi,
         "borrowerUuid": formData.borrowerUuid,
-        "id": formData?.id
+        "id": formData?.id,
     }
 }

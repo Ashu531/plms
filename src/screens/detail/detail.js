@@ -13,6 +13,9 @@ import { formViewTypes } from '../../forms/leadDetails.jsx';
 import { leadState, requestData } from '../../entities/formDetails.js';
 import ChoiceBox, { Checklist } from '../../components/checklist/checklist.jsx';
 import { Bars, TailSpin } from "react-loader-spinner";
+import addIcon from "../../assets/Icons/addIcon.svg";
+import CommentBoxModal from '../../components/commentBox/commentBox';
+import Button from '../../components/button/button.jsx';
 
 const documentTypes = [
     'Aadhaar Card', 
@@ -54,6 +57,7 @@ const [activityNoResult,setActivityNoResult] = useState(false)
 const [commentLoader,setCommentLoader] = useState(false)
 const [commentNoResult,setCommentNoResult] = useState(false)
 const [loader,setLoader] = useState(false)
+const [isModalVisible, setIsModalVisible] = useState(false);
 
 const switchToDropState = () => {
     setCurrentUploadState(uploadtStates.drop)
@@ -82,38 +86,36 @@ const removeFile = (i) => {
 
 const getDocumentType = () => {
     switch(documentValue){
-        case 'PAN Card': return 'PAN_CARD'
-        case 'Aadhaar Card': return 'AADHAR_CARD'
-        case 'Bank Statement': return 'BANK_STATEMENT'
-        case 'Passport': return 'PHOTO' 
-        case 'Driving License': return 'PHOTO' 
+        case 'PAN Card': return 'pan'
+        case 'Aadhaar Card': return 'aadhar'
+        case 'Bank Statement': return 'statement'
+        case 'Passport': return 'passport' 
+        case 'Driving License': return 'license' 
         case 'Voter ID': return 'PHOTO' 
         case 'Landline Bill': return 'PHOTO' 
         case 'Electricity Bill': return 'PHOTO' 
         case 'Gas Bill': return 'PHOTO' 
         case 'Water Bill': return 'PHOTO'
-        case 'Others': return 'PHOTO'
+        case 'Others': return 'other'
     }
 }
 
  useEffect(()=>{
      getActivityData()
      getUserComment()
-     getLeadOverview()
  },[])
 
  const getUserComment=async()=>{
      setCommentLoader(true)
-    await axios.get(`${API_URL}/api/loan/lead/comments/${props?.leadData?.leadId}/`,{
+    await axios.get(`${API_URL}/api/loan/v1/loan-lead/${props?.leadData?.id}/comments/`,{
         headers: {
             token: `${props?.token}`,
         },
     }).
     then(res => {
         setCommentLoader(false)
-
-        if(res.data.data.data.length > 0){
-            setComments(res.data.data.data)
+        if(res.data.data.length > 0){
+            setComments(res.data.data)
         }else{
             setCommentNoResult(true)
         }
@@ -124,15 +126,15 @@ const getDocumentType = () => {
 
  const getActivityData=async()=>{
     setActivityLoader(true)
-    await axios.get(`${API_URL}/api/loan/update/history/${props?.leadData?.leadId}/`,{
+    await axios.get(`${API_URL}/api/loan/v1/loan-lead/${props?.leadData?.id}/logs/`,{
         headers: {
             token: `${props?.token}`,
         },
     }).
     then(res => {
         setActivityLoader(false)
-        if(res.data.data.data.length > 0){
-            setActivities(res.data.data.data)
+        if(res.data.data.length > 0){
+            setActivities(res.data.data)
         }else{
             setActivityNoResult(true)
         }
@@ -142,33 +144,16 @@ const getDocumentType = () => {
     });
  }
 
- const getLeadOverview=async()=>{
-    await axios.get(`${API_URL}/api/loan/overview/${props?.leadData?.leadId}/`,{
-        headers: {
-            token: `${props?.token}`,
-        },
-    }).
-    then(res => {
-        setLeadData(res.data.data.data)
-    }).catch(err=>{
-        console.log(err)
-    });
-    
- }
-
  const updateLead = async () => {
-
-    // console.log(data, "edit payload")
-
-    await axios.post(`${API_URL}/api/loan/overview/${props?.leadData?.leadId}/`,
-    requestData({...formData, borrowerUuid: leadOverview.borrowerUuid}),
+    await axios.post(`${API_URL}/api/loan/v1/loan-lead/${props?.leadData?.id}/`,
+    requestData({...formData}),
     {
         headers: {
             token: `${props?.token}`,
         },
     }).
     then(res => {
-        // setLeadData(res.data.data.data)
+        setLeadData(res.data)
     }).catch(err=>console.log(err));
  }
 
@@ -197,13 +182,25 @@ const handleDocTypeSelection = (docType) => {
         }
 }
 
-const handleRefresh=async()=>{
-    setLoader(true)
-    props?.onRefresh(props?.leadData)
-    await getActivityData()
-    await getUserComment()
-    await getLeadOverview()
-    setLoader(false)
+const handleCommentSubmit = async (comment) => {
+    await axios.post(`${API_URL}/api/loan/v1/loan-lead/${props?.leadData?.id}/comments/`, {
+        comment,
+    }, {
+        headers: {
+            token: `${props?.token}`,
+        },
+    }).then(res => {
+        getUserComment();
+    }).catch(err => console.log(err));
+    closeCommentBox();
+}
+
+const closeCommentBox = () => {
+    setIsModalVisible(false);
+}
+
+const openCommentBox = () => {
+    setIsModalVisible(true);
 }
 
   return (
@@ -213,11 +210,11 @@ const handleRefresh=async()=>{
                 <div className='row'>
                     <img src={caretIcon} onClick={()=>handleBack()} style={{cursor:'pointer'}}/>
                     <div className='column' style={{marginTop: 20,marginLeft: 12}}>
-                        <span className='lead-page-heading' >{props?.leadData?.fullName && props?.leadData?.fullName.length > 0 ? props?.leadData?.fullName : `${props?.leadData?.studentFirstName} ${props?.leadData?.studentMiddleName} ${props?.leadData?.studentLastName}`} : {props?.leadData?.leadId}</span>
-                        <span className='lead-page-subheading'> {props?.leadData?.mobile}</span>
+                        <span className='lead-page-heading' >{props?.leadData?.student_name} : {props?.leadData?.application_id}</span>
+                        <span className='lead-page-subheading'> {props?.leadData?.applicant_phone}</span>
                     </div>
                 </div>
-                <div className='column' style={{alignItems:'flex-end'}}>
+                {/* <div className='column' style={{alignItems:'flex-end'}}>
                     {
                         props?.consent ? 
                         <>
@@ -252,7 +249,7 @@ const handleRefresh=async()=>{
                     }
                     
                    
-                </div>
+                </div> */}
             </div>
         </div>
         <div className='lead-page-content'>
@@ -263,21 +260,23 @@ const handleRefresh=async()=>{
             />
             {
                 tab === 0 && 
-                formData && <EditableLeadForm
-                    instituteName={instituteName}
-                    viewType={formViewTypes.VIEW}
-                    previousFormData={previousFormData}
-                    formData={formData}
-                    setFormData={(data) => setFormData(data)}
-                    showHeadings={true}
-                    handleSave={updateLead}
-                />
+                formData && <div className="scrollable-form-container">
+                    <EditableLeadForm
+                        instituteName={instituteName}
+                        viewType={formViewTypes.VIEW}
+                        previousFormData={previousFormData}
+                        formData={formData}
+                        setFormData={(data) => setFormData(data)}
+                        showHeadings={true}
+                        handleSave={updateLead}
+                    />
+              </div>
             }
             {
                 tab === 1 && 
                 <div className='financials-container row full-width'>
                     <FinancialForm 
-                        leadData={leadData}
+                        leadData={props?.leadData}
                         token={props?.token}
                     />
                 </div>
@@ -353,8 +352,8 @@ const handleRefresh=async()=>{
                             verifiedFiles={verifiedFiles}
                             setVerifiedFiles={setVerifiedFiles}
                             removeFile={removeFile}
-                            getReferenceId={() => leadOverview.borrowerUuid}
-                            getLeadId={() => `LEAD-${leadOverview.leadId}`}
+                            // getReferenceId={() => leadOverview.borrowerUuid}
+                            getLeadId={() => `LEAD-${props?.leadData?.id}`}
                             getDocumentType={getDocumentType}
                             currentUploadState={currentUploadState}
                             onDrop={switchToPreviewState}
@@ -363,13 +362,60 @@ const handleRefresh=async()=>{
                                 switchToUploadedState();
                                 setTimeout(() => switchToDropState(), 3000)
                             }}
+                            leadID={props?.leadData?.id}
                         />
                     </div>
                 </div>    
             }
+            { tab === 3 && <div style={{width: '100%',display:'flex', justifyContent:"flex-end",alignItems:"flex-end"}}>
+                        <Button
+                            leadingIcon={addIcon}
+                            text="Add Comment"
+                            classes={{
+                                background: "#8F14CC",
+                                borderRadius: "8px",
+                                height: "44px",
+                            }}
+                            textClass={{
+                                color: "#FFF",
+                                fontSize: "16px",
+                                fontFamily: "Montserrat",
+                                fontWeight: 500,
+                            }}
+                            onClick={openCommentBox}
+                        />
+                    </div> }
             {
                 tab === 3 &&
                 <div className='activity-container row full-width'>
+                      
+                    <div className='activity-container column'>
+                        <span className='activity-container-heading'>Activity Log</span>
+                        <div className='column' style={{gap: 10,marginTop: 16}}>
+                        {
+                              activities.length > 0 && activities.map((item,index)=>{
+                                    return(
+                                         <ActivityCard 
+                                                title={item.action}                                                
+                                                name={item.username}
+                                                time={item.created_at}
+                                        />
+                                    )
+                                }) 
+                            }
+                            {
+                                activityNoResult &&
+                                <div style={{color: '#000'}}>No Results</div>
+                            }
+                        </div>
+                        {
+                            activityLoader && 
+                            <div className="credenc-loader-white">
+                                <TailSpin color="#00BFFF" height={100} width={100}/>
+                            </div>
+                        }
+                    </div>
+                    <div className='activity-container-divider' />
                     <div className='activity-container column '>
                         <span className='activity-container-heading'>Comments</span>
                         <div className='column' style={{gap: 10,marginTop: 16}}>
@@ -377,8 +423,8 @@ const handleRefresh=async()=>{
                               comments?.length > 0 && comments.map((item,index)=>{
                                     return(
                                          <ActivityCard 
-                                                title={item.log}
-                                                name={item.updatedBy}
+                                                title={item.text}
+                                                name={item.username}
                                                 time={item?.createdAt?.date}
                                         />
                                     )
@@ -396,33 +442,6 @@ const handleRefresh=async()=>{
                             }
                         </div>
                     </div>
-                    <div className='activity-container-divider' />
-                    <div className='activity-container column'>
-                        <span className='activity-container-heading'>Activity Log</span>
-                        <div className='column' style={{gap: 10,marginTop: 16}}>
-                        {
-                              activities.length > 0 && activities.map((item,index)=>{
-                                    return(
-                                         <ActivityCard 
-                                                title={item.template}
-                                                name={item.category}
-                                                time={item.created.date}
-                                        />
-                                    )
-                                }) 
-                            }
-                            {
-                                activityNoResult &&
-                                <div style={{color: '#000'}}>No Results</div>
-                            }
-                        </div>
-                        {
-                            activityLoader && 
-                            <div className="credenc-loader-white">
-                                <TailSpin color="#00BFFF" height={100} width={100}/>
-                            </div>
-                        }
-                    </div>
                 </div>
             }
         </div>
@@ -432,6 +451,12 @@ const handleRefresh=async()=>{
             <TailSpin color="#00BFFF" height={100} width={100}/>
           </div>
         }
+
+            <CommentBoxModal
+                visible={isModalVisible}
+                onClose={closeCommentBox}
+                onSubmit={handleCommentSubmit}
+            />
     </div>
   )
 }

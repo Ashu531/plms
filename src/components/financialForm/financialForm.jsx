@@ -83,13 +83,13 @@ export default function FinancialForm({
         }
     },[employmentStatus])
 
-    console.log(isSalaried,"salaried+++")
 
     const handleFinancialData=(data)=>{
-        if(data?.borrowerData?.netMonthlyIncome > 0){
+        
+        if(data?.data?.income_per_year > 0){
             setMonthySalary({
                 ...monthySalary,
-                value: data?.borrowerData?.netMonthlyIncome,
+                value: data?.data.income_per_year,
             })
         }else{
             setMonthySalary({
@@ -100,14 +100,14 @@ export default function FinancialForm({
         
         setCompanyName({
             ...companyName,
-            value: data?.borrowerData?.lastCurrentEmployer,
+            value: data?.data?.company_name,
         })
 
         employmentStatusList.forEach((item,index)=>{
-            if(item.value === data?.borrowerData?.employmentStatusId){
+            if(item.value == data?.data.employment_status){
                 setEmploymentStatus({
                     ...employmentStatus,
-                    value : data?.borrowerData?.employmentStatusId
+                    value : item.value
                 })
             }
         })
@@ -236,12 +236,12 @@ export default function FinancialForm({
     const submitData=async()=>{
         setLoader(true)
         let data = {
-            netMonthlyIncome: monthySalary.value,
-            lastCurrentEmployer: companyName.value,
-            employmentStatusId : employmentStatus.value
+            income_per_year: monthySalary.value,
+            company_name: companyName.value,
+            employment_status : employmentStatus.value
         }
 
-        await axios.post(`${API_URL}/api/loan/financial/details/LEAD-${leadData?.borrowerData.leadId}/`,data,{
+        await axios.put(`${API_URL}/api/loan/v1/loan-lead/${leadData?.id}/finances/`,data,{
             headers: {
                 token: `${token}`,
             },
@@ -259,13 +259,13 @@ export default function FinancialForm({
 
     const getOverviewData=async()=>{
         setLoader(true)
-        await axios.get(`${API_URL}/api/loan/overview/LEAD-${leadData?.borrowerData.leadId}/`,{
+        await axios.get(`${API_URL}/api/loan/v1/loan-lead/${leadData?.id}/finances/`,{
             headers: {
                 token: `${token}`,
             },
         }).
         then(res => {
-            let resData = res?.data?.data?.data;
+            let resData = res?.data
             setFinancialData(resData)
             handleFinancialData(resData)
         }).catch(err=>console.log(err));

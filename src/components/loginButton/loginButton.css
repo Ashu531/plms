@@ -1,0 +1,111 @@
+.button{
+    align-items: center;
+    border-radius: 5rem;
+    outline: none;
+    border: none;
+    text-align: center;
+    color: #FFFFFF;
+    cursor: pointer;
+}
+
+.button-primary{
+    background: #8F14CC;
+}
+
+.button-outline{
+    border: 1px solid #8F14CC;
+    background: #ffffff;
+    color: #8F14CC;
+}
+
+.button-secondary{
+    background: rgba(255, 255, 255, 0.15);
+    font-weight: 500 !important;
+    color: rgba(60, 60, 60, 1);
+}
+
+.button-white{
+    width: 100%;
+    background: (255, 255, 255);
+    color: #4e4e4e;
+    padding: 1.4rem 1.4rem;
+    font-size: 1.4rem;
+    font-weight: 600;
+}
+
+.button-big{
+    width: 100%;
+    padding: 1.4rem 1rem;
+    align-self: stretch;
+    font-weight: bold;
+    font-size: 1.6rem;
+    line-height: 2.4rem;
+}
+
+.button-small{
+    width: 50%;
+    padding: 1.2rem 1.6rem;
+    font-weight: 600;
+    font-size: 1.4rem;
+    line-height: 2.1rem;
+}
+
+.button-auto{
+    padding: 1.2rem 1.6rem;
+    font-weight: 600;
+    font-size: 1.4rem;
+    line-height: 2.1rem;
+}
+
+.button-secondary:active{
+    background: rgba(0, 0, 0, 0.034);
+}
+
+.button-white:active{
+    background: (255, 255, 255, 0.4);
+}
+
+.disabled{
+    pointer-events: none;
+    background: rgba(0, 0, 0, 0.15);
+    color: rgba(0, 0, 0, 0.6);
+    font-weight: 500;
+    font-size: 1.4rem;
+    line-height: 2.1rem;
+}
+
+@media screen and(max-width: 499px){
+    .button-secondary{
+        border-radius: 5rem;
+        background: none;
+        align-items: flex-end;
+        font-weight: 700;
+        font-size: 1.2rem;
+        line-height: 1.8rem;
+        padding: 0;
+        margin: 0;
+
+    }
+
+    .button-secondary:hover{
+        border-bottom: 2px solid #FFFFFF;
+    }
+
+    .button-big{
+        font-size: 1.4rem;
+        line-height: 2.1rem;
+    }
+
+    .button-small{
+        width: 100%;
+        font-size: 1.2rem;
+        line-height: 1.8rem;
+    }
+
+    .button-white{
+        border-radius: 5rem;
+        background: none;
+        padding: 0;
+        margin: 0;
+    }
+}
