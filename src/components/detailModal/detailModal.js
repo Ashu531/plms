@@ -9,21 +9,21 @@ import ActivityCard from '../activityCard/activityCard.jsx';
 
 export default function DetailModal(props) {
 
-    useEffect(() => {
-        getQuickViewData();
-    }, []);
+    // useEffect(() => {
+    //     getQuickViewData();
+    // }, []);
 
-    const getQuickViewData = async () => {
-        await axios.get(`${API_URL}/api/loan/overview/${props?.leadData?.leadId}/`, {
-            headers: {
-                token: `${props?.token}`,
-            },
-        })
-        .then(res => {
-            console.log(res.data.data);
-        })
-        .catch(err => console.log(err));
-    };
+    // const getQuickViewData = async () => {
+    //     await axios.get(`${API_URL}/api/loan/overview/${props?.leadData?.leadId}/`, {
+    //         headers: {
+    //             token: `${props?.token}`,
+    //         },
+    //     })
+    //     .then(res => {
+    //         console.log(res.data.data);
+    //     })
+    //     .catch(err => console.log(err));
+    // };
 
     const goToDetailPage = () => {
         let i = 1;

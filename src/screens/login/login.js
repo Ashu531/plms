@@ -57,7 +57,7 @@ export default function Login() {
             method: 'POST',
             data: JSON.stringify({
                 phone_number: `${inputValue}`,
-                college_slug: urlSlug
+                // college_slug: urlSlug
             }),
             headers: {
                 'Content-Type': 'application/json'

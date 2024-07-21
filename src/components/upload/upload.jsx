@@ -76,61 +76,120 @@ export default function Upload({
     e.dataTransfer.dropEffect = 'copy';
   }
 
+  // const uploadFiles = () => {
+  //   selectedFiles.forEach(async (file, index) => {
+  //     let data = new FormData();
+  //     data.append('document_file', file);
+  //     // data.append('referenceId', getReferenceId())
+  //     // data.append('leadId', getLeadId())
+  //     data.append('type', getDocumentType())
+  //     // data.append('fileName', getDocumentType())
+
+  //     const res = await axios.post(`${API_URL}/api/loan/v1/loan-lead/${leadID}/documents/`, data, {
+  //       headers: {
+  //         token: `${token}`,
+  //       },
+  //       onUploadProgress: data => {
+  //         let prog = [...progress];
+  //         let uploadProgress = Math.round((100 * data.loaded) / data.total);
+  //         prog[index] = uploadProgress / 10;
+  //         setProgress([...prog]);
+
+  //         if(uploadProgress == 100){
+  //             const progressInterval = setInterval(() => {
+  //                 prog[index] = prog[index] + 1;
+  //                 if(prog[index] > 99){
+  //                   clearInterval(progressInterval);
+  //                 } else {
+  //                   setProgress([...prog]);
+  //                 }
+  //             }, 600)
+  //         }
+  //       }
+  //     }).then(res => {
+  //         let prog = [...progress];
+  //         prog[index] = 100;
+  //         setProgress([...prog]);
+  //         setVerifiedFiles([...verifiedFiles, res.data.id]);
+  //         onUpload()
+  //       })
+  //     .catch(err => {
+  //       if(err.response){
+  //         setError({
+  //           status: true,
+  //           message: err.response.data.error
+  //         })
+  //         let prog = [...progress];
+  //         prog[index] = 0;
+  //         setProgress([...prog]);
+  //       } else {
+  //         setError({
+  //           status: true,
+  //           message: "Upload failed! Try again."
+  //         })
+  //       }
+  //     });
+  //   })
+  // }
+
   const uploadFiles = () => {
     selectedFiles.forEach(async (file, index) => {
       let data = new FormData();
       data.append('document_file', file);
-      // data.append('referenceId', getReferenceId())
-      // data.append('leadId', getLeadId())
-      data.append('type', getDocumentType())
-      // data.append('fileName', getDocumentType())
-
-      const res = await axios.post(`${API_URL}/api/loan/v1/loan-lead/${leadID}/documents/`, data, {
-        headers: {
-          token: `${token}`,
-        },
-        onUploadProgress: data => {
-          let prog = [...progress];
-          let uploadProgress = Math.round((100 * data.loaded) / data.total);
-          prog[index] = uploadProgress / 10;
-          setProgress([...prog]);
-
-          if(uploadProgress == 100){
+      data.append('type', getDocumentType());
+  
+      try {
+        const response = await axios.post(`${API_URL}/api/loan/v1/loan-lead/${leadID}/documents/`, data, {
+          headers: {
+            'Token':token,
+            'Content-Type': 'multipart/form-data'
+          },
+          onUploadProgress: data => {
+            let prog = [...progress];
+            let uploadProgress = Math.round((100 * data.loaded) / data.total);
+            prog[index] = uploadProgress;
+            setProgress([...prog]);
+  
+            if (uploadProgress === 100) {
               const progressInterval = setInterval(() => {
-                  prog[index] = prog[index] + 1;
-                  if(prog[index] > 99){
-                    clearInterval(progressInterval);
-                  } else {
-                    setProgress([...prog]);
-                  }
-              }, 600)
+                prog[index] = prog[index] + 1;
+                if (prog[index] > 99) {
+                  clearInterval(progressInterval);
+                } else {
+                  setProgress([...prog]);
+                }
+              }, 600);
+            }
           }
-        }
-      }).then(res => {
-          let prog = [...progress];
-          prog[index] = 100;
-          setProgress([...prog]);
-          setVerifiedFiles([...verifiedFiles, res.data.id]);
-          onUpload()
-        })
-      .catch(err => {
-        if(err.response){
+        });
+  
+        console.log('Upload Response:', response);
+  
+        let prog = [...progress];
+        prog[index] = 100;
+        setProgress([...prog]);
+        setVerifiedFiles([...verifiedFiles, response.data.id]);
+        onUpload();
+      } catch (error) {
+        console.error('Upload Error:', error);
+        if (error.response) {
           setError({
             status: true,
-            message: err.response.data.error
-          })
-          let prog = [...progress];
-          prog[index] = 0;
-          setProgress([...prog]);
+            message: error.response.data.error
+          });
         } else {
           setError({
             status: true,
             message: "Upload failed! Try again."
-          })
+          });
         }
-      });
-    })
-  }
+        let prog = [...progress];
+        prog[index] = 0;
+        setProgress([...prog]);
+      }
+    });
+  };
+  
 
   useEffect(() => {
     if(selectedFiles.length > 0){
