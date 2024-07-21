@@ -5,6 +5,7 @@ import pendingIcon from '../../assets/Icons/pendingIcon.svg';
 import Button from '../button/button.jsx';
 import axios from 'axios';
 import { Bars, TailSpin } from 'react-loader-spinner';
+import ActivityCard from '../activityCard/activityCard.jsx';
 
 export default function DetailModal(props) {
 
@@ -76,11 +77,22 @@ export default function DetailModal(props) {
                 }
                 <div className='column full-width'>
                     <div className='modal-header'>Last Update</div>
-                    <div className='update-content'>
+                    <div className='update-content' style={{flexDirection: "row",justifyContent:"space-between"}}>
                         <div className='update-content-header'>
-                            {props?.leadData?.last_lead_status}
+                            Status
+                        </div>
+                        <div className='update-content-header'>
+                            <b>{props?.lastActivity?.last_lead_status}</b>
                         </div>
                     </div>
+                    <div style={{marginTop : 16, width: '100%'}}>
+                        <ActivityCard 
+                            title={props?.lastActivity?.last_activity.action}
+                            name={props?.lastActivity?.last_activity.user}
+                            time={props?.lastActivity?.last_activity.timestamp}
+                        />
+                    </div>
+                    
                 </div>
             </div>
             <div className='modal-footer row full-width'>

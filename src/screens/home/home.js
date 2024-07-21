@@ -262,7 +262,7 @@ const Home = () => {
       },
   }).
   then(res => {
-     setLastActivity(res.data)
+     setLastActivity(res.data.data)
      openSlidingPanel()
   }).catch(err=>console.log(err));
   }
