@@ -1,5 +1,4 @@
 import axios from "axios";
-import { Mixpanel } from "./mixpanel";
 
 
 export const saveForm = async (payload, token) => {
@@ -9,12 +8,6 @@ export const saveForm = async (payload, token) => {
             token: `${token}`,
         },
     }).then(res => {
-
-        // try{
-        //     Mixpanel?.track(`financing_lead_created`, payload)
-        // } catch(e){}
-        console.log(res,"res+++")
-
         return res.data
     })
     .catch(err => {

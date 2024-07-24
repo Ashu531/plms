@@ -431,7 +431,7 @@ const openCommentBox = () => {
                                 })
                             }
                             {
-                                commentNoResult &&
+                                commentNoResult && comments?.length === 0 &&
                                 <div style={{color: '#000'}}>No Results</div>
                             }
                             {

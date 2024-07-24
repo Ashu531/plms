@@ -19,6 +19,7 @@ export default function Header({
     removeSearchQuery,
     getDraftCount,
     draftCount,
+    logout
 }) {
 
     const handleBack=()=>{
@@ -73,10 +74,10 @@ export default function Header({
             
             <img src={downloads} style={{width: '36px', height: '36px',cursor: 'pointer'}} onClick={()=>goToDownloads()} />
             {/* <img src={bellIcon} style={{width: '36px', height: '36px'}} /> */}
-            {/* <div className='logout-container'>
+            <div className='logout-container' onClick={logout}>
                 <img src={logoutIcon} />
                 <span className='logout-text'>Log Out</span>
-            </div> */}
+            </div>
         </div>
    </div>
   )

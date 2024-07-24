@@ -225,12 +225,14 @@ const Home = () => {
   }
 
   const navigatePage = (i) => {
+    
     // setQuery('')
     setLoading(false)
     if(i == 0){
+      fetchData();
       resetDetailsPage();
     }
-
+      
        closeSlidingPanel()
        setScreen(i);
   };
@@ -375,6 +377,28 @@ const Home = () => {
     setEditMode(true)
   }
 
+  const handleLogout = async() => {
+    setLoading(true)
+    await apiRequest({
+      url: `/api/auth/v1/logout/`,
+      method: 'POST',
+      data: {},
+      headers: { 
+        'token' : token,
+     },
+      onSuccess: async (data) => {
+        setLoading(false)
+        localStorage.removeItem("token");
+        localStorage.removeItem("college");
+        navigate('/login', { replace: true });
+      },
+      onError: (response) => {
+          setLoading(false);
+      }
+  });
+   
+  };
+
     return (
           <div className="home-container">
             {
@@ -387,6 +411,7 @@ const Home = () => {
                     query={query}
                     token={token}
                     screen={screen}
+                    logout={handleLogout}
               />
             }
             { screen === 0 &&
