@@ -15,6 +15,7 @@
     "axios": "^0.24.0",
     "lodash": "^4.17.21",
     "moment": "^2.29.4",
+    "pdfjs-dist": "^4.5.136",
     "prop-types": "^15.8.1",
     "react": "^17.0.2",
     "react-click-away-listener": "^2.2.3",
@@ -22,7 +23,6 @@
     "react-dom": "^17.0.2",
     "react-infinite-scroll-component": "^6.1.0",
     "react-loader-spinner": "^5.3.4",
-    "react-pdf": "^7.1.3",
     "react-redux": "^7.2.6",
     "react-router": "^6.0.2",
     "react-router-dom": "^6.25.1"

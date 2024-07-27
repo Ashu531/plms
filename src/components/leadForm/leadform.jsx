@@ -185,7 +185,9 @@ export function EditableLeadForm ({
     showHeadings=false,
     handleSave
 }) {
-
+    console.log(instituteName,
+        previousFormData,
+        formData,"formData")
     const [viewTypes, setViewTypes] = useState({
         lead: viewType,
         loan: viewType

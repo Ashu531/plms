@@ -72,7 +72,7 @@ export default function Header({
                 </div> 
             </div> */}
             
-            <img src={downloads} style={{width: '36px', height: '36px',cursor: 'pointer'}} onClick={()=>goToDownloads()} />
+            {/* <img src={downloads} style={{width: '36px', height: '36px',cursor: 'pointer'}} onClick={()=>goToDownloads()} /> */}
             {/* <img src={bellIcon} style={{width: '36px', height: '36px'}} /> */}
             <div className='logout-container' onClick={logout}>
                 <img src={logoutIcon} />

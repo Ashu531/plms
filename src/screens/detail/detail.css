@@ -43,12 +43,14 @@
     line-height: normal;
 }
 
-.lead-page-content{
-    margin-top: 2rem;
-    margin: 2rem 30px 0rem 30px;
+.lead-page-content {
+    display: flex;
+    flex-direction: column;
+    height: 650px;
+    margin: 2rem 30px 0 30px;
 }
 
-.document-container{
+.document-container {
     width: 100%;
     height: 90%;
     margin-top: 2rem;
@@ -57,7 +59,8 @@
     justify-content: space-between;
     align-items: flex-start;
     gap: 2rem;
-
+    overflow-y: auto; 
+    padding-right: 15px;
 }
 
 .add-info-container{
@@ -80,7 +83,7 @@
 }
 
 .activity-container{
-    height: 90%;
+    /* height: 90%; */
     margin-top: 2rem;
     box-sizing: border-box;
     align-items: flex-start;

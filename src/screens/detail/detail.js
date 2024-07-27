@@ -341,7 +341,7 @@ const openCommentBox = () => {
                             </div>
                         ))}
                     </div>
-                    <div className='row' style={{border: '1px solid #8F14CC', borderRadius: '8px', height: '560px', justifyContent: 'center'}}>
+                    <div className='row' style={{border: '1px solid #8F14CC', borderRadius: '8px', justifyContent: 'center'}}>
                         <Upload 
                             showBorder={true} 
                             token={props?.token} 
@@ -363,6 +363,7 @@ const openCommentBox = () => {
                                 setTimeout(() => switchToDropState(), 3000)
                             }}
                             leadID={props?.leadData?.id}
+                            getDocumentType={()=>getDocumentType()}
                         />
                     </div>
                 </div>    

@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useRef } from "react";
-import Button from "../../components/button/button.jsx";
+import Button from "../button/button.jsx";
 import cloudIcon from "../../assets/Icons/cloudDropIcon.svg";
-import { Document, Page, pdfjs } from 'react-pdf';
 import axios from "axios";
+import { getToken } from "../../helpers/authService.js";
+import { getDocument, GlobalWorkerOptions } from "pdfjs-dist"; 
 import './upload.css';
 
 export const uploadtStates = {
@@ -11,21 +12,22 @@ export const uploadtStates = {
   uploaded: 2
 };
 
+
+GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjsLib.version}/pdf.worker.min.js`;
+
 export default function Upload({
   width = '',
   height = '',
-  token,
-  showBorder,
   selectedFiles, setSelectedFiles,
   deletedFiles, setDeletedFiles,
   verifiedFiles, setVerifiedFiles,
-  removeFile,
   currentUploadState,
   onDrop,
   onCancel,
-  onSave,
   onUpload,
-  leadID
+  leadID,
+  getDocumentType,
+  token
 }) {
   const fileInputField = useRef(null);
   const [progress, setProgress] = useState([]);
@@ -65,9 +67,24 @@ export default function Upload({
 
   const uploadFiles = () => {
     selectedFiles.forEach(async (file, index) => {
-      let data = new FormData();
-      data.append('document_file', file);
 
+      const fileType = file.type === 'application/pdf' ? 'pdf' : 'image';
+      
+      let data = new FormData();
+      data.append('document_format', fileType);
+      data.append('document_file', file);
+      const documentType = getDocumentType();
+      data.append('type', documentType);
+  
+      if (!fileType || !file || !documentType) {
+        console.error('Missing mandatory fields:', { fileType, file, documentType });
+        setError({
+          status: true,
+          message: "Missing mandatory fields. Upload failed!"
+        });
+        return;
+      }
+  
       try {
         const response = await axios.post(`${API_URL}/api/loan/v1/loan-lead/${leadID}/documents/`, data, {
           headers: {
@@ -79,7 +96,7 @@ export default function Upload({
             let uploadProgress = Math.round((100 * data.loaded) / data.total);
             prog[index] = uploadProgress;
             setProgress([...prog]);
-
+  
             if (uploadProgress === 100) {
               const progressInterval = setInterval(() => {
                 prog[index] = prog[index] + 1;
@@ -92,12 +109,13 @@ export default function Upload({
             }
           }
         });
-
+  
         let prog = [...progress];
         prog[index] = 100;
         setProgress([...prog]);
         setVerifiedFiles([...verifiedFiles, response.data.id]);
         onUpload();
+        fetchExistingDocuments()
       } catch (error) {
         console.error('Upload Error:', error);
         if (error.response) {
@@ -117,6 +135,7 @@ export default function Upload({
       }
     });
   };
+  
 
   useEffect(() => {
     if (selectedFiles.length > 0) {
@@ -135,10 +154,6 @@ export default function Upload({
   }, [deletedFiles]);
 
   useEffect(() => {
-    pdfjs.GlobalWorkerOptions.workerSrc = new URL('pdfjs-dist/build/pdf.worker.min.js', import.meta.url).toString();
-  }, []);
-
-  useEffect(() => {
     if (currentUploadState === uploadtStates.drop) {
       setSelectedFiles([]);
     }
@@ -148,20 +163,65 @@ export default function Upload({
     fetchExistingDocuments();
   }, [leadID]);
 
-  const renderExistingDocuments = () => {
-    return existingDocuments.map((doc, index) => (
-      <div key={index} className="existing-document">
-        {doc[0] === 'pdf' ? (
-          <Document file={`${API_URL}/${doc[1]}`}>
-            <Page pageNumber={1} />
-          </Document>
-        ) : (
-          <img className="file-preview" src={`${API_URL}/${doc[1]}`} alt={`${doc[0]} preview`} />
-        )}
-        <div className="document-type">{doc[0].toUpperCase()}</div>
-      </div>
-    ));
+  const renderPDF = (fileUrl) => {
+    const [numPages, setNumPages] = useState(null);
+    const [pageNumber, setPageNumber] = useState(1);
+
+    useEffect(() => {
+      const loadingTask = getDocument(fileUrl);
+      loadingTask.promise.then((pdf) => {
+        setNumPages(pdf.numPages);
+      });
+    }, [fileUrl]);
+
+    return (
+      <canvas
+        ref={canvasRef => {
+          if (canvasRef) {
+            const loadingTask = getDocument(fileUrl);
+            loadingTask.promise.then((pdf) => {
+              pdf.getPage(pageNumber).then((page) => {
+                const viewport = page.getViewport({ scale: 1 });
+                const canvas = canvasRef;
+                const context = canvas.getContext('2d');
+                canvas.height = viewport.height;
+                canvas.width = viewport.width;
+                page.render({
+                  canvasContext: context,
+                  viewport: viewport,
+                });
+              });
+            });
+          }
+        }}
+      />
+    );
   };
+
+  const renderExistingDocuments = () => {
+    return existingDocuments.map((doc, index) => {
+      const isMatchingDoc = getDocumentType() === doc[0];
+      
+      return (
+        <div key={index} className="existing-document">
+          {isMatchingDoc ? (
+            doc[3] === "pdf" ? (
+              renderPDF(`${doc[1]}`)
+            ) : (
+              <img className="file-preview" src={`${doc[1]}`} alt={`${doc[0]} preview`} />
+            )
+          ) : null}
+          {/* {!isMatchingDoc && (
+            <div className="file-not-matching">
+              No Preview available
+            </div>
+          )} */}
+          {/* <div className="document-type">{doc[0].toUpperCase()}</div> */}
+        </div>
+      );
+    });
+  };
+  
 
   return (
     <div className="plms-content-box" style={{ width: `${width}`, height: `${height}` }} onClick={(e) => e.stopPropagation()}>
@@ -181,9 +241,7 @@ export default function Upload({
               {file.name.split('.').pop() !== 'pdf' ? (
                 <img className="file-preview" src={URL.createObjectURL(file)} alt="preview" />
               ) : (
-                <Document file={file} onLoadSuccess={() => {}}>
-                  <Page pageNumber={1} />
-                </Document>
+                renderPDF(URL.createObjectURL(file))
               )}
               {progress[i] > 0 && <div className="plms-subtitle">{currentUploadState === uploadtStates.uploaded ? 'Uploaded' : 'Uploading'} file: {file.name}</div>}
               {progress[i] > 0 && (
@@ -206,7 +264,7 @@ export default function Upload({
                     textClass={{
                       color: '#8F14CC',
                       fontSize: '14px',
-                      fontFamily: 'Montserrat',
+                      fontFamily: 'Poppins',
                       fontWeight: 600
                     }}
                     onClick={onCancel}
@@ -222,7 +280,7 @@ export default function Upload({
                     textClass={{
                       color: '#FFF',
                       fontSize: '14px',
-                      fontFamily: 'Montserrat',
+                      fontFamily: 'Poppins',
                       fontWeight: 600
                     }}
                     onClick={uploadFiles}
@@ -235,6 +293,7 @@ export default function Upload({
         </div>
       )}
       <div className="existing-documents">
+        <h2>Preview</h2>
         {renderExistingDocuments()}
       </div>
     </div>
