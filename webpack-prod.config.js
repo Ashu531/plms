@@ -45,7 +45,7 @@ const configs = addBaseConfig({
     host: "0.0.0.0",
     // disableHostCheck: true,
     allowedHosts: "all",
-    port: 4000,
+    port: 4444,
     historyApiFallback: true,
     hot: true,
     static: {
