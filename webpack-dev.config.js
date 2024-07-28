@@ -36,7 +36,7 @@ const configs = addBaseConfig({
       //   "U2FsdGVkX19p7zIuVPh8mW1fp9PdMxR0aGHzQ0IbJuw="
       // ),
       // LOGIN_API_URL: JSON.stringify("http://localhost:7777"),
-      API_URL: JSON.stringify("http://ec2-16-16-27-246.eu-north-1.compute.amazonaws.com:8000/"),
+      API_URL: JSON.stringify("http://ec2-51-20-121-202.eu-north-1.compute.amazonaws.com:8000"),
     }),
     new HtmlWebpackPlugin({
       title: "React Cards",
