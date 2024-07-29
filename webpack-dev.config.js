@@ -1,7 +1,6 @@
 const { DefinePlugin } = require("webpack");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const addBaseConfig = require("./webpack-base.config");
-const ModuleFederationPlugin = require("webpack/lib/container/ModuleFederationPlugin");
 
 const configs = addBaseConfig({
   mode: "development",
