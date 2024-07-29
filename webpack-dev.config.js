@@ -12,6 +12,16 @@ const configs = addBaseConfig({
   module: {
     rules: [
       {
+        test: /\.(js|jsx)$/,
+        exclude: /node_modules/,
+        use: {
+          loader: 'babel-loader',
+          options: {
+            presets: ['@babel/preset-env', '@babel/preset-react'],
+          },
+        },
+      },
+      {
         test: /\.css$/,
         use: ["style-loader", "css-loader"],
       },
@@ -36,7 +46,7 @@ const configs = addBaseConfig({
       //   "U2FsdGVkX19p7zIuVPh8mW1fp9PdMxR0aGHzQ0IbJuw="
       // ),
       // LOGIN_API_URL: JSON.stringify("http://localhost:7777"),
-      API_URL: JSON.stringify("http://ec2-51-21-129-24.eu-north-1.compute.amazonaws.com:8000"),
+      API_URL: JSON.stringify("http://ec2-16-171-111-161.eu-north-1.compute.amazonaws.com:8000"),
     }),
     new HtmlWebpackPlugin({
       title: "React Cards",
