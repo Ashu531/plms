@@ -16,6 +16,7 @@ import { Bars, TailSpin } from "react-loader-spinner";
 import addIcon from "../../assets/Icons/addIcon.svg";
 import CommentBoxModal from '../../components/commentBox/commentBox';
 import Button from '../../components/button/button.jsx';
+import LenderForm from '../../components/lenderForm/lenderForm.jsx';
 
 const documentTypes = [
     'Aadhaar Card', 
@@ -58,6 +59,7 @@ const [commentLoader,setCommentLoader] = useState(false)
 const [commentNoResult,setCommentNoResult] = useState(false)
 const [loader,setLoader] = useState(false)
 const [isModalVisible, setIsModalVisible] = useState(false);
+const  [lenderData,setLenderData] = useState([])
 
 const switchToDropState = () => {
     setCurrentUploadState(uploadtStates.drop)
@@ -103,7 +105,23 @@ const getDocumentType = () => {
  useEffect(()=>{
      getActivityData()
      getUserComment()
+     getLenderData()
  },[])
+
+ const getLenderData=async()=>{
+    await axios.get(`${API_URL}/api/loan/v1/loan-lenders/`,{
+        headers: {
+            token: `${props?.token}`,
+        },
+    }).
+    then(res => {
+        if(res.data.data.length > 0){
+            setLenderData(res.data.data)
+        }
+    }).catch(err=>{
+        console.log(err,"error")
+    });
+ }
 
  const getUserComment=async()=>{
      setCommentLoader(true)
@@ -254,7 +272,7 @@ const openCommentBox = () => {
         </div>
         <div className='lead-page-content'>
             <TabBar 
-                items={["Details", "Financials", "Documents", "Activity Log & Comments"]}
+                items={["Details", "Financials", "Lender", "Documents", "Comments"]}
                 handleTabNumber={handleTabNavigation}
                 selected={tab}
             />
@@ -283,6 +301,16 @@ const openCommentBox = () => {
             }
             {
                 tab === 2 && 
+                <div className='financials-container row full-width'>
+                    <LenderForm
+                        leadData={props?.leadData}
+                        lenderData={lenderData}
+                        token={props?.token}
+                    />
+                </div>
+            }
+            {
+                tab === 3 && 
                 <div className='document-container row full-width'>
                     <div className='column' style={{gap:20}}>
                         <div style={{...(documentValue === 'PAN Card' ? {background: '#F7F0FF',borderRadius: 8} : null), width: '100%'}}>
@@ -341,7 +369,7 @@ const openCommentBox = () => {
                             </div>
                         ))}
                     </div>
-                    <div className='row' style={{border: '1px solid #8F14CC', borderRadius: '8px', justifyContent: 'center'}}>
+                    <div className='row' style={{border: '1px solid #C2185B', borderRadius: '8px', justifyContent: 'center'}}>
                         <Upload 
                             showBorder={true} 
                             token={props?.token} 
@@ -368,12 +396,12 @@ const openCommentBox = () => {
                     </div>
                 </div>    
             }
-            { tab === 3 && <div style={{width: '100%',display:'flex', justifyContent:"flex-end",alignItems:"flex-end"}}>
+            { tab === 4 && <div style={{width: '100%',display:'flex', justifyContent:"flex-end",alignItems:"flex-end"}}>
                         <Button
                             leadingIcon={addIcon}
                             text="Add Comment"
                             classes={{
-                                background: "#8F14CC",
+                                background: "#C2185B",
                                 borderRadius: "8px",
                                 height: "44px",
                             }}
@@ -387,7 +415,7 @@ const openCommentBox = () => {
                         />
                     </div> }
             {
-                tab === 3 &&
+                tab === 4  &&
                 <div className='activity-container row full-width'>
                       
                     <div className='activity-container column'>

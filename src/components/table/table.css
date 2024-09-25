@@ -47,7 +47,7 @@
 }
 
 .table-row:hover {
-    border: 1px solid #8F14CC;
+    border: 1px solid #C2185B;
     background: rgba(143, 20, 204, 0.05);
 }
 
@@ -91,7 +91,7 @@
 }
 
 .icon-container:hover {
-    background: #8F14CC;
+    background: #C2185B;
 }
 
 .caret-icon {

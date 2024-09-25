@@ -1,0 +1,14 @@
+.lender-form-container{
+    width: 100%;
+    display: flex;
+    justify-content: flex-start;
+    gap: 20px;
+}
+
+.lender-form-header{
+    color: #0B090D;
+    font-size: 20px;
+    font-family: 'Montserrat';
+    font-weight: 600;
+    text-transform: capitalize;
+}

@@ -1,12 +1,12 @@
 .plms-list{
-    list-style-type: none;
-    overflow: hidden;
+    /* list-style-type: none;
+    overflow: hidden; */
     /* padding: 0 0 0 12px; */
     border-radius: 8px;
     background: #F4F4F4;
-    padding: 5px;
+    /* padding: 5px; */
     display: flex;
-    justify-content: flex-start;
+    justify-content: space-around;
     align-items: flex-start;
 }
 .plms-item{
@@ -30,6 +30,6 @@
     /* border-bottom: solid var(--primary-base);.label */
     font-weight: 500;
     border-radius: 8px;
-    background: #8F14CC;
+    background: #C2185B;
     padding: 10px 15px;
 }

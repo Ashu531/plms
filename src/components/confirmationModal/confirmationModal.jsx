@@ -24,12 +24,12 @@ export default function ConfirmationModal(props) {
                       text={props?.secondaryButtonText}
                       classes={{
                         borderRadius: 8,
-                        border: '1px solid #8F14CC',
+                        border: '1px solid #C2185B',
                         height: '44px',
                         width:'30%'
                       }}
                       textClass={{
-                          color: '#8F14CC',
+                          color: '#C2185B',
                           fontSize: '14px',
                           fontFamily: 'Montserrat',
                           fontWeight: 600
@@ -39,7 +39,7 @@ export default function ConfirmationModal(props) {
                     <Button 
                       text={props?.primaryButtonText}
                       classes={{
-                          background: '#8F14CC',
+                          background: '#C2185B',
                           borderRadius: '8px',
                           height: '44px',
                           width: '150px',

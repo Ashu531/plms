@@ -9,7 +9,7 @@
     align-self: stretch;
     border-radius: 8px;
     cursor: pointer;
-    border: 1px solid #8F14CC;
+    border: 1px solid #C2185B;
     position: relative;
     /* margin: 24px 0px; */
 }
@@ -30,7 +30,7 @@
 
 :hover.document-card-container{
     border-radius: 8px;
-    border: 1px solid #8F14CC;
+    border: 1px solid #C2185B;
     background: #F7F0FF;
 }
 

@@ -257,12 +257,12 @@ export default function Upload({
                     text='Cancel'
                     classes={{
                       borderRadius: 8,
-                      border: '1px solid #8F14CC',
+                      border: '1px solid #C2185B',
                       height: '44px',
                       width: '150px',
                     }}
                     textClass={{
-                      color: '#8F14CC',
+                      color: '#C2185B',
                       fontSize: '14px',
                       fontFamily: 'Poppins',
                       fontWeight: 600
@@ -272,7 +272,7 @@ export default function Upload({
                   <Button
                     text='Save'
                     classes={{
-                      background: '#8F14CC',
+                      background: '#C2185B',
                       borderRadius: '8px',
                       height: '44px',
                       width: '150px',

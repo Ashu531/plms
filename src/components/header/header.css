@@ -20,7 +20,7 @@
     align-items: center;
     gap: 10px;
     border-radius: 8px;
-    border: 1px solid #8F14CC;
+    border: 1px solid #C2185B;
     cursor: pointer;
 }
 
@@ -46,7 +46,7 @@
 .plms-draft-count-content{
     height: 16px;
     width: 16px;
-    background: #8F14CC;
+    background: #C2185B;
     padding: 4px;
     border-radius: 10px;
     display: flex;

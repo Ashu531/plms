@@ -26,7 +26,7 @@
 }
 
 .consent-link{
-    color: #8F14CC;
+    color: #C2185B;
     font-size: 14px;
     font-family: 'Montserrat';
     font-weight: 600;
@@ -71,7 +71,7 @@
     align-items: center;
     align-self: stretch;
     border-radius: 8px;
-    background: #8F14CC;
+    background: #C2185B;
 }
 
 .add-doc-text{

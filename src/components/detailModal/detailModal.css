@@ -40,7 +40,7 @@
     align-items: center;
     gap: 10px;
     border-radius: 8px;
-    border: 1px solid #8F14CC;
+    border: 1px solid #C2185B;
     background: #FFF;
 }
 
@@ -102,7 +102,7 @@
 }
 
 .table-link {
-    color: #8F14CC;
+    color: #C2185B;
     font-size: 14px;
     font-family: 'Montserrat';
     font-weight: 600;

@@ -25,7 +25,7 @@ export default function UserConsentModal(props) {
                     <Button 
                       text='Send Request'
                       classes={{
-                          background: '#8F14CC',
+                          background: '#C2185B',
                           borderRadius: '8px',
                           height: '44px',
                           width: '150px',

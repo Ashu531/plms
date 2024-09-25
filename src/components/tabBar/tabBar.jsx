@@ -15,7 +15,7 @@ const TabBar = (props) => {
       <ul className="plms-list">
         {items.map((item, i) => {
           const isActive = i === activeItem;
-          return <li className={`plms-item ${isActive ? "plms-active-tab": ""}`} key={i} onClick={() => handleClick(i)} style={{width: '25%'}}>{item}</li>
+          return <li className={`plms-item ${isActive ? "plms-active-tab": ""}`} key={i} onClick={() => handleClick(i)}>{item}</li>
         })}
       </ul>
   );

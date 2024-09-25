@@ -143,7 +143,7 @@ const Home = () => {
                   }
               })
           );
-              console.log(results,"result")
+
           const statusData = results.map((data, index) => ({
               name: statuses[index],
               count: data.length, 
@@ -188,9 +188,9 @@ const Home = () => {
   };
 
     const handleRowClick = (item, index) => {
+        getQuickViewData(item)
         getLastActivity(item)
-        setLeadInfo(item)
-        
+        setLeadInfo(item)   
     };
 
     // const handleIconClick = (item, index) => {
@@ -441,7 +441,7 @@ const Home = () => {
                   leadingIcon={addIcon}
                   text="Create Lead"
                   classes={{
-                    background: "#8F14CC",
+                    background: "#C2185B",
                     borderRadius: "8px",
                     height: "44px",
                   }}

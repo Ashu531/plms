@@ -9,13 +9,13 @@
 }
 
 .button-primary{
-    background: #8F14CC;
+    background: #C2185B;
 }
 
 .button-outline{
-    border: 1px solid #8F14CC;
+    border: 1px solid #C2185B;
     background: #ffffff;
-    color: #8F14CC;
+    color: #C2185B;
 }
 
 .button-secondary{

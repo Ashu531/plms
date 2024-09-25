@@ -213,7 +213,7 @@ export default function DownloadPage(props) {
               leadingIcon={startDate && endDate ? downloadIcon : disabledDownload}
               text="Generate Report"
               classes={startDate && endDate ? {
-                background: "#8F14CC",
+                background: "#C2185B",
                 borderRadius: "8px",
                 height: "44px",
               }: {

@@ -45,7 +45,7 @@ const removeFile = (i) => {
   return (
    <div className='upload-modal'>
        <div className='upload-modal-content'>
-                    <div className='row' style={{border: '1px solid #8F14CC', borderRadius: '8px', height: '560px', justifyContent: 'center'}}>
+                    <div className='row' style={{border: '1px solid #C2185B', borderRadius: '8px', height: '560px', justifyContent: 'center'}}>
                         <Upload 
                             showBorder={true} 
                             token={token} 

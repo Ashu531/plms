@@ -1,35 +1,117 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './detailModal.css';
-import uploadIcon from '../../assets/Icons/uploadIcon.svg';
-import pendingIcon from '../../assets/Icons/pendingIcon.svg';
 import Button from '../button/button.jsx';
-import axios from 'axios';
-import { Bars, TailSpin } from 'react-loader-spinner';
+import { Modal, Select, Spin } from 'antd';
 import ActivityCard from '../activityCard/activityCard.jsx';
+import axios from 'axios';
+
+const { Option } = Select;
 
 export default function DetailModal(props) {
+    const [isModalVisible, setIsModalVisible] = useState(false);
+    const [status, setStatus] = useState(null);
+    const [subStatus, setSubStatus] = useState(null);
+    const [statusObject, setStatusObject] = useState(null);
+    const [subStatusObject, setSubStatusObject] = useState(null);
+    const [statusOptions, setStatusOptions] = useState([]);
+    const [subStatusOptions, setSubStatusOptions] = useState([]);
+    const [loading, setLoading] = useState(true);
 
-    // useEffect(() => {
-    //     getQuickViewData();
-    // }, []);
+    useEffect(() => {
+        fetchLeadData(); 
+    }, []);
 
-    // const getQuickViewData = async () => {
-    //     await axios.get(`${API_URL}/api/loan/overview/${props?.leadData?.leadId}/`, {
-    //         headers: {
-    //             token: `${props?.token}`,
-    //         },
-    //     })
-    //     .then(res => {
-    //         console.log(res.data.data);
-    //     })
-    //     .catch(err => console.log(err));
-    // };
+    useEffect(() => {
+        if (isModalVisible) {
+            fetchStatusOptions();
+        }
+    }, [isModalVisible]);
 
-    const goToDetailPage = () => {
-        let i = 1;
-        props?.openDetailPage(props?.leadData, i);
+    const fetchStatusOptions = async () => {
+        try {
+            const response = await axios.get(`${API_URL}/api/loan/v1/statuses/`, {
+                headers: {
+                    token: `${props?.token}`,
+                }
+            });
+            setStatusOptions(response.data.data);
+        } catch (error) {
+            console.error('Error fetching statuses:', error);
+        }
     };
 
+    const fetchSubStatusOptions = async (statusId) => {
+        if (statusId) {
+            try {
+                const response = await axios.get(`${API_URL}/api/loan/v1/statuses/${statusId}/substatuses/`, {
+                    headers: {
+                        token: `${props?.token}`,
+                    }
+                });
+                setSubStatusOptions(response.data);
+            } catch (error) {
+                console.error('Error fetching substatuses:', error);
+            }
+        }
+    };
+
+    const fetchLeadData = async () => {
+        setLoading(true);
+        try {
+            const response = await axios.get(`${API_URL}/api/loan/v1/loan-lead/${props?.leadData?.id}/`, {
+                headers: {
+                    token: `${props?.token}`,
+                }
+            });
+            console.log(response,"response++")
+            setStatusObject(response.data.data.main_status);
+            setSubStatusObject(response.data.data.substatus);
+        } catch (error) {
+            console.error('Error fetching lead data:', error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const showModal = () => {
+        setIsModalVisible(true);
+    };
+
+    const handleCancel = () => {
+        setIsModalVisible(false);
+    };
+
+    const handleStatusChange = (value) => {
+        setStatus(value);
+        fetchSubStatusOptions(value);
+    };
+
+    const handleSubStatusChange = (value) => {
+        setSubStatus(value);
+    };
+
+    const goToDetailPage = () => {
+        props?.openDetailPage(props?.leadData, 1);
+    };
+
+    const submitStatusResponse = async () => {
+       
+        try {
+            await axios.put(`${API_URL}/api/loan/v1/loan-lead/${props?.leadData?.id}/status/`, {
+                status_id: status,
+                substatus_id: subStatus
+            }, {
+                headers: {
+                    token: `${props?.token}`,
+                }
+            });
+            await fetchLeadData();  // Refetch lead data after successful submission
+            setIsModalVisible(false);
+        } catch (error) {
+            console.error('Error submitting status response:', error);
+        }
+    };
+    console.log(statusObject,subStatusObject,"substatus")
     return (
         <div className='detail-modal'>
             <div className='detail-modal-header'>
@@ -41,71 +123,73 @@ export default function DetailModal(props) {
                         {props?.leadData?.application_id}
                     </div>
                 </div>
-                {/* <div className='upload-icon-content'>
-                    <img src={uploadIcon} alt="Upload Icon" />
-                </div> */}
             </div>
-           
+
             <div className='modal-content'>
                 <div className='modal-divider' />
                 <div className='column full-width'>
-                    <div className='modal-header'>Details</div>
-                    <div className='column full-width' style={{ marginTop: 12 }}>
-                        <div className='row full-width'>
-                            <span className='table-label'>Mobile Number</span>
-                            <span className='table-value'>{props?.leadData?.applicant_phone}</span>
-                        </div>
-                        <div className='row full-width'>
-                            <span className='table-label'>Email</span>
-                            <span className='table-value'>{props?.leadData?.applicant_email}</span>
-                        </div>
+                    <div className='row full-width'>
+                        <div className='modal-header'>Status Overview</div>
+                        <Button
+                            text='Update'
+                            classes={{
+                                background: '#C2185B',
+                                borderRadius: '8px',
+                                height: '32px',
+                                width: '25%',
+                            }}
+                            textClass={{
+                                color: '#FFF',
+                                fontSize: '14px',
+                                fontFamily: 'Montserrat',
+                                fontWeight: 600
+                            }}
+                            onClick={showModal}
+                        />
                     </div>
-                </div>
-                <div className='modal-divider' style={{ margin: '8px 0px' }} />
-                {
-                    props?.pendencyResponse &&
-                    <div style={{ width: '100%' }}>
-                        <div className='modal-divider'/>
-                        <div className='column full-width' style={{ margin: '40px 0px' }}>
-                            <div className='modal-header'>Pendencies</div>
-                            <div className='column full-width' style={{ marginTop: 12 }}>
-                                <TailSpin color="#0DB78F" height={30} width={30} />
-                            </div>
-                        </div>
-                        <div className='modal-divider'/>
-                    </div>
-                }
-                <div className='column full-width'>
-                    <div className='modal-header'>Last Update</div>
-                    <div className='update-content' style={{flexDirection: "row",justifyContent:"space-between"}}>
+                    
+                    <div className='update-content' style={{ flexDirection: "row", justifyContent: "space-between" }}>
                         <div className='update-content-header'>
                             Status
                         </div>
                         <div className='update-content-header'>
-                            <b>{props?.lastActivity?.last_lead_status}</b>
+                            {loading ? <Spin /> : <b>{statusObject?.name || "NA"}</b>}
                         </div>
                     </div>
-                    <div style={{marginTop : 16, width: '100%'}}>
+                    <div className='update-content' style={{ flexDirection: "row", justifyContent: "space-between" }}>
+                        <div className='update-content-header'>
+                           Sub Status
+                        </div>
+                        <div className='update-content-header'>
+                            {loading ? <Spin /> : <b>{subStatusObject?.name || "NA"}</b>}
+                        </div>
+                    </div>
+                </div>
+
+                <div className='modal-divider' style={{ margin: '8px 0px' }} />
+                <div className='column full-width'>
+                    <div className='modal-header'>Last Update</div>
+                    <div style={{ marginTop: 16, width: '100%' }}>
                         <ActivityCard 
                             title={props?.lastActivity?.last_activity.action}
                             name={props?.lastActivity?.last_activity.user}
                             time={props?.lastActivity?.last_activity.timestamp}
                         />
                     </div>
-                    
                 </div>
             </div>
+
             <div className='modal-footer row full-width'>
                 <Button
                     text='Edit Details'
                     classes={{
                         borderRadius: 8,
-                        border: '1px solid #8F14CC',
+                        border: '1px solid #C2185B',
                         height: '44px',
                         width: '40%',
                     }}
                     textClass={{
-                        color: '#8F14CC',
+                        color: '#C2185B',
                         fontSize: '14px',
                         fontFamily: 'Montserrat',
                         fontWeight: 600
@@ -118,7 +202,7 @@ export default function DetailModal(props) {
                 <Button
                     text='View Full Details'
                     classes={{
-                        background: '#8F14CC',
+                        background: '#C2185B',
                         borderRadius: '8px',
                         height: '44px',
                         width: '40%',
@@ -132,6 +216,41 @@ export default function DetailModal(props) {
                     onClick={() => goToDetailPage()}
                 />
             </div>
+
+            <Modal
+                title="Status Overview"
+                visible={isModalVisible}
+                onCancel={handleCancel}
+                onOk={submitStatusResponse}
+            >
+                <div style={{ marginBottom: 16 }}>
+                    <label>Status:</label>
+                    <Select
+                        value={statusObject?.name}
+                        onChange={handleStatusChange}
+                        style={{ width: '100%', marginTop: 12 }}
+                        placeholder="Select Status"
+                    >
+                        {statusOptions.map(option => (
+                            <Option key={option.id} value={option.id}>{option.name}</Option>
+                        ))}
+                    </Select>
+                </div>
+                <div>
+                    <label>Substatus:</label>
+                    <Select
+                        value={subStatusObject?.name}
+                        onChange={handleSubStatusChange}
+                        style={{ width: '100%', marginTop: 12 }}
+                        placeholder="Select Sub Status"
+                        disabled={subStatusObject}
+                    >
+                        {subStatusOptions.length > 0 && subStatusOptions.map(option => (
+                            <Option key={option.id} value={option.id}>{option.name}</Option>
+                        ))}
+                    </Select>
+                </div>
+            </Modal>
         </div>
     );
 }
