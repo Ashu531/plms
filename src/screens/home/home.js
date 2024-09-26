@@ -188,7 +188,7 @@ const Home = () => {
   };
 
     const handleRowClick = (item, index) => {
-        getQuickViewData(item)
+        // getQuickViewData(item)
         getLastActivity(item)
         setLeadInfo(item)   
     };
@@ -233,7 +233,7 @@ const Home = () => {
       resetDetailsPage();
     }
       
-       closeSlidingPanel()
+       setOpenPanel(false);
        setScreen(i);
   };
 
@@ -292,6 +292,7 @@ const Home = () => {
             tenure: `${resData?.tenure}`,
             advanceEmi: `${resData?.advance_emi}`
         }
+
         setFormData({...data});
         setTemporaryFormData({...data});
         setTurnOnButtonLoader({
@@ -313,6 +314,7 @@ const Home = () => {
 
     const closeSlidingPanel = () => {
       // setLeadInfo({});
+      resetDetailsPage()
       setOpenPanel(false);
     }
 
@@ -342,7 +344,6 @@ const Home = () => {
             advanceEmi: `${resData?.advance_emi}`,
             id: `${resData.id}`
       }
-
       setFormData({...formData});
       setTemporaryFormData({...formData});
     }

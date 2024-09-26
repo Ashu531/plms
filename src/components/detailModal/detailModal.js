@@ -18,14 +18,16 @@ export default function DetailModal(props) {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        fetchLeadData(); 
+        fetchLeadData();
     }, []);
 
     useEffect(() => {
         if (isModalVisible) {
             fetchStatusOptions();
+            setStatus(statusObject?.id || null);
+            setSubStatus(subStatusObject?.id || null);
         }
-    }, [isModalVisible]);
+    }, [isModalVisible, statusObject, subStatusObject]);
 
     const fetchStatusOptions = async () => {
         try {
@@ -48,7 +50,7 @@ export default function DetailModal(props) {
                         token: `${props?.token}`,
                     }
                 });
-                setSubStatusOptions(response.data);
+                setSubStatusOptions(response.data.data);
             } catch (error) {
                 console.error('Error fetching substatuses:', error);
             }
@@ -63,9 +65,12 @@ export default function DetailModal(props) {
                     token: `${props?.token}`,
                 }
             });
-            console.log(response,"response++")
+
             setStatusObject(response.data.data.main_status);
+            setStatus(response.data.data.main_status?.id);
+            fetchSubStatusOptions(response.data.data.main_status.id);
             setSubStatusObject(response.data.data.substatus);
+            setSubStatus(response.data.data.substatus?.id);
         } catch (error) {
             console.error('Error fetching lead data:', error);
         } finally {
@@ -95,7 +100,6 @@ export default function DetailModal(props) {
     };
 
     const submitStatusResponse = async () => {
-       
         try {
             await axios.put(`${API_URL}/api/loan/v1/loan-lead/${props?.leadData?.id}/status/`, {
                 status_id: status,
@@ -105,13 +109,13 @@ export default function DetailModal(props) {
                     token: `${props?.token}`,
                 }
             });
-            await fetchLeadData();  // Refetch lead data after successful submission
+            await fetchLeadData();
             setIsModalVisible(false);
         } catch (error) {
             console.error('Error submitting status response:', error);
         }
     };
-    console.log(statusObject,subStatusObject,"substatus")
+
     return (
         <div className='detail-modal'>
             <div className='detail-modal-header'>
@@ -226,7 +230,7 @@ export default function DetailModal(props) {
                 <div style={{ marginBottom: 16 }}>
                     <label>Status:</label>
                     <Select
-                        value={statusObject?.name}
+                        value={status}
                         onChange={handleStatusChange}
                         style={{ width: '100%', marginTop: 12 }}
                         placeholder="Select Status"
@@ -239,11 +243,10 @@ export default function DetailModal(props) {
                 <div>
                     <label>Substatus:</label>
                     <Select
-                        value={subStatusObject?.name}
+                        value={subStatus}
                         onChange={handleSubStatusChange}
                         style={{ width: '100%', marginTop: 12 }}
                         placeholder="Select Sub Status"
-                        disabled={subStatusObject}
                     >
                         {subStatusOptions.length > 0 && subStatusOptions.map(option => (
                             <Option key={option.id} value={option.id}>{option.name}</Option>
