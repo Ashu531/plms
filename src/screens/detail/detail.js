@@ -462,6 +462,7 @@ const downloadAll = async () => {
                             }}
                             leadID={props?.leadData?.id}
                             getDocumentType={()=>getDocumentType()}
+                            fetchAlldocs={()=>fetchExistingDocuments()}
                         />
                     </div>
                 </div>    

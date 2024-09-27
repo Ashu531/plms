@@ -23,7 +23,8 @@ export default function Upload({
   onUpload,
   leadID,
   getDocumentType,
-  token
+  token,
+  fetchAlldocs
 }) {
   const fileInputField = useRef(null);
   const [progress, setProgress] = useState([]);
@@ -111,6 +112,7 @@ export default function Upload({
         setVerifiedFiles([...verifiedFiles, response.data.id]);
         onUpload();
         fetchExistingDocuments()
+        fetchAlldocs()
       } catch (error) {
         console.error('Upload Error:', error);
         if (error.response) {
