@@ -3,7 +3,6 @@ import Button from "../button/button.jsx";
 import cloudIcon from "../../assets/Icons/cloudDropIcon.svg";
 import axios from "axios";
 import { getToken } from "../../helpers/authService.js";
-import { getDocument, GlobalWorkerOptions } from "pdfjs-dist"; 
 import './upload.css';
 
 export const uploadtStates = {
@@ -11,9 +10,6 @@ export const uploadtStates = {
   preview: 1,
   uploaded: 2
 };
-
-
-GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjsLib.version}/pdf.worker.min.js`;
 
 export default function Upload({
   width = '',
@@ -67,11 +63,10 @@ export default function Upload({
 
   const uploadFiles = () => {
     selectedFiles.forEach(async (file, index) => {
-
       const fileType = file.type === 'application/pdf' ? 'pdf' : 'image';
       
       let data = new FormData();
-      data.append('document_format', fileType);
+      data.append('file_type', fileType);
       data.append('document_file', file);
       const documentType = getDocumentType();
       data.append('type', documentType);
@@ -135,7 +130,6 @@ export default function Upload({
       }
     });
   };
-  
 
   useEffect(() => {
     if (selectedFiles.length > 0) {
@@ -163,41 +157,6 @@ export default function Upload({
     fetchExistingDocuments();
   }, [leadID]);
 
-  const renderPDF = (fileUrl) => {
-    const [numPages, setNumPages] = useState(null);
-    const [pageNumber, setPageNumber] = useState(1);
-
-    useEffect(() => {
-      const loadingTask = getDocument(fileUrl);
-      loadingTask.promise.then((pdf) => {
-        setNumPages(pdf.numPages);
-      });
-    }, [fileUrl]);
-
-    return (
-      <canvas
-        ref={canvasRef => {
-          if (canvasRef) {
-            const loadingTask = getDocument(fileUrl);
-            loadingTask.promise.then((pdf) => {
-              pdf.getPage(pageNumber).then((page) => {
-                const viewport = page.getViewport({ scale: 1 });
-                const canvas = canvasRef;
-                const context = canvas.getContext('2d');
-                canvas.height = viewport.height;
-                canvas.width = viewport.width;
-                page.render({
-                  canvasContext: context,
-                  viewport: viewport,
-                });
-              });
-            });
-          }
-        }}
-      />
-    );
-  };
-
   const renderExistingDocuments = () => {
     return existingDocuments.map((doc, index) => {
       const isMatchingDoc = getDocumentType() === doc[0];
@@ -206,22 +165,15 @@ export default function Upload({
         <div key={index} className="existing-document">
           {isMatchingDoc ? (
             doc[3] === "pdf" ? (
-              renderPDF(`${doc[1]}`)
+              <div className="pdf-placeholder" style={{marginTop: 16}}>PDF file ready for upload</div>
             ) : (
               <img className="file-preview" src={`${doc[1]}`} alt={`${doc[0]} preview`} />
             )
           ) : null}
-          {/* {!isMatchingDoc && (
-            <div className="file-not-matching">
-              No Preview available
-            </div>
-          )} */}
-          {/* <div className="document-type">{doc[0].toUpperCase()}</div> */}
         </div>
       );
     });
   };
-  
 
   return (
     <div className="plms-content-box" style={{ width: `${width}`, height: `${height}` }} onClick={(e) => e.stopPropagation()}>
@@ -237,11 +189,11 @@ export default function Upload({
       {currentUploadState !== uploadtStates.drop && selectedFiles.length > 0 && (
         <div className="plms-file-container">
           {selectedFiles.map((file, i) => (
-            <div key={i}>
+            <div key={i} style={{marginTop: 12}}>
               {file.name.split('.').pop() !== 'pdf' ? (
                 <img className="file-preview" src={URL.createObjectURL(file)} alt="preview" />
               ) : (
-                renderPDF(URL.createObjectURL(file))
+                <div className="pdf-placeholder">PDF file ready for upload</div>
               )}
               {progress[i] > 0 && <div className="plms-subtitle">{currentUploadState === uploadtStates.uploaded ? 'Uploaded' : 'Uploading'} file: {file.name}</div>}
               {progress[i] > 0 && (

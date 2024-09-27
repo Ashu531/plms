@@ -17,6 +17,8 @@ import addIcon from "../../assets/Icons/addIcon.svg";
 import CommentBoxModal from '../../components/commentBox/commentBox';
 import Button from '../../components/button/button.jsx';
 import LenderForm from '../../components/lenderForm/lenderForm.jsx';
+import JSZip from 'jszip';
+import { saveAs } from 'file-saver';
 
 const documentTypes = [
     'Aadhaar Card', 
@@ -60,6 +62,23 @@ const [commentNoResult,setCommentNoResult] = useState(false)
 const [loader,setLoader] = useState(false)
 const [isModalVisible, setIsModalVisible] = useState(false);
 const  [lenderData,setLenderData] = useState([])
+const [existingDocuments, setExistingDocuments] = useState([]);
+
+useEffect(() => {
+  fetchExistingDocuments();
+}, []);
+
+const fetchExistingDocuments = async () => {
+  try {
+    const response = await axios.get(`${API_URL}/api/loan/v1/loan-lead/${props?.leadData?.id}/documents/`, {
+      headers: { 'Token': props?.token }
+    });
+    console.log(response,"response+++")
+    setExistingDocuments(response.data.data);
+  } catch (error) {
+    console.error('Error fetching documents:', error);
+  }
+};
 
 const switchToDropState = () => {
     setCurrentUploadState(uploadtStates.drop)
@@ -221,6 +240,40 @@ const openCommentBox = () => {
     setIsModalVisible(true);
 }
 
+const downloadAll = async () => {
+    const zip = new JSZip();
+  
+    const downloadPromises = existingDocuments.map(async (doc) => {
+      const fileName = doc[0];
+      const fileUrl = doc[1];
+      let fileType = doc[2]; 
+
+      if (fileType === 'image') {
+        fileType = '.jpeg';
+      } else if (!fileType.startsWith('.')) {
+        fileType = `.${fileType}`;
+      }
+  
+      try {
+        const response = await axios.get(fileUrl, { responseType: 'blob' });
+  
+        const formattedFileName = fileName.endsWith(fileType) ? fileName : `${fileName}${fileType}`;
+  
+        zip.file(formattedFileName, response.data);
+      } catch (error) {
+        console.error(`Error downloading ${fileName}:`, error);
+      }
+    });
+  
+    await Promise.all(downloadPromises);
+  
+    zip.generateAsync({ type: 'blob' }).then((blob) => {
+      saveAs(blob, 'documents.zip');
+    });
+  };
+  
+  
+
   return (
     <div className='lead-detail-page'>
         <div className='lead-page-header full-width'>
@@ -268,6 +321,23 @@ const openCommentBox = () => {
                     
                    
                 </div> */}
+                <div style={{width: '20%'}}>
+                    <Button
+                        text='Download All'
+                        classes={{
+                            background: "#C2185B",
+                            borderRadius: "8px",
+                            height: "44px",
+                          }}
+                          textClass={{
+                            color: "#FFF",
+                            fontSize: "16px",
+                            fontFamily: "Montserrat",
+                            fontWeight: 500,
+                          }}
+                        onClick={() => downloadAll()}
+                    />
+                </div>
             </div>
         </div>
         <div className='lead-page-content'>
