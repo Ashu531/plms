@@ -19,6 +19,8 @@ import Button from '../../components/button/button.jsx';
 import LenderForm from '../../components/lenderForm/lenderForm.jsx';
 import JSZip from 'jszip';
 import { saveAs } from 'file-saver';
+import AccountAndAddress from '../../components/detailOverview.js/detailOverview';
+import moment from "moment"
 
 const documentTypes = [
     'Aadhaar Card', 
@@ -63,6 +65,7 @@ const [loader,setLoader] = useState(false)
 const [isModalVisible, setIsModalVisible] = useState(false);
 const  [lenderData,setLenderData] = useState([])
 const [existingDocuments, setExistingDocuments] = useState([]);
+const [loanTypeList,setLoanTypeList] = useState([])
 
 useEffect(() => {
   fetchExistingDocuments();
@@ -125,7 +128,23 @@ const getDocumentType = () => {
      getActivityData()
      getUserComment()
      getLenderData()
+     getLoanType()
  },[])
+
+ const getLoanType=async()=>{
+    await axios.get(`${API_URL}/api/loan/v1/loantype/`,{
+        headers: {
+            token: `${props?.token}`,
+        },
+    }).
+    then(res => {
+        if(res.data.data.length > 0){
+            setLoanTypeList(res.data.data)
+        }
+    }).catch(err=>{
+        console.log(err,"error")
+    });
+}
 
  const getLenderData=async()=>{
     await axios.get(`${API_URL}/api/loan/v1/loan-lenders/`,{
@@ -283,6 +302,7 @@ const downloadAll = async () => {
                     <div className='column' style={{marginTop: 20,marginLeft: 12}}>
                         <span className='lead-page-heading' >{props?.leadData?.student_name} : {props?.leadData?.application_id}</span>
                         <span className='lead-page-subheading'> {props?.leadData?.applicant_phone}</span>
+                        <span className='lead-page-subheading'>Created at: {moment(props?.leadData?.created_at).format('LLL')}</span>
                     </div>
                 </div>
                 {/* <div className='column' style={{alignItems:'flex-end'}}>
@@ -321,7 +341,9 @@ const downloadAll = async () => {
                     
                    
                 </div> */}
-                <div style={{width: '20%'}}>
+                {
+                    tab === 3 &&
+                    <div style={{width: '20%'}}>
                     <Button
                         text='Download All'
                         classes={{
@@ -338,11 +360,13 @@ const downloadAll = async () => {
                         onClick={() => downloadAll()}
                     />
                 </div>
+                }
+               
             </div>
         </div>
         <div className='lead-page-content'>
             <TabBar 
-                items={["Details", "Financials", "Lender", "Documents", "Comments"]}
+                items={["Details", "Financials", "Lender","Documents", "Comments","Account & Address"]}
                 handleTabNumber={handleTabNavigation}
                 selected={tab}
             />
@@ -375,6 +399,7 @@ const downloadAll = async () => {
                     <LenderForm
                         leadData={props?.leadData}
                         lenderData={lenderData}
+                        loanTypeList={loanTypeList}
                         token={props?.token}
                     />
                 </div>
@@ -498,7 +523,7 @@ const downloadAll = async () => {
                                          <ActivityCard 
                                                 title={item.action}                                                
                                                 name={item.username}
-                                                time={item.created_at}
+                                                time={item.timestamp}
                                         />
                                     )
                                 }) 
@@ -525,7 +550,7 @@ const downloadAll = async () => {
                                          <ActivityCard 
                                                 title={item.text}
                                                 name={item.username}
-                                                time={item?.createdAt?.date}
+                                                time={item?.created_at}
                                         />
                                     )
                                 })
@@ -542,6 +567,12 @@ const downloadAll = async () => {
                             }
                         </div>
                     </div>
+                </div>
+            }
+            {
+                tab === 5 &&
+                <div className="scrollable-form-container">
+                <AccountAndAddress leadID={props?.leadData?.id} token={props?.token} />
                 </div>
             }
         </div>

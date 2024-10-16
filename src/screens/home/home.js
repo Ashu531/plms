@@ -56,6 +56,8 @@ const Home = () => {
     const [noResult,setNoResult] = useState(false)
     const [editMode,setEditMode] = useState(false)
     const [lastActivity,setLastActivity] = useState({});
+    const [pageSize, setPageSize] = useState(10);
+    const [currentPage, setCurrentPage] = useState(1);
 
     const navigate = useNavigate();
 
@@ -103,14 +105,14 @@ const Home = () => {
 
     const handleSearch = async(query) => {
 
-      await axios.get(`${API_URL}/api/loan/v1/list-loan-leads/?search=${query}`,{
+      await axios.get(`${API_URL}/api/loan/v1/list-loan-leads/?search=${query}&page_size=${pageSize}&page_num=${currentPage}`,{
           headers: {
               token: `${token}`,
           },
       }).
       then(res => {
-          if(res?.data?.length > 0){
-              let detail = res?.data;
+          if(res?.data?.data.length > 0){
+              let detail = res?.data.data;
               setLoading(false)
               setSearchData(detail)
               setSearchCount(res?.data?.count)
@@ -127,57 +129,92 @@ const Home = () => {
 
     const fetchStatuses = async () => {
       try {
-          const statuses = ['incomplete', 'inprocess', 'rejected', 'approved', 'disbursed'];
-          const results = await Promise.all(
-              statuses.map(async (status) => {
-                  try {
-                      const response = await axios.get(`${API_URL}/api/loan/v1/list-loan-leads/?page_size=20&page_num=1&status=${status}`, {
-                          headers: {
-                              'Content-Type': 'application/json',
-                              'token': token, 
-                          },
-                      });
-                      return response.data.data;
-                  } catch (error) {
-                      throw new Error(`Failed to fetch data for status ${status}`);
-                  }
-              })
-          );
-
-          const statusData = results.map((data, index) => ({
-              name: statuses[index],
-              count: data.length, 
-          }));
-          setStatusList(statusData);
+        const statuses = ['incomplete', 'inprocess', 'rejected', 'approved', 'disbursed'];
+    
+        const allResponse = await axios.get(`${API_URL}/api/loan/v1/list-loan-leads/?page_size=${pageSize}&page_num=${currentPage}`, {
+          headers: {
+            'Content-Type': 'application/json',
+            'token': token,
+          },
+        });
+    
+        const allCount = allResponse.data.count; 
+    
+        const results = await Promise.all(
+          statuses.map(async (status) => {
+            try {
+              const response = await axios.get(`${API_URL}/api/loan/v1/list-loan-leads/?page_size=${pageSize}&page_num=${currentPage}&status=${status}`, {
+                headers: {
+                  'Content-Type': 'application/json',
+                  'token': token,
+                },
+              });
+              return { name: status, count: response.data.count };
+            } catch (error) {
+              throw new Error(`Failed to fetch data for status ${status}`);
+            }
+          })
+        );
+    
+        const statusData = [{ name: 'all', count: allCount }, ...results]; 
+        setStatusList(statusData);
       } catch (err) {
-          setError('Failed to fetch statuses');
+        setError('Failed to fetch statuses');
       } finally {
-          setLoading(false);
+        setLoading(false);
       }
-  };
+    };
+    
+    
+    
+    const handleStatusChange = async (status, index) => {
+      try {
+        setLoading(true);
+        let url = `${API_URL}/api/loan/v1/list-loan-leads/?page_size=${pageSize}&page_num=${currentPage}`;
+        if (status.name !== 'all') {
+          url += `&status=${status.name}`;
+        }
+    
+        const response = await axios.get(url, {
+          headers: {
+            'Content-Type': 'application/json',
+            'token': token,
+          },
+        });
+    
+        setData(response.data.data);
+        setStatusCount(response.data.count);
+        setScreen(0);  
+      } catch (error) {
+        setError('Failed to fetch data for the selected status');
+      } finally {
+        setLoading(false);
+      }
+    };
+    
   
 
     const fetchData = async () => {
       try {
         await apiRequest({
-            url: `/api/loan/v1/list-loan-leads/?page_size=20&page_num=1`,
+            url: `/api/loan/v1/list-loan-leads/?page_size=${pageSize}&page_num=${currentPage}`,
             method: 'GET',
             data: {},
             headers: {
                 'Content-Type': 'application/json',
-                'token' : token,
+                'token': token,
             },
             onSuccess: async (data) => {
                 if(data.data.length > 0){
-                  setData(data.data)
-                  setStatusCount(data.count)
-                }else{
-                  setData([])
+                  setData(data.data);
+                  setStatusCount(data.count);
+                } else {
+                  setData([]);
                 }
             },
             onError: (response) => {
                 setError({...error, otp: response.data.message});
-                setLoading(false)
+                setLoading(false);
             }
         })
       } catch (err) {
@@ -185,39 +222,14 @@ const Home = () => {
       } finally {
           setLoading(false);
       }
-  };
+    };
+    
 
-    const handleRowClick = (item, index) => {
+  const handleRowClick = (item, index) => {
         // getQuickViewData(item)
         getLastActivity(item)
         setLeadInfo(item)   
     };
-
-    // const handleIconClick = (item, index) => {
-    //     console.log('Icon clicked', item, index);
-    // };
-
-    const handleStatusChange = async (status, index) => {
-      try {
-          setLoading(true);
-          // Fetch data for the selected status
-          const response = await axios.get(`${API_URL}/api/loan/v1/list-loan-leads/?page_size=20&page_num=1&status=${status.name}`, {
-              headers: {
-                  'Content-Type': 'application/json',
-                  'token': token,
-              },
-          });
-          // Update data and status count based on the response
-          setData(response.data.data);
-          setStatusCount(response.data.count);
-          setScreen(0); // Ensure that you are on the home screen when updating the data
-      } catch (error) {
-          setError('Failed to fetch data for the selected status');
-      } finally {
-          setLoading(false);
-      }
-  };
-  
 
   const goToDownloads=()=>{
     let i = 3
@@ -459,22 +471,44 @@ const Home = () => {
             </div>
             }
 
-            { loading ? (
-                <div className="loader">
-                    <Bars color="#00BFFF" height={80} width={80} />
-                </div>
-            ) : error ? (
-                <div className="error">{error}</div>
+            {loading ? (
+              <div className="loader">
+                <Bars color="#00BFFF" height={80} width={80} />
+              </div>
+            ) : noResult ? (
+              <div className="no-results">No results found for "{query}"</div>
+            ) : query?.length > 0 && screen === 0 ? (
+              <Table
+                list={searchData} 
+                onRowClick={handleRowClick}
+                onIconClick={handleIconClick}
+                turnOnButtonLoader={{ status: false }}
+                loader={loading}
+                tableType={0}
+                setPageSize={setPageSize}
+                setCurrentHomePage={setCurrentPage}
+                currentHomePage={currentPage}
+                pageSize={pageSize}
+                statusCount={searchCount}
+                fetchData={fetchData} 
+              />
             ) : (
-              screen === 0 &&   <Table
-                    list={data}
-                    onRowClick={handleRowClick}
-                    onIconClick={handleIconClick}
-                    turnOnButtonLoader={{ status: false }}
-                    loader={loading}
-                    tableType={0}
-                />
+              screen === 0 && <Table
+                list={data}
+                onRowClick={handleRowClick}
+                onIconClick={handleIconClick}
+                turnOnButtonLoader={{ status: false }}
+                loader={loading}
+                tableType={0}
+                setPageSize={setPageSize}
+                setCurrentHomePage={setCurrentPage}
+                currentHomePage={currentPage}
+                pageSize={pageSize}
+                statusCount={statusCount}
+                fetchData={fetchData}
+              />
             )}
+
 
              {screen === 1 && (
                 <div className="full-width">
@@ -528,16 +562,6 @@ const Home = () => {
                 // setLeadData={setLeadInfo}
               />
             }
-            {/* {
-                uploadModal &&
-                <UploadModal
-                  closeUploadModal={()=>closeUploadModal()}
-                  token={token}
-                  docType={''}
-                  borrowerUuid={leadInfo.borrowerUuid}
-                  leadId={leadInfo.leadId}
-                />
-            } */}
           </div>
     );
 };

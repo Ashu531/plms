@@ -104,7 +104,26 @@
     transform: rotate(-45deg);
 }
 
-.icon-container:hover > .caret-icon {
-    border-right: 1.5px solid #FFFFFF;
-    border-bottom: 1.5px solid #FFFFFF;
+.custom-pagination .ant-pagination-item {
+    color: #C2185B; 
 }
+
+.custom-pagination .ant-pagination-item a {
+    color: #C2185B; 
+}
+
+.custom-pagination .ant-pagination-item-active {
+    color: #C2185B;
+    border-color: #C2185B;
+}
+
+.custom-pagination .ant-pagination-prev, 
+.custom-pagination .ant-pagination-next {
+    color: #C2185B;
+}
+
+.custom-pagination .ant-pagination-prev:hover, 
+.custom-pagination .ant-pagination-next:hover {
+    color: #A9154B;
+}
+

@@ -5,6 +5,7 @@ import { Input } from '../input/input.jsx'
 import './/financialForm.css'
 import axios from 'axios';
 import { Bars, TailSpin } from "react-loader-spinner";
+import { message } from 'antd'
 
 const employmentStatusList = [
     {
@@ -249,7 +250,7 @@ export default function FinancialForm({
         then(res => {
             // location.reload()
             getOverviewData()
-            alert('Data Submitted Successfully!')
+            message.success('Data Submitted Successfully!')
             console.log(res)
         }).catch(err=>{
             setLoader(false)

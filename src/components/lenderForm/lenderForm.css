@@ -1,14 +1,42 @@
-.lender-form-container{
+.lender-form-container {
     width: 100%;
     display: flex;
-    justify-content: flex-start;
-    gap: 20px;
-}
-
-.lender-form-header{
+    flex-direction: column;
+    gap: 24px;
+  }
+  
+  .lender-form-header {
     color: #0B090D;
     font-size: 20px;
     font-family: 'Montserrat';
     font-weight: 600;
     text-transform: capitalize;
-}
+  }
+  
+  .form-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    width: 100%;
+  }
+  
+  .form-item {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+  }
+  
+  .form-label {
+    margin-bottom: 8px;
+    font-size: 14px;
+    font-family: 'Montserrat';
+    font-weight: 600;
+    color: #0B090D;
+  }
+  
+  .form-submit {
+    display: flex;
+    justify-content: flex-start;
+    margin-top: 24px;
+  }
+  

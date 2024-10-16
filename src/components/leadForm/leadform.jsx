@@ -11,6 +11,7 @@ import { saveDraft, saveForm, editForm } from '../../helpers/apis';
 import { Bars, TailSpin } from "react-loader-spinner";
 import ClickAwayListener from 'react-click-away-listener';
 import axios from 'axios'
+import { message } from 'antd';
 
 export default function LeadForm({
     token,
@@ -45,7 +46,7 @@ export default function LeadForm({
             borrowerNameError || courseError || courseFeeError || loanAmountError || tenureError || advanceEmiError
         ) {
             setLoader(false);
-            alert("All the fields are mandatory to fill");
+            message.success("All the fields are mandatory to fill");
             return;
         }
     
@@ -66,7 +67,7 @@ export default function LeadForm({
             }
         } catch (error) {
             console.error(error);
-            alert("An error occurred while saving the lead.");
+            message.error("An error occurred while saving the lead.");
         } finally {
             setLoader(false);
         }

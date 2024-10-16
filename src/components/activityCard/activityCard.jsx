@@ -3,7 +3,7 @@ import './/activityCard.css'
 import moment from 'moment'
 
 export default function ActivityCard(props) {
-
+console.log(moment(props?.time).format('L'))
   return (
     <div className='activity-card-container'>
         <div className='column'>
