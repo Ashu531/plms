@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import './table.css';
-import { Bars, TailSpin } from "react-loader-spinner";
+import { TailSpin } from "react-loader-spinner";
 import { Pagination } from 'antd';
 
 export default function Table({
-    list,
+    list = [],
     onRowClick,
     onIconClick,
     turnOnButtonLoader,
@@ -18,8 +18,6 @@ export default function Table({
     fetchData
 }) {
     const [buttonLoader, setButtonLoader] = useState(false);
-    const [itemsPerPage] = useState(10); 
-    const [paginatedList, setPaginatedList] = useState([]);
 
     const handleIconClick = (event, item, index) => {
         event.stopPropagation();
@@ -27,17 +25,7 @@ export default function Table({
     };
 
     useEffect(() => {
-        const startIndex = (currentHomePage - 1) * itemsPerPage;
-        const endIndex = startIndex + itemsPerPage;
-        setPaginatedList(list.slice(startIndex, endIndex));
-    }, [list, currentHomePage, itemsPerPage]);
-
-    useEffect(() => {
-        if (turnOnButtonLoader.status === true) {
-            setButtonLoader(true);
-        } else {
-            setButtonLoader(false);
-        }
+        setButtonLoader(turnOnButtonLoader?.status);
     }, [turnOnButtonLoader]);
 
     return (
@@ -51,9 +39,9 @@ export default function Table({
                 {(tableType === 0 || tableType === 5) && <div className='header-text' style={{ flex: '3 1 0px' }}>Disbursed On</div>}
                 <div className='header-text' style={{ flex: '1 1 0px' }}></div>
             </div>
-                
+
             <div className='table-row-container'>
-                {paginatedList.length > 0 ? paginatedList.map((item, index) => (
+                {list.length > 0 ? list.map((item, index) => (
                     <div key={`${item}-${index}`} className='table-row' onClick={() => onRowClick(item, index)}>
                         <div className='row-text'>{item.application_id}</div>
                         <div className='row-text'>{item.student_name}</div>
@@ -79,13 +67,13 @@ export default function Table({
                 className='custom-pagination'
                 current={currentHomePage}
                 pageSize={pageSize}
-                total={statusCount} 
+                total={statusCount}
                 onChange={(page, size) => {
                     setCurrentHomePage(page);
                     setPageSize(size);
                     fetchData(page);
                 }}
-                style={{marginTop: 12,alignSelf: "end"}}
+                style={{marginTop: 12, alignSelf: "end"}}
             />
         </div>
     );
