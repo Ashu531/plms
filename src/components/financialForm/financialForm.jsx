@@ -252,9 +252,10 @@ export default function FinancialForm({
             getOverviewData()
             message.success('Data Submitted Successfully!')
             console.log(res)
-        }).catch(err=>{
+        }).catch(error=>{
             setLoader(false)
-            console.log(err)
+            const errorMessage = error.response?.data?.message || error.message || 'An error occurred';
+            message.error(errorMessage);
         });
     }
 

@@ -194,10 +194,10 @@ const Home = () => {
     
   
 
-    const fetchData = async () => {
+    const fetchData = async (pageNumber=1) => {
       try {
         await apiRequest({
-            url: `/api/loan/v1/list-loan-leads/?page_size=${pageSize}&page_num=${currentPage}`,
+            url: `/api/loan/v1/list-loan-leads/?page_size=${pageSize}&page_num=${pageNumber}`,
             method: 'GET',
             data: {},
             headers: {
@@ -490,7 +490,7 @@ const Home = () => {
                 currentHomePage={currentPage}
                 pageSize={pageSize}
                 statusCount={searchCount}
-                fetchData={fetchData} 
+                fetchData={(page)=>fetchData(page)} 
               />
             ) : (
               screen === 0 && <Table
@@ -505,7 +505,7 @@ const Home = () => {
                 currentHomePage={currentPage}
                 pageSize={pageSize}
                 statusCount={statusCount}
-                fetchData={fetchData}
+                fetchData={(page)=>fetchData(page)}
               />
             )}
 

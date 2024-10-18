@@ -21,6 +21,7 @@ import JSZip from 'jszip';
 import { saveAs } from 'file-saver';
 import AccountAndAddress from '../../components/detailOverview.js/detailOverview';
 import moment from "moment"
+import { message } from 'antd';
 
 const documentTypes = [
     'Aadhaar Card', 
@@ -76,7 +77,6 @@ const fetchExistingDocuments = async () => {
     const response = await axios.get(`${API_URL}/api/loan/v1/loan-lead/${props?.leadData?.id}/documents/`, {
       headers: { 'Token': props?.token }
     });
-    console.log(response,"response+++")
     setExistingDocuments(response.data.data);
   } catch (error) {
     console.error('Error fetching documents:', error);
@@ -210,7 +210,10 @@ const getDocumentType = () => {
     }).
     then(res => {
         setLeadData(res.data)
-    }).catch(err=>console.log(err));
+    }).catch(error=>{
+        const errorMessage = error.response?.data?.message || error.message || 'An error occurred';
+        message.error(errorMessage);
+    });
  }
 
   const handleBack=()=>{
@@ -247,7 +250,10 @@ const handleCommentSubmit = async (comment) => {
         },
     }).then(res => {
         getUserComment();
-    }).catch(err => console.log(err));
+    }).catch(error => {
+        const errorMessage = error.response?.data?.message || error.message || 'An error occurred';
+        message.error(errorMessage);
+    });
     closeCommentBox();
 }
 

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './detailModal.css';
-import { Modal, Select, Spin, DatePicker, Input } from 'antd';
+import { Modal, Select, Spin, DatePicker, Input,message } from 'antd';
 import Button from '../button/button.jsx';
 import ActivityCard from '../activityCard/activityCard.jsx';
 import axios from 'axios';
@@ -110,16 +110,18 @@ export default function DetailModal(props) {
             }, {
                 headers: { token: `${props?.token}` },
             });
-            
+    
             if (status === '84cbfde5-ba59-4786-a0e9-bbd4b0ef4729') {
                 submitDisbursalDetails();
             }
             await fetchLeadData();
             setIsModalVisible(false);
         } catch (error) {
-            console.error('Error submitting status response:', error);
+            const errorMessage = error.response?.data?.message || error.message || 'An error occurred';
+            message.error(errorMessage);
         }
     };
+    
 
     const submitDisbursalDetails = async () => {
         try {
@@ -132,6 +134,8 @@ export default function DetailModal(props) {
             console.log('Disbursal data submitted successfully!');
         } catch (error) {
             console.error('Error submitting disbursal details:', error);
+            const errorMessage = error.response?.data?.message || error.message || 'An error occurred';
+            message.error(errorMessage);
         }
     };
 

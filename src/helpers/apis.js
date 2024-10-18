@@ -10,11 +10,10 @@ export const saveForm = async (payload, token) => {
     }).then(res => {
         return res.data
     })
-    .catch(err => {
-        // if(err.response.data.error.length > 0){
-        //     alert(err.response.data.error)
-        // }
-       return err.response
+    .catch(error => {
+        const errorMessage = error.response?.data?.message || error.message || 'An error occurred';
+        message.error(errorMessage);
+       return error.response
     })
     
     return response;
@@ -28,7 +27,11 @@ export const saveEditedForm = async (payload, token) => {
             token: `${token}`,
         },
     }).then(res => res.data.data)
-    .catch(err => console.log(err.response))
+    .catch(error => {
+        console.log(error.response)
+        const errorMessage = error.response?.data?.message || error.message || 'An error occurred';
+        message.error(errorMessage);
+    })
 
     return response;
 

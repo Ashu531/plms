@@ -67,7 +67,7 @@ export default function LeadForm({
             }
         } catch (error) {
             console.error(error);
-            message.error("An error occurred while saving the lead.");
+            message.error(error.message);
         } finally {
             setLoader(false);
         }
@@ -84,6 +84,8 @@ export default function LeadForm({
             return response.data; 
         } catch (error) {
             console.error(error);
+            const errorMessage = error.response?.data?.message || error.message || 'An error occurred';
+            message.error(errorMessage);
             throw error; 
         }
     };

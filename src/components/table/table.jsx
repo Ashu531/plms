@@ -83,7 +83,7 @@ export default function Table({
                 onChange={(page, size) => {
                     setCurrentHomePage(page);
                     setPageSize(size);
-                    fetchData();
+                    fetchData(page);
                 }}
                 style={{marginTop: 12,alignSelf: "end"}}
             />

@@ -48,8 +48,10 @@ export default function LenderForm(props) {
       .then((res) => {
         message.success("Data Submitted Successfully!");
       })
-      .catch((err) => {
-        console.log(err);
+      .catch((error) => {
+        console.log(error);
+        const errorMessage = error.response?.data?.message || error.message || 'An error occurred';
+            message.error(errorMessage);
       });
   };
 

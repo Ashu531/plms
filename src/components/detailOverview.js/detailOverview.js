@@ -87,7 +87,8 @@ const AccountAndAddress = (props) => {
       });
       message.success('Bank details saved successfully');
     } catch (error) {
-      message.error('Failed to save bank details');
+      const errorMessage = error.response?.data?.message || error.message || 'An error occurred';
+      message.error(errorMessage);
     }
   };
 
@@ -104,7 +105,8 @@ const AccountAndAddress = (props) => {
       });
       message.success('Address details saved successfully');
     } catch (error) {
-      message.error('Failed to save address details');
+      const errorMessage = error.response?.data?.message || error.message || 'An error occurred';
+      message.error(errorMessage);
     }
   };
 
